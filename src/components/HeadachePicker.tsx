@@ -3,6 +3,7 @@
 import { HEADACHES, FORMATS } from "@/lib/content";
 import { useSelection } from "@/context/selection";
 import { SectionHeading } from "./Section";
+import BrainAnimation from "./BrainAnimation";
 
 export default function HeadachePicker() {
   const { selected, toggle, clear, isSelected, recommendedFormatIds } =
@@ -21,7 +22,9 @@ export default function HeadachePicker() {
           intro="Pick the ones that sound like you. We’ll match each to the format built to solve it — and build your shortlist as you go."
         />
 
-        <div className="mt-12 grid gap-8 lg:grid-cols-[1.15fr_0.85fr]">
+        <BrainAnimation />
+
+        <div className="mt-6 grid gap-8 lg:grid-cols-[1.15fr_0.85fr]">
           {/* chips */}
           <div className="flex flex-wrap content-start gap-2.5">
             {HEADACHES.map((h) => {

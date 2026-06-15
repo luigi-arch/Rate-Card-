@@ -122,3 +122,51 @@ input::placeholder,
 textarea::placeholder {
   color: var(--color-muted-2);
 }
+
+/* ---- Brain / headache animation ---- */
+@keyframes brain-throb {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.04); }
+}
+@keyframes brain-glow {
+  0%, 100% { opacity: 0.28; transform: translate(-50%, -50%) scale(1); }
+  50% { opacity: 0.6; transform: translate(-50%, -50%) scale(1.14); }
+}
+@keyframes thought-bob {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-12px); }
+}
+@keyframes thought-emit {
+  0% { opacity: 0; transform: translateY(8px) scale(0.94); }
+  18% { opacity: 1; }
+  82% { opacity: 1; }
+  100% { opacity: 0; transform: translateY(-22px) scale(1); }
+}
+@keyframes spark-flash {
+  0%, 100% { opacity: 0.25; transform: scale(0.9) rotate(0deg); }
+  50% { opacity: 1; transform: scale(1.12) rotate(-4deg); }
+}
+.animate-brain-throb {
+  animation: brain-throb 4.5s ease-in-out infinite;
+  transform-origin: center;
+}
+.animate-brain-glow {
+  animation: brain-glow 4.5s ease-in-out infinite;
+}
+.animate-thought {
+  animation: thought-bob var(--dur, 5s) ease-in-out infinite;
+  animation-delay: var(--delay, 0s);
+}
+.animate-spark {
+  animation: spark-flash var(--dur, 2.4s) ease-in-out infinite;
+  animation-delay: var(--delay, 0s);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-brain-throb,
+  .animate-brain-glow,
+  .animate-thought,
+  .animate-spark {
+    animation: none;
+  }
+}

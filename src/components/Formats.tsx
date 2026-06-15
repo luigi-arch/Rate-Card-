@@ -107,6 +107,27 @@ export default function Formats() {
   );
 }
 
+function LogoTile({ logo, tag }: { logo?: string; tag: string }) {
+  const [failed, setFailed] = useState(false);
+
+  if (logo && !failed) {
+    return (
+      // eslint-disable-next-line @next/next/no-img-element
+      <img
+        src={logo}
+        alt={`${tag} logo`}
+        onError={() => setFailed(true)}
+        className="relative max-h-24 w-auto object-contain"
+      />
+    );
+  }
+  return (
+    <span className="display relative text-center text-5xl text-white/90 sm:text-6xl">
+      {tag}
+    </span>
+  );
+}
+
 function FeaturePanel({
   format: f,
   recommended,
@@ -125,18 +146,7 @@ function FeaturePanel({
           className="pointer-events-none absolute -right-10 -top-10 h-44 w-44 rounded-full opacity-25 blur-3xl"
           style={{ background: "var(--color-gold)" }}
         />
-        {logo ? (
-          // eslint-disable-next-line @next/next/no-img-element
-          <img
-            src={logo}
-            alt={`${f.name} logo`}
-            className="relative max-h-24 w-auto object-contain"
-          />
-        ) : (
-          <span className="display relative text-center text-5xl text-white/90 sm:text-6xl">
-            {f.tag}
-          </span>
-        )}
+        <LogoTile logo={logo} tag={f.tag} />
         <span className="absolute left-5 top-5 rounded-md bg-gold px-2.5 py-1 text-[0.65rem] font-bold uppercase tracking-wide text-black">
           {f.tag}
         </span>

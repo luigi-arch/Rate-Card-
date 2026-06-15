@@ -669,11 +669,11 @@ export const CONTACT = {
 /* ------------------------------------------------------------------ */
 
 export const FORMAT_LOGOS: Partial<Record<FormatId, string>> = {
-  // explained: "/formats/explained.svg",
-  // "street-views": "/formats/street-views.svg",
-  // guides: "/formats/guides.svg",
-  // "mini-docs": "/formats/mini-docs.svg",
-  // interviews: "/formats/interviews.svg",
-  // "spotlight-reel": "/formats/spotlight-reel.svg",
-  // sidequests: "/formats/sidequests.svg",
+  explained: "/formats/explained.svg",
+  "street-views": "/formats/street-views.svg",
+  guides: "/formats/guides.svg",
+  "mini-docs": "/formats/mini-docs.svg",
+  interviews: "/formats/interviews.svg",
+  "spotlight-reel": "/formats/spotlight-reel.svg",
+  sidequests: "/formats/sidequests.svg",
 };

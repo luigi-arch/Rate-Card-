@@ -1,22 +1,25 @@
 import type { Metadata } from "next";
-import { Archivo, Inter, Geist_Mono } from "next/font/google";
+import { Bebas_Neue, Manrope } from "next/font/google";
 import "./globals.css";
 
-const inter = Inter({
-  variable: "--font-inter",
+/**
+ * Type system.
+ * - Display: Bebas Neue (SideStreet's condensed headline face).
+ * - Body/UI: Manrope — a geometric grotesque standing in for Avenir / Articulat,
+ *   with Helvetica in the fallback stack (see --font-sans in globals.css).
+ *
+ * To swap in the real licensed fonts later: drop the .woff2 files in /public/fonts,
+ * declare them with next/font/local here, and point the same two CSS variables at them.
+ */
+const display = Bebas_Neue({
+  variable: "--font-display",
   subsets: ["latin"],
+  weight: "400",
   display: "swap",
 });
 
-const archivo = Archivo({
-  variable: "--font-archivo",
-  subsets: ["latin"],
-  weight: ["600", "700", "800", "900"],
-  display: "swap",
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-mono-geist",
+const sans = Manrope({
+  variable: "--font-sans-brand",
   subsets: ["latin"],
   display: "swap",
 });
@@ -63,7 +66,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${inter.variable} ${archivo.variable} ${geistMono.variable} h-full antialiased`}
+      className={`${display.variable} ${sans.variable} h-full antialiased`}
     >
       <body className="min-h-full">{children}</body>
     </html>

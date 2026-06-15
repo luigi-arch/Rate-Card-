@@ -5,64 +5,63 @@ export default function Hero() {
   return (
     <section
       id="top"
-      className="relative overflow-hidden border-b border-line bg-grid pt-28 pb-16 sm:pt-36 sm:pb-24"
+      className="relative overflow-hidden border-b border-line bg-grid"
     >
       {/* gold glow */}
       <div
         aria-hidden
-        className="pointer-events-none absolute -top-40 left-1/2 h-[420px] w-[820px] -translate-x-1/2 rounded-full opacity-[0.18] blur-[120px]"
+        className="pointer-events-none absolute -top-48 left-1/2 h-[520px] w-[900px] -translate-x-1/2 rounded-full opacity-20 blur-[130px]"
         style={{ background: "var(--color-gold)" }}
       />
-      <div className="relative mx-auto max-w-6xl px-5 sm:px-8">
+      <div className="relative mx-auto flex max-w-4xl flex-col items-center px-5 pb-20 pt-36 text-center sm:pb-28 sm:pt-44">
         <Reveal>
-          <p className="eyebrow mb-5 flex items-center gap-2">
-            <span className="inline-block h-1.5 w-1.5 rounded-full bg-gold" />
+          <span className="inline-flex items-center gap-2 rounded-full border border-line-strong bg-surface/60 px-4 py-1.5 text-xs font-bold uppercase tracking-[0.18em] text-muted">
+            <span className="h-1.5 w-1.5 rounded-full bg-gold" />
             {AUDIENCE.tagline}
-          </p>
+          </span>
         </Reveal>
 
-        <Reveal delay={60}>
-          <h1 className="display max-w-4xl text-[2.6rem] leading-[0.95] text-white sm:text-6xl md:text-7xl">
+        <Reveal delay={80}>
+          <h1 className="display mt-8 text-6xl text-white sm:text-7xl md:text-8xl">
             You bring the headache.
             <br />
             <span className="text-gold">We build the story.</span>
           </h1>
         </Reveal>
 
-        <Reveal delay={140}>
+        <Reveal delay={160}>
           <p className="mt-7 max-w-xl text-lg leading-relaxed text-muted">
-            We don’t sell reels and carousels. We sell solutions to marketing
-            problems — native content that feels real, earns attention and
-            actually changes how people see you.
+            We don’t sell reels. We sell solutions — native content that feels
+            real and changes how people see you.
           </p>
         </Reveal>
 
-        <Reveal delay={220}>
-          <div className="mt-9 flex flex-wrap items-center gap-3">
+        <Reveal delay={240}>
+          <div className="mt-9 flex flex-wrap items-center justify-center gap-3">
             <a
               href="#headaches"
-              className="rounded-full bg-gold px-7 py-3.5 text-sm font-bold text-black transition-transform hover:scale-[1.03]"
+              className="rounded-full bg-gold px-8 py-4 text-sm font-bold uppercase tracking-wide text-black transition-transform hover:scale-[1.03]"
             >
               Find your fix →
             </a>
             <a
               href="#formats"
-              className="rounded-full border border-line-strong px-7 py-3.5 text-sm font-bold text-white transition-colors hover:border-white"
+              className="rounded-full border border-line-strong px-8 py-4 text-sm font-bold uppercase tracking-wide text-white transition-colors hover:border-white"
             >
               See the formats
             </a>
           </div>
         </Reveal>
 
-        {/* headline stats */}
-        <Reveal delay={300}>
-          <dl className="mt-16 grid grid-cols-2 gap-px overflow-hidden rounded-2xl border border-line bg-line sm:grid-cols-4">
+        {/* slim stat strip */}
+        <Reveal delay={320} className="mt-16 w-full">
+          <dl className="flex flex-wrap items-center justify-center gap-x-10 gap-y-6 border-t border-line pt-10 sm:gap-x-16">
             {AUDIENCE.headline.map((s) => (
-              <div key={s.label} className="bg-ink-2 px-5 py-6">
-                <dt className="font-display text-3xl font-extrabold text-gold sm:text-4xl">
+              <div key={s.label} className="text-center">
+                <dt className="font-display text-4xl leading-none text-gold sm:text-5xl">
                   {s.value}
                 </dt>
-                <dd className="mt-1 text-xs uppercase tracking-wide text-muted">
+                <dd className="mt-2 text-[0.7rem] font-semibold uppercase tracking-[0.15em] text-muted">
                   {s.label}
                 </dd>
               </div>

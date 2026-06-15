@@ -661,3 +661,19 @@ export const CONTACT = {
   site: "sidestreetmalta.com",
   instagram: "https://www.instagram.com/sidestreetmalta/",
 };
+
+/* ------------------------------------------------------------------ */
+/* Format logos                                                        */
+/* Drop uploaded logos in /public/formats (e.g. street-views.svg) and  */
+/* map them here. Anything left out falls back to a styled monogram.   */
+/* ------------------------------------------------------------------ */
+
+export const FORMAT_LOGOS: Partial<Record<FormatId, string>> = {
+  // explained: "/formats/explained.svg",
+  // "street-views": "/formats/street-views.svg",
+  // guides: "/formats/guides.svg",
+  // "mini-docs": "/formats/mini-docs.svg",
+  // interviews: "/formats/interviews.svg",
+  // "spotlight-reel": "/formats/spotlight-reel.svg",
+  // sidequests: "/formats/sidequests.svg",
+};

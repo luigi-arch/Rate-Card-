@@ -1,34 +1,54 @@
+/**
+ * SideStreet logo — gold ring with a split "S" monogram.
+ * This is a faithful placeholder; to use the real asset, drop `logo.svg`
+ * into /public and replace the <svg> below with:
+ *   <img src="/logo.svg" alt="SideStreet" className="h-9 w-auto" />
+ */
 export default function Logo({
   className = "",
   showWordmark = true,
+  size = 36,
 }: {
   className?: string;
   showWordmark?: boolean;
+  size?: number;
 }) {
   return (
-    <span className={`inline-flex items-center gap-2.5 ${className}`}>
+    <span className={`inline-flex items-center gap-3 ${className}`}>
       <svg
-        width="34"
-        height="34"
-        viewBox="0 0 34 34"
+        width={size}
+        height={size}
+        viewBox="0 0 100 100"
         fill="none"
         aria-hidden="true"
         className="shrink-0"
       >
-        {/* crown */}
-        <path
-          d="M6 7.5 L9.5 10 L12.5 6 L17 9.5 L21.5 6 L24.5 10 L28 7.5 L26.5 12 L7.5 12 Z"
-          fill="var(--color-gold)"
+        <circle
+          cx="50"
+          cy="50"
+          r="46"
+          fill="none"
+          stroke="var(--color-gold)"
+          strokeWidth="5"
         />
-        {/* badge */}
-        <rect x="6" y="13" width="22" height="18" rx="5" fill="var(--color-gold)" />
-        <path
-          d="M21.4 19.1c-.5-1.2-1.7-2-3.4-2-2 0-3.4 1.1-3.4 2.8 0 1.5 1 2.3 3 2.8l1 .25c1 .25 1.4.5 1.4 1.05 0 .6-.6 1-1.6 1-1.1 0-1.8-.45-2.1-1.4l-2 .85c.5 1.5 1.9 2.4 4 2.4 2.3 0 3.8-1.15 3.8-3 0-1.5-.9-2.35-3-2.85l-1-.25c-1-.25-1.4-.5-1.4-1 0-.55.5-.9 1.4-.9.9 0 1.5.4 1.8 1.2z"
-          fill="#0a0a0b"
-        />
+        <clipPath id="ss-clip">
+          <circle cx="50" cy="50" r="42" />
+        </clipPath>
+        <g clipPath="url(#ss-clip)">
+          {/* upper lobe (gold) */}
+          <path
+            d="M0,0 H100 V52 C74,40 60,66 40,58 C26,52 16,42 0,48 Z"
+            fill="var(--color-gold)"
+          />
+          {/* lower lobe (ink) */}
+          <path
+            d="M0,100 H100 V52 C74,40 60,66 40,58 C26,52 16,42 0,48 Z"
+            fill="var(--color-ink)"
+          />
+        </g>
       </svg>
       {showWordmark && (
-        <span className="font-display text-[1.15rem] font-extrabold tracking-tight text-white">
+        <span className="font-display text-2xl leading-none tracking-[0.04em] text-white">
           SIDESTREET
         </span>
       )}

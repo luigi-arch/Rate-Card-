@@ -5,19 +5,21 @@
   --color-ink-2: #0f0f11;
   --color-surface: #161619;
   --color-surface-2: #1d1d21;
-  --color-line: rgba(255, 255, 255, 0.09);
+  --color-line: rgba(255, 255, 255, 0.08);
   --color-line-strong: rgba(255, 255, 255, 0.16);
-  --color-muted: #9a9aa2;
+  --color-muted: #a2a2aa;
   --color-muted-2: #6f6f77;
-  --color-gold: #f5b301;
-  --color-gold-bright: #ffc62b;
-  --color-gold-soft: rgba(245, 179, 1, 0.12);
+  --color-gold: #f5c518;
+  --color-gold-bright: #ffd84d;
+  --color-gold-soft: rgba(245, 197, 24, 0.12);
 
-  --font-display: var(--font-archivo), system-ui, sans-serif;
-  --font-sans: var(--font-inter), system-ui, sans-serif;
-  --font-mono: var(--font-mono-geist), ui-monospace, monospace;
+  /* Bebas Neue for display; Manrope (Avenir/Articulat stand-in) + Helvetica for body */
+  --font-display: var(--font-display), "Bebas Neue", Impact, sans-serif;
+  --font-sans: var(--font-sans-brand), "Helvetica Neue", Helvetica, Arial,
+    sans-serif;
 
-  --shadow-glow: 0 0 0 1px rgba(245, 179, 1, 0.25), 0 18px 60px -20px rgba(245, 179, 1, 0.25);
+  --shadow-glow: 0 0 0 1px rgba(245, 197, 24, 0.25),
+    0 24px 70px -24px rgba(245, 197, 24, 0.28);
 }
 
 :root {
@@ -33,6 +35,7 @@ body {
   background-color: var(--color-ink);
   color: #ffffff;
   font-family: var(--font-sans);
+  font-feature-settings: "ss01", "cv01";
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
 }
@@ -42,26 +45,29 @@ body {
   color: #000;
 }
 
-/* Eyebrow / label */
+/* Eyebrow / label — brand sans, uppercase */
 .eyebrow {
-  font-family: var(--font-mono);
-  font-size: 0.7rem;
-  letter-spacing: 0.18em;
+  font-family: var(--font-sans);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.22em;
   text-transform: uppercase;
   color: var(--color-gold);
 }
 
+/* Display headlines — Bebas Neue (all caps face) */
 .display {
   font-family: var(--font-display);
-  font-weight: 800;
-  letter-spacing: -0.02em;
-  line-height: 0.98;
+  font-weight: 400;
+  letter-spacing: 0.005em;
+  line-height: 0.92;
+  text-transform: uppercase;
 }
 
 /* Subtle dotted grid backdrop */
 .bg-grid {
-  background-image: radial-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px);
-  background-size: 26px 26px;
+  background-image: radial-gradient(rgba(255, 255, 255, 0.045) 1px, transparent 1px);
+  background-size: 28px 28px;
 }
 
 .card {
@@ -74,7 +80,8 @@ body {
 .reveal {
   opacity: 0;
   transform: translateY(22px);
-  transition: opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1), transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+  transition: opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1),
+    transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
   will-change: opacity, transform;
 }
 .reveal.is-visible {
@@ -83,14 +90,24 @@ body {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  html { scroll-behavior: auto; }
-  .reveal { opacity: 1; transform: none; transition: none; }
+  html {
+    scroll-behavior: auto;
+  }
+  .reveal {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
 }
 
 /* Marquee for client logos */
 @keyframes marquee {
-  from { transform: translateX(0); }
-  to { transform: translateX(-50%); }
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
 }
 .marquee-track {
   display: flex;

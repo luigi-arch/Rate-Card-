@@ -26,7 +26,7 @@ export default function Placeholder({
 
   return (
     <div
-      className={`relative flex ${ratio} w-full flex-col items-center justify-center gap-2.5 overflow-hidden rounded-xl border border-dashed border-line-strong bg-gradient-to-br from-surface-2 to-ink-2 text-center ${className}`}
+      className={`relative flex ${ratio} w-full flex-col items-center justify-center gap-2.5 overflow-hidden rounded-xl border border-dashed border-white/15 bg-gradient-to-br from-[#1c1c1f] to-[#0b0b0c] text-center ${className}`}
     >
       <div
         aria-hidden
@@ -48,11 +48,11 @@ export default function Placeholder({
           </svg>
         </span>
       )}
-      <span className="relative px-3 text-xs font-bold uppercase tracking-[0.15em] text-muted">
+      <span className="relative px-3 text-xs font-bold uppercase tracking-[0.15em] text-white/70">
         {label}
       </span>
       {sublabel && (
-        <span className="relative font-mono text-[0.68rem] text-muted-2">
+        <span className="relative font-mono text-[0.68rem] text-white/35">
           {sublabel}
         </span>
       )}

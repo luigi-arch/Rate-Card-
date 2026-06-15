@@ -15,7 +15,7 @@ export default function Results() {
           <Reveal className="flex items-center gap-3">
             <span className="text-gold">★★★★★</span>
             <span className="text-sm text-muted">
-              <span className="font-display text-lg font-extrabold text-white">
+              <span className="font-display text-lg font-extrabold text-fg">
                 {CLIENT_RATING}
               </span>{" "}
               average client rating
@@ -35,13 +35,13 @@ export default function Results() {
               />
               <div className="p-7">
               <p className="eyebrow !text-muted-2">{r.client}</p>
-              <h3 className="mt-2 font-display text-2xl text-white">
+              <h3 className="mt-2 font-display text-2xl text-fg">
                 {r.project}
               </h3>
               <dl className="mt-6 grid grid-cols-3 gap-3">
                 {r.stats.map((s) => (
                   <div key={s.label}>
-                    <dt className="font-display text-2xl font-extrabold text-gold">
+                    <dt className="font-display text-3xl font-extrabold text-fg">
                       {s.value}
                     </dt>
                     <dd className="mt-1 text-[0.7rem] uppercase leading-tight tracking-wide text-muted">
@@ -56,7 +56,7 @@ export default function Results() {
         </div>
 
         <Reveal className="mt-10 text-center">
-          <p className="display text-xl text-white sm:text-2xl">
+          <p className="display text-xl text-fg sm:text-2xl">
             “Content that informs. Stories that connect. Results that speak.”
           </p>
         </Reveal>

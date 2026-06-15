@@ -15,10 +15,10 @@ export default function Distribution() {
         <div className="mt-14 grid gap-5 md:grid-cols-3">
           {DISTRIBUTION.channels.map((c, i) => (
             <Reveal key={c.title} delay={i * 90} className="card p-7">
-              <span className="font-display text-2xl font-extrabold text-gold/30">
+              <span className="font-display text-2xl font-extrabold text-fg">
                 0{i + 1}
               </span>
-              <h3 className="mt-3 font-display text-lg font-bold text-white">
+              <h3 className="mt-3 font-display text-lg font-bold text-fg">
                 {c.title}
               </h3>
               <p className="mt-2 text-sm leading-relaxed text-muted">{c.body}</p>
@@ -28,7 +28,7 @@ export default function Distribution() {
 
         <Reveal className="mt-10">
           <blockquote className="border-l-2 border-gold pl-6">
-            <p className="display max-w-2xl text-2xl text-white sm:text-3xl">
+            <p className="display max-w-2xl text-2xl text-fg sm:text-3xl">
               {DISTRIBUTION.pullQuote}
             </p>
           </blockquote>

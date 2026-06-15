@@ -60,7 +60,7 @@ export default function Portfolio() {
                 className="group block overflow-hidden rounded-xl border border-line bg-surface transition-colors hover:border-gold/50"
               >
                 {/* reel thumbnail placeholder (9:16) */}
-                <div className="relative flex aspect-[4/5] items-center justify-center overflow-hidden bg-gradient-to-br from-surface-2 to-ink-2">
+                <div className="relative flex aspect-[4/5] items-center justify-center overflow-hidden bg-gradient-to-br from-[#1c1c1f] to-[#0b0b0c]">
                   <div
                     aria-hidden
                     className="pointer-events-none absolute -right-6 -top-6 h-24 w-24 rounded-full opacity-20 blur-2xl"
@@ -76,7 +76,7 @@ export default function Portfolio() {
                   </span>
                 </div>
                 <div className="flex items-center justify-between gap-2 px-3.5 py-3">
-                  <span className="truncate text-sm font-medium text-white">
+                  <span className="truncate text-sm font-medium text-fg">
                     {item.client}
                   </span>
                   <span className="shrink-0 text-muted-2 transition-colors group-hover:text-gold">
@@ -108,7 +108,7 @@ function FilterButton({
       className={`rounded-full border px-4 py-2 text-sm font-medium transition-colors ${
         active
           ? "border-gold bg-gold text-black"
-          : "border-line-strong text-muted hover:border-white hover:text-white"
+          : "border-line-strong text-muted hover:border-fg hover:text-fg"
       }`}
     >
       {children}

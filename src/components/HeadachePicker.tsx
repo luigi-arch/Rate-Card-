@@ -22,9 +22,12 @@ export default function HeadachePicker() {
           intro="Pick the ones that sound like you. We’ll match each to the format built to solve it — and build your shortlist as you go."
         />
 
-        <BrainAnimation />
+        {/* brain on a black feature panel */}
+        <div className="relative mt-10 overflow-hidden rounded-3xl bg-ink px-4 py-8 sm:py-10">
+          <BrainAnimation />
+        </div>
 
-        <div className="mt-6 grid gap-8 lg:grid-cols-[1.15fr_0.85fr]">
+        <div className="mt-8 grid gap-8 lg:grid-cols-[1.15fr_0.85fr]">
           {/* chips */}
           <div className="flex flex-wrap content-start gap-2.5">
             {HEADACHES.map((h) => {
@@ -38,7 +41,7 @@ export default function HeadachePicker() {
                   className={`group rounded-full border px-4 py-2.5 text-left text-sm font-medium transition-all ${
                     active
                       ? "border-gold bg-gold text-black"
-                      : "border-line-strong text-muted hover:border-white hover:text-white"
+                      : "border-line-strong text-muted hover:border-fg hover:text-fg"
                   }`}
                 >
                   <span className="mr-1.5 opacity-60">“</span>
@@ -57,7 +60,7 @@ export default function HeadachePicker() {
                 <button
                   type="button"
                   onClick={clear}
-                  className="text-xs text-muted-2 underline-offset-2 hover:text-white hover:underline"
+                  className="text-xs text-muted-2 underline-offset-2 hover:text-fg hover:underline"
                 >
                   Clear
                 </button>
@@ -75,15 +78,15 @@ export default function HeadachePicker() {
                   <a
                     key={f.id}
                     href={`#format-${f.id}`}
-                    className="flex items-center justify-between gap-3 rounded-xl border border-line bg-surface px-4 py-3 transition-colors hover:border-gold/50"
+                    className="flex items-center justify-between gap-3 rounded-xl border border-line bg-surface-2 px-4 py-3 transition-colors hover:border-gold"
                   >
                     <span>
-                      <span className="block font-display font-bold text-white">
+                      <span className="block font-display text-lg text-fg">
                         {f.name}
                       </span>
                       <span className="text-xs text-muted">{f.keyword}</span>
                     </span>
-                    <span className="text-sm font-semibold text-gold">
+                    <span className="text-sm font-bold text-fg">
                       {f.priceFrom ? `€${f.priceFrom.toLocaleString()}` : "Custom"}
                     </span>
                   </a>

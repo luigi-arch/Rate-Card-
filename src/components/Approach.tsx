@@ -28,6 +28,7 @@ export default function Approach() {
         />
 
         <div className="mt-14 grid gap-5 md:grid-cols-2">
+          {/* old way — light card */}
           <Reveal className="card p-7 sm:p-9">
             <p className="eyebrow mb-5 !text-muted-2">What agencies sell</p>
             <ul className="space-y-3">
@@ -47,8 +48,9 @@ export default function Approach() {
             </p>
           </Reveal>
 
-          <Reveal delay={90} className="card border-gold/30 bg-gold-soft p-7 sm:p-9">
-            <p className="eyebrow mb-5">What you actually want</p>
+          {/* new way — black feature card */}
+          <Reveal delay={90} className="card-dark p-7 text-white sm:p-9">
+            <p className="eyebrow eyebrow-gold mb-5">What you actually want</p>
             <ul className="space-y-3">
               {NEW_WAY.map((item) => (
                 <li
@@ -60,7 +62,7 @@ export default function Approach() {
                 </li>
               ))}
             </ul>
-            <p className="mt-6 text-sm text-muted">
+            <p className="mt-6 text-sm text-white/60">
               Real results. We build each format around one of these, not around
               a format spec sheet.
             </p>

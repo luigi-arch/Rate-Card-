@@ -20,7 +20,7 @@ export default function Audience() {
               {AUDIENCE.channels.map((c) => (
                 <li key={c.name} className="flex items-baseline justify-between">
                   <span className="text-muted">{c.name}</span>
-                  <span className="font-display text-2xl font-extrabold text-white">
+                  <span className="font-display text-2xl font-extrabold text-fg">
                     {c.value}
                   </span>
                 </li>
@@ -42,7 +42,7 @@ export default function Audience() {
                 <li key={a.range}>
                   <div className="mb-1.5 flex items-center justify-between text-sm">
                     <span className="text-muted">{a.range}</span>
-                    <span className="font-semibold text-white">{a.pct}%</span>
+                    <span className="font-semibold text-fg">{a.pct}%</span>
                   </div>
                   <div className="h-2 overflow-hidden rounded-full bg-surface-2">
                     <div
@@ -63,7 +63,7 @@ export default function Audience() {
                 <div key={g.label}>
                   <div className="flex items-baseline justify-between">
                     <span className="text-muted">{g.label}</span>
-                    <span className="font-display text-3xl font-extrabold text-white">
+                    <span className="font-display text-3xl font-extrabold text-fg">
                       {g.pct}%
                     </span>
                   </div>

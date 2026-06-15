@@ -80,13 +80,13 @@ export default function Logo({
           fontWeight="700"
           fontSize="74"
           clipPath="url(#ss-bottom)"
-          fill="#ffffff"
+          fill="#0c0c0d"
         >
           S
         </text>
       </svg>
       {showWordmark && (
-        <span className="font-display text-2xl leading-none tracking-[0.04em] text-white">
+        <span className="font-display text-2xl leading-none tracking-[0.04em] text-fg">
           SIDESTREET
         </span>
       )}

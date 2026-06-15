@@ -5,7 +5,7 @@ export function SectionHeading({
   title,
   intro,
   align = "left",
-  theme = "dark",
+  theme = "light",
 }: {
   eyebrow?: string;
   title: React.ReactNode;
@@ -13,24 +13,25 @@ export function SectionHeading({
   align?: "left" | "center";
   theme?: "dark" | "light";
 }) {
-  const light = theme === "light";
+  const dark = theme === "dark";
   return (
     <Reveal
       className={
         align === "center" ? "mx-auto max-w-2xl text-center" : "max-w-2xl"
       }
     >
-      {eyebrow &&
-        (light ? (
-          <p className="mb-3 text-xs font-bold uppercase tracking-[0.22em] text-zinc-500">
-            {eyebrow}
-          </p>
-        ) : (
-          <p className="eyebrow mb-3">{eyebrow}</p>
-        ))}
+      {eyebrow && (
+        <p
+          className={`mb-3 text-xs font-bold uppercase tracking-[0.2em] ${
+            dark ? "text-gold" : "text-zinc-500"
+          }`}
+        >
+          {eyebrow}
+        </p>
+      )}
       <h2
         className={`display text-4xl sm:text-5xl md:text-6xl ${
-          light ? "text-zinc-900" : "text-white"
+          dark ? "text-white" : "text-fg"
         }`}
       >
         {title}
@@ -38,7 +39,7 @@ export function SectionHeading({
       {intro && (
         <p
           className={`mt-4 max-w-xl text-base leading-relaxed ${
-            light ? "text-zinc-600" : "text-muted"
+            dark ? "text-white/70" : "text-muted"
           }`}
         >
           {intro}

@@ -57,9 +57,10 @@ export default function LeadForm() {
     <section id="contact" className="py-20 sm:py-28">
       <div className="mx-auto max-w-6xl px-5 sm:px-8">
         <div className="card grid gap-0 overflow-hidden lg:grid-cols-[0.9fr_1.1fr]">
-          {/* left: brief summary */}
-          <div className="border-b border-line bg-gold-soft p-8 sm:p-10 lg:border-b-0 lg:border-r">
+          {/* left: brief summary — black feature panel */}
+          <div className="bg-ink p-8 text-white sm:p-10">
             <SectionHeading
+              theme="dark"
               eyebrow="Let’s build"
               title="Tell us your headache."
               intro="Share a few details and we’ll come back with a tailored recommendation — usually within one working day."
@@ -67,20 +68,22 @@ export default function LeadForm() {
 
             <div className="mt-8 space-y-5">
               <div>
-                <p className="eyebrow !text-muted-2 mb-2">Your selected headaches</p>
+                <p className="mb-2 text-xs font-bold uppercase tracking-[0.2em] text-white/50">
+                  Your selected headaches
+                </p>
                 {selectedHeadacheLabels.length ? (
                   <ul className="flex flex-wrap gap-2">
                     {selectedHeadacheLabels.map((h) => (
                       <li
                         key={h}
-                        className="rounded-full border border-gold/40 bg-ink/40 px-3 py-1 text-xs text-white"
+                        className="rounded-full border border-gold/40 bg-white/5 px-3 py-1 text-xs text-white"
                       >
                         “{h}”
                       </li>
                     ))}
                   </ul>
                 ) : (
-                  <p className="text-sm text-muted">
+                  <p className="text-sm text-white/60">
                     None yet —{" "}
                     <a href="#headaches" className="text-gold hover:underline">
                       pick yours
@@ -92,7 +95,9 @@ export default function LeadForm() {
 
               {recommendedNames.length > 0 && (
                 <div>
-                  <p className="eyebrow !text-muted-2 mb-2">We’d recommend</p>
+                  <p className="mb-2 text-xs font-bold uppercase tracking-[0.2em] text-white/50">
+                    We’d recommend
+                  </p>
                   <ul className="flex flex-wrap gap-2">
                     {recommendedNames.map((n) => (
                       <li
@@ -106,7 +111,7 @@ export default function LeadForm() {
                 </div>
               )}
 
-              <div className="border-t border-line/60 pt-5 text-sm text-muted">
+              <div className="border-t border-white/10 pt-5 text-sm text-white/60">
                 Prefer email?{" "}
                 <a
                   href={`mailto:${CONTACT.email}`}
@@ -125,7 +130,7 @@ export default function LeadForm() {
                 <div className="flex h-14 w-14 items-center justify-center rounded-full bg-gold text-2xl text-black">
                   ✓
                 </div>
-                <h3 className="mt-5 font-display text-2xl font-bold text-white">
+                <h3 className="mt-5 font-display text-3xl text-fg">
                   Brief received.
                 </h3>
                 <p className="mt-2 max-w-sm text-sm text-muted">
@@ -172,7 +177,7 @@ export default function LeadForm() {
                 <div>
                   <label
                     htmlFor="message"
-                    className="mb-1.5 block text-sm font-medium text-white"
+                    className="mb-1.5 block text-sm font-medium text-fg"
                   >
                     Anything else?
                   </label>
@@ -181,7 +186,7 @@ export default function LeadForm() {
                     name="message"
                     rows={3}
                     placeholder="Tell us about your goal or the problem you’re trying to solve…"
-                    className="w-full rounded-xl border border-line bg-ink px-4 py-3 text-sm text-white outline-none transition-colors focus:border-gold"
+                    className="w-full rounded-xl border border-line bg-white px-4 py-3 text-sm text-fg outline-none transition-colors focus:border-gold"
                   />
                 </div>
 
@@ -225,7 +230,7 @@ function Field({
 }) {
   return (
     <div>
-      <label htmlFor={name} className="mb-1.5 block text-sm font-medium text-white">
+      <label htmlFor={name} className="mb-1.5 block text-sm font-medium text-fg">
         {label}
         {required && <span className="text-gold"> *</span>}
       </label>
@@ -235,7 +240,7 @@ function Field({
         type={type}
         required={required}
         autoComplete={autoComplete}
-        className="w-full rounded-xl border border-line bg-ink px-4 py-3 text-sm text-white outline-none transition-colors focus:border-gold"
+        className="w-full rounded-xl border border-line bg-white px-4 py-3 text-sm text-fg outline-none transition-colors focus:border-gold"
       />
     </div>
   );
@@ -252,14 +257,14 @@ function SelectField({
 }) {
   return (
     <div>
-      <label htmlFor={name} className="mb-1.5 block text-sm font-medium text-white">
+      <label htmlFor={name} className="mb-1.5 block text-sm font-medium text-fg">
         {label}
       </label>
       <select
         id={name}
         name={name}
         defaultValue=""
-        className="w-full rounded-xl border border-line bg-ink px-4 py-3 text-sm text-white outline-none transition-colors focus:border-gold"
+        className="w-full rounded-xl border border-line bg-white px-4 py-3 text-sm text-fg outline-none transition-colors focus:border-gold"
       >
         <option value="" disabled>
           Select…

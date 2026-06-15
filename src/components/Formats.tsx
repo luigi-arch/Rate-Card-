@@ -71,7 +71,7 @@ export default function Formats() {
                   <span className="flex items-baseline gap-3">
                     <span
                       className={`font-display text-2xl leading-none transition-colors ${
-                        isActive ? "text-white" : "text-muted group-hover:text-white"
+                        isActive ? "text-fg" : "text-muted group-hover:text-fg"
                       }`}
                     >
                       {f.name.replace("Interviewed by SideStreet", "Interviews")}
@@ -84,7 +84,7 @@ export default function Formats() {
                   </span>
                   <span
                     className={`whitespace-nowrap text-sm font-bold ${
-                      isActive ? "text-gold" : "text-muted-2"
+                      isActive ? "text-fg" : "text-muted-2"
                     }`}
                   >
                     {f.priceFrom ? `€${f.priceFrom.toLocaleString()}` : "Custom"}
@@ -148,7 +148,7 @@ function FeaturePanel({
   return (
     <div className="card overflow-hidden">
       {/* visual / logo tile */}
-      <div className="relative flex h-44 items-center justify-center overflow-hidden border-b border-line bg-gradient-to-br from-surface-2 to-ink-2 sm:h-52">
+      <div className="relative flex h-44 items-center justify-center overflow-hidden rounded-t-2xl bg-gradient-to-br from-[#1c1c1f] to-[#0b0b0c] sm:h-52">
         <div
           aria-hidden
           className="pointer-events-none absolute -right-10 -top-10 h-44 w-44 rounded-full opacity-25 blur-3xl"
@@ -168,18 +168,21 @@ function FeaturePanel({
       <div className="p-7 sm:p-8">
         <div className="flex items-start justify-between gap-4">
           <div>
-            <h3 className="font-display text-4xl leading-none text-white sm:text-5xl">
+            <h3 className="font-display text-4xl leading-none text-fg sm:text-5xl">
               {f.name}
             </h3>
-            <p className="mt-2 text-sm font-semibold uppercase tracking-wide text-gold">
-              Builds {f.keyword}
+            <p className="mt-3 flex items-center gap-2 text-sm font-semibold uppercase tracking-wide text-muted">
+              Builds
+              <span className="rounded bg-gold px-2 py-0.5 text-black">
+                {f.keyword}
+              </span>
             </p>
           </div>
           <div className="shrink-0 text-right">
             <span className="block text-[0.65rem] uppercase tracking-wide text-muted-2">
               From
             </span>
-            <span className="font-display text-3xl leading-none text-gold">
+            <span className="font-display text-3xl leading-none text-fg">
               {f.priceFrom ? `€${f.priceFrom.toLocaleString()}` : "Custom"}
             </span>
           </div>
@@ -212,16 +215,16 @@ function FeaturePanel({
 
         {/* includes (collapsed) */}
         <details className="group mt-6 border-t border-line pt-5">
-          <summary className="flex cursor-pointer list-none items-center justify-between text-sm font-bold uppercase tracking-wide text-white">
+          <summary className="flex cursor-pointer list-none items-center justify-between text-sm font-bold uppercase tracking-wide text-fg">
             What’s included
-            <span className="text-lg text-gold transition-transform group-open:rotate-45">
+            <span className="text-lg text-fg transition-transform group-open:rotate-45">
               +
             </span>
           </summary>
           <div className="mt-5 grid gap-5 sm:grid-cols-3">
             {f.includes.map((grp) => (
               <div key={grp.group}>
-                <p className="text-xs font-bold uppercase tracking-wide text-gold">
+                <p className="text-xs font-bold uppercase tracking-wide text-fg">
                   {grp.group}
                 </p>
                 <ul className="mt-2 space-y-1.5">
@@ -253,7 +256,7 @@ function Meta({ label, value }: { label: string; value: string }) {
       <dt className="text-[0.65rem] uppercase tracking-wide text-muted-2">
         {label}
       </dt>
-      <dd className="mt-0.5 font-semibold text-white">{value}</dd>
+      <dd className="mt-0.5 font-semibold text-fg">{value}</dd>
     </div>
   );
 }

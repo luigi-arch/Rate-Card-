@@ -1,29 +1,35 @@
 @import "tailwindcss";
 
 @theme {
-  --color-ink: #0a0a0b;
-  --color-ink-2: #0f0f11;
-  --color-surface: #161619;
-  --color-surface-2: #1d1d21;
-  --color-line: rgba(255, 255, 255, 0.08);
-  --color-line-strong: rgba(255, 255, 255, 0.16);
-  --color-muted: #a2a2aa;
-  --color-muted-2: #6f6f77;
+  /* Light-first palette: white dominant, black + yellow features */
+  --color-paper: #ffffff;
+  --color-paper-2: #f5f5f2;
+  --color-fg: #0c0c0d; /* primary text / black */
+  --color-ink: #0b0b0c; /* black feature blocks */
+  --color-ink-2: #161618;
+  --color-surface: #ffffff; /* cards on white */
+  --color-surface-2: #f3f3f1;
+  --color-line: rgba(0, 0, 0, 0.1);
+  --color-line-strong: rgba(0, 0, 0, 0.16);
+  --color-muted: #56565d;
+  --color-muted-2: #8c8c93;
   --color-gold: #ffb600;
   --color-gold-bright: #ffce4d;
-  --color-gold-soft: rgba(255, 182, 0, 0.12);
+  --color-gold-soft: rgba(255, 182, 0, 0.16);
 
   /* Bebas Neue for display; Manrope (Avenir/Articulat stand-in) + Helvetica for body */
   --font-display: var(--font-display), "Bebas Neue", Impact, sans-serif;
   --font-sans: var(--font-sans-brand), "Helvetica Neue", Helvetica, Arial,
     sans-serif;
 
-  --shadow-glow: 0 0 0 1px rgba(255, 182, 0, 0.25),
-    0 24px 70px -24px rgba(255, 182, 0, 0.28);
+  --shadow-soft: 0 1px 2px rgba(0, 0, 0, 0.04),
+    0 14px 40px -22px rgba(0, 0, 0, 0.25);
+  --shadow-glow: 0 0 0 1px rgba(255, 182, 0, 0.4),
+    0 24px 60px -22px rgba(255, 182, 0, 0.5);
 }
 
 :root {
-  color-scheme: dark;
+  color-scheme: light;
 }
 
 html {
@@ -32,10 +38,9 @@ html {
 }
 
 body {
-  background-color: var(--color-ink);
-  color: #ffffff;
+  background-color: var(--color-paper);
+  color: var(--color-fg);
   font-family: var(--font-sans);
-  font-feature-settings: "ss01", "cv01";
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
 }
@@ -45,13 +50,17 @@ body {
   color: #000;
 }
 
-/* Eyebrow / label — brand sans, uppercase */
+/* Eyebrow / label — brand sans, uppercase. Black on light. */
 .eyebrow {
   font-family: var(--font-sans);
   font-size: 0.72rem;
   font-weight: 700;
-  letter-spacing: 0.22em;
+  letter-spacing: 0.2em;
   text-transform: uppercase;
+  color: var(--color-fg);
+}
+/* Eyebrow variant for dark feature blocks */
+.eyebrow-gold {
   color: var(--color-gold);
 }
 
@@ -64,15 +73,23 @@ body {
   text-transform: uppercase;
 }
 
-/* Subtle dotted grid backdrop */
+/* Dotted grid backdrop (subtle on white) */
 .bg-grid {
-  background-image: radial-gradient(rgba(255, 255, 255, 0.045) 1px, transparent 1px);
+  background-image: radial-gradient(rgba(0, 0, 0, 0.05) 1px, transparent 1px);
   background-size: 28px 28px;
 }
 
+/* Card on white */
 .card {
-  background: linear-gradient(180deg, var(--color-surface) 0%, var(--color-ink-2) 100%);
+  background: var(--color-surface);
   border: 1px solid var(--color-line);
+  border-radius: 1rem;
+  box-shadow: var(--shadow-soft);
+}
+/* Card on a dark feature block */
+.card-dark {
+  background: linear-gradient(180deg, #1a1a1d 0%, #0e0e10 100%);
+  border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 1rem;
 }
 
@@ -135,12 +152,6 @@ textarea::placeholder {
 @keyframes thought-bob {
   0%, 100% { transform: translateY(0); }
   50% { transform: translateY(-12px); }
-}
-@keyframes thought-emit {
-  0% { opacity: 0; transform: translateY(8px) scale(0.94); }
-  18% { opacity: 1; }
-  82% { opacity: 1; }
-  100% { opacity: 0; transform: translateY(-22px) scale(1); }
 }
 @keyframes spark-flash {
   0%, 100% { opacity: 0.25; transform: scale(0.9) rotate(0deg); }

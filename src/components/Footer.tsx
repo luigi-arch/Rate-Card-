@@ -3,11 +3,11 @@ import Logo from "./Logo";
 
 export default function Footer() {
   return (
-    <footer className="border-t border-line bg-paper-2 py-12">
+    <footer className="bg-ink py-12 text-white">
       <div className="mx-auto flex max-w-6xl flex-col items-start justify-between gap-8 px-5 sm:px-8 md:flex-row md:items-center">
         <div>
-          <Logo />
-          <p className="mt-4 max-w-xs text-sm text-muted">
+          <Logo size={30} />
+          <p className="mt-4 max-w-xs text-sm text-white/60">
             Malta’s largest youth news platform. We build stories that make an
             impact.
           </p>
@@ -16,7 +16,7 @@ export default function Footer() {
         <div className="flex flex-col gap-3 text-sm md:items-end">
           <a
             href={`mailto:${CONTACT.email}`}
-            className="text-muted transition-colors hover:text-fg"
+            className="text-white/60 transition-colors hover:text-white"
           >
             {CONTACT.email}
           </a>
@@ -24,7 +24,7 @@ export default function Footer() {
             href={CONTACT.instagram}
             target="_blank"
             rel="noopener noreferrer"
-            className="text-muted transition-colors hover:text-fg"
+            className="text-white/60 transition-colors hover:text-white"
           >
             @sidestreetmalta
           </a>
@@ -40,7 +40,7 @@ export default function Footer() {
       </div>
 
       <div className="mx-auto mt-10 max-w-6xl px-5 sm:px-8">
-        <div className="flex flex-col gap-2 border-t border-line pt-6 text-xs text-muted-2 sm:flex-row sm:items-center sm:justify-between">
+        <div className="flex flex-col gap-2 border-t border-white/10 pt-6 text-xs text-white/40 sm:flex-row sm:items-center sm:justify-between">
           <p>© {new Date().getFullYear()} SideStreet. All rights reserved.</p>
           <p>Stories that matter. Partnerships that make an impact.</p>
         </div>

@@ -23,7 +23,7 @@ export default function Logo({
     return (
       // eslint-disable-next-line @next/next/no-img-element
       <img
-        src="/logo.svg"
+        src="/sidestreet_logo_new.png"
         alt="SideStreet"
         onError={() => setUseFile(false)}
         style={{ height: size }}

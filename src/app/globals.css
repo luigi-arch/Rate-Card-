@@ -9,17 +9,17 @@
   --color-line-strong: rgba(255, 255, 255, 0.16);
   --color-muted: #a2a2aa;
   --color-muted-2: #6f6f77;
-  --color-gold: #f5c518;
-  --color-gold-bright: #ffd84d;
-  --color-gold-soft: rgba(245, 197, 24, 0.12);
+  --color-gold: #ffb600;
+  --color-gold-bright: #ffce4d;
+  --color-gold-soft: rgba(255, 182, 0, 0.12);
 
   /* Bebas Neue for display; Manrope (Avenir/Articulat stand-in) + Helvetica for body */
   --font-display: var(--font-display), "Bebas Neue", Impact, sans-serif;
   --font-sans: var(--font-sans-brand), "Helvetica Neue", Helvetica, Arial,
     sans-serif;
 
-  --shadow-glow: 0 0 0 1px rgba(245, 197, 24, 0.25),
-    0 24px 70px -24px rgba(245, 197, 24, 0.28);
+  --shadow-glow: 0 0 0 1px rgba(255, 182, 0, 0.25),
+    0 24px 70px -24px rgba(255, 182, 0, 0.28);
 }
 
 :root {

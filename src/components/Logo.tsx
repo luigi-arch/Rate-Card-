@@ -1,13 +1,15 @@
 /**
- * SideStreet logo — gold ring with a split "S" monogram.
- * This is a faithful placeholder; to use the real asset, drop `logo.svg`
- * into /public and replace the <svg> below with:
- *   <img src="/logo.svg" alt="SideStreet" className="h-9 w-auto" />
+ * SideStreet logo — gold ring containing a split "S" monogram
+ * (gold upper, ink lower). Hand-built SVG replica of the brand mark.
+ *
+ * If you later attach the original as a FILE (the way the PDFs were attached,
+ * not pasted inline), drop it at /public/logo.svg and replace the <svg> with:
+ *   <img src="/logo.svg" alt="SideStreet" style={{ height: size }} />
  */
 export default function Logo({
   className = "",
   showWordmark = true,
-  size = 36,
+  size = 38,
 }: {
   className?: string;
   showWordmark?: boolean;
@@ -23,29 +25,52 @@ export default function Logo({
         aria-hidden="true"
         className="shrink-0"
       >
+        {/* outer gold ring */}
         <circle
           cx="50"
           cy="50"
-          r="46"
+          r="45"
           fill="none"
           stroke="var(--color-gold)"
           strokeWidth="5"
         />
-        <clipPath id="ss-clip">
-          <circle cx="50" cy="50" r="42" />
-        </clipPath>
-        <g clipPath="url(#ss-clip)">
-          {/* upper lobe (gold) */}
-          <path
-            d="M0,0 H100 V52 C74,40 60,66 40,58 C26,52 16,42 0,48 Z"
-            fill="var(--color-gold)"
-          />
-          {/* lower lobe (ink) */}
-          <path
-            d="M0,100 H100 V52 C74,40 60,66 40,58 C26,52 16,42 0,48 Z"
-            fill="var(--color-ink)"
-          />
-        </g>
+
+        {/* split S: same glyph drawn twice, clipped top (gold) / bottom (ink) */}
+        <defs>
+          <clipPath id="ss-top">
+            <rect x="0" y="0" width="100" height="50" />
+          </clipPath>
+          <clipPath id="ss-bottom">
+            <rect x="0" y="50" width="100" height="50" />
+          </clipPath>
+        </defs>
+
+        <text
+          x="50"
+          y="51"
+          textAnchor="middle"
+          dominantBaseline="central"
+          fontFamily="Helvetica, Arial, sans-serif"
+          fontWeight="700"
+          fontSize="74"
+          clipPath="url(#ss-top)"
+          fill="var(--color-gold)"
+        >
+          S
+        </text>
+        <text
+          x="50"
+          y="51"
+          textAnchor="middle"
+          dominantBaseline="central"
+          fontFamily="Helvetica, Arial, sans-serif"
+          fontWeight="700"
+          fontSize="74"
+          clipPath="url(#ss-bottom)"
+          fill="#ffffff"
+        >
+          S
+        </text>
       </svg>
       {showWordmark && (
         <span className="font-display text-2xl leading-none tracking-[0.04em] text-white">

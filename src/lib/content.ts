@@ -10,9 +10,7 @@ export type FormatId =
   | "street-views"
   | "guides"
   | "mini-docs"
-  | "interviews"
-  | "spotlight-reel"
-  | "sidequests";
+  | "interviews";
 
 export interface ContentFormat {
   id: FormatId;
@@ -78,7 +76,7 @@ export const HOW_IT_WORKS = [
   {
     step: "02",
     title: "We match it to a format",
-    body: "Street Views, Explained, Mini Docs, Guides, Interviews or a Spotlight Reel — each one engineered to solve a specific problem.",
+    body: "Street Views, Explained, Mini Docs, Guides or Interviews — each one engineered to solve a specific problem.",
   },
   {
     step: "03",
@@ -342,93 +340,6 @@ export const FORMATS: ContentFormat[] = [
       "We need assets for months, not one post",
     ],
   },
-  {
-    id: "spotlight-reel",
-    name: "Spotlight Reel",
-    tag: "Brand Reel",
-    keyword: "Awareness",
-    priceFrom: 1250,
-    oneLiner: "A flagship brand film for a launch, event or campaign moment built to make an impression.",
-    description:
-      "A high-production hero reel that puts a brand, event or launch centre-stage. Designed for reach and brand awareness — the polished moment that anchors a campaign and travels across channels.",
-    bestFor: "Brand awareness",
-    length: "90 sec+",
-    reach: "30K–100K",
-    idealFor: "Brands, Events, Launches",
-    includes: [
-      {
-        group: "Strategy & concept",
-        items: [
-          "Creative direction & concept",
-          "Shot list & production plan",
-        ],
-      },
-      {
-        group: "Production",
-        items: [
-          "Full production crew",
-          "Premium lighting & audio",
-          "Multi-setup shoot",
-        ],
-      },
-      {
-        group: "Post-production",
-        items: [
-          "Cinematic hero edit",
-          "Motion graphics & sound design",
-          "Cutdowns for social",
-        ],
-      },
-    ],
-    solves: [
-      "We have a launch or event and need a flagship moment",
-      "We need premium brand awareness at scale",
-      "We want a polished hero piece that travels across channels",
-    ],
-  },
-  {
-    id: "sidequests",
-    name: "SideQuests",
-    tag: "In-person Experiences",
-    keyword: "Belonging",
-    priceFrom: null,
-    oneLiner: "Real-world events and experiences that bring the audience together — content capture built in.",
-    description:
-      "Activations that extend the brand beyond screens and into physical spaces, creating stronger emotional bonds and community identity. Each event becomes a long-tail storytelling asset. SideQuests are about access, participation and belonging — not passive consumption.",
-    bestFor: "Community",
-    length: "Custom",
-    reach: "Event-led",
-    idealFor: "Brands building loyalty & community",
-    includes: [
-      {
-        group: "Experience design",
-        items: [
-          "Concept & activation design",
-          "Audience participation mechanics",
-          "Logistics & production planning",
-        ],
-      },
-      {
-        group: "Capture",
-        items: [
-          "On-site multi-camera capture",
-          "Photography & b-roll",
-        ],
-      },
-      {
-        group: "Output",
-        items: [
-          "Hero recap film",
-          "Social cutdowns & stories",
-        ],
-      },
-    ],
-    solves: [
-      "People don’t feel connected to us",
-      "We want real-world interaction and participation",
-      "We want memorable experiences and stronger loyalty",
-    ],
-  },
 ];
 
 /* ------------------------------------------------------------------ */
@@ -446,8 +357,6 @@ export const HEADACHES: Headache[] = [
   { id: "csr", label: "Our good work goes unseen", formatId: "mini-docs" },
   { id: "leadership", label: "Our leadership feels distant", formatId: "interviews" },
   { id: "credibility", label: "We need credibility & thought leadership", formatId: "interviews" },
-  { id: "launch", label: "We have a launch that needs a big moment", formatId: "spotlight-reel" },
-  { id: "community", label: "People don’t feel connected to us", formatId: "sidequests" },
 ];
 
 /* ------------------------------------------------------------------ */
@@ -610,8 +519,6 @@ export const PORTFOLIO: PortfolioItem[] = [
   { client: "Cadbury · Foodbank", formatId: "mini-docs", url: "https://www.instagram.com/reel/DSiJHyxjF0q/" },
   { client: "Housing Authority — CEO M. Zerafa", formatId: "interviews", url: "https://www.instagram.com/reel/DLR3A3bIua2/" },
   { client: "EP Valletta", formatId: "interviews", url: "https://www.instagram.com/reel/DUGaPKNjUKM/" },
-  { client: "Zeppi’s", formatId: "spotlight-reel", url: "https://www.instagram.com/p/DN-ZkxhDF8M/" },
-  { client: "Embassy Cinemas", formatId: "spotlight-reel", url: "https://www.instagram.com/reel/DItPJRgoZrJ/" },
 ];
 
 /* ------------------------------------------------------------------ */
@@ -674,6 +581,4 @@ export const FORMAT_LOGOS: Partial<Record<FormatId, string>> = {
   guides: "/formats/guides.svg",
   "mini-docs": "/formats/mini-docs.svg",
   interviews: "/formats/interviews.svg",
-  "spotlight-reel": "/formats/spotlight-reel.svg",
-  sidequests: "/formats/sidequests.svg",
 };

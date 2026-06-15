@@ -37,7 +37,7 @@ export default function Formats() {
       <div className="mx-auto max-w-6xl px-5 sm:px-8">
         <SectionHeading
           eyebrow="Our formats"
-          title="Six formats. Six problems solved."
+          title="Five formats. Five problems solved."
           intro="Native, organic and built to feel real — never like an ad. Pick a format to explore it."
         />
 

@@ -1,6 +1,7 @@
 import { RESULTS, CLIENT_RATING } from "@/lib/content";
 import { SectionHeading } from "./Section";
 import Reveal from "./Reveal";
+import Placeholder from "./Placeholder";
 
 export default function Results() {
   return (
@@ -24,9 +25,17 @@ export default function Results() {
 
         <div className="mt-14 grid gap-5 md:grid-cols-3">
           {RESULTS.map((r, i) => (
-            <Reveal key={r.client} delay={i * 90} className="card p-7">
+            <Reveal key={r.client} delay={i * 90} className="card overflow-hidden">
+              <Placeholder
+                label={r.client}
+                sublabel={`public/work/${r.client.toLowerCase().replace(/[^a-z0-9]+/g, "-")}.jpg`}
+                aspect="video"
+                variant="play"
+                className="rounded-none border-x-0 border-t-0"
+              />
+              <div className="p-7">
               <p className="eyebrow !text-muted-2">{r.client}</p>
-              <h3 className="mt-2 font-display text-xl font-bold text-white">
+              <h3 className="mt-2 font-display text-2xl text-white">
                 {r.project}
               </h3>
               <dl className="mt-6 grid grid-cols-3 gap-3">
@@ -41,6 +50,7 @@ export default function Results() {
                   </div>
                 ))}
               </dl>
+              </div>
             </Reveal>
           ))}
         </div>

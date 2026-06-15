@@ -1,5 +1,6 @@
 import { AUDIENCE } from "@/lib/content";
 import Reveal from "./Reveal";
+import Placeholder from "./Placeholder";
 
 export default function Hero() {
   return (
@@ -53,8 +54,18 @@ export default function Hero() {
           </div>
         </Reveal>
 
+        {/* showreel / hero media */}
+        <Reveal delay={300} className="mt-14 w-full max-w-3xl">
+          <Placeholder
+            label="Showreel"
+            sublabel="public/hero.mp4 or public/hero.jpg"
+            aspect="video"
+            variant="play"
+          />
+        </Reveal>
+
         {/* slim stat strip */}
-        <Reveal delay={320} className="mt-16 w-full">
+        <Reveal delay={360} className="mt-14 w-full">
           <dl className="flex flex-wrap items-center justify-center gap-x-10 gap-y-6 border-t border-line pt-10 sm:gap-x-16">
             {AUDIENCE.headline.map((s) => (
               <div key={s.label} className="text-center">

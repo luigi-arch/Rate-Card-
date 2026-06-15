@@ -50,26 +50,39 @@ export default function Portfolio() {
           ))}
         </div>
 
-        <div className="mt-8 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="mt-8 grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4">
           {items.map((item, i) => (
-            <Reveal key={item.url} delay={(i % 3) * 60}>
+            <Reveal key={item.url} delay={(i % 4) * 50}>
               <a
                 href={item.url}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="group flex h-full items-center justify-between gap-3 rounded-xl border border-line bg-surface px-5 py-4 transition-colors hover:border-gold/50"
+                className="group block overflow-hidden rounded-xl border border-line bg-surface transition-colors hover:border-gold/50"
               >
-                <span>
-                  <span className="block text-[0.65rem] uppercase tracking-wide text-gold">
+                {/* reel thumbnail placeholder (9:16) */}
+                <div className="relative flex aspect-[4/5] items-center justify-center overflow-hidden bg-gradient-to-br from-surface-2 to-ink-2">
+                  <div
+                    aria-hidden
+                    className="pointer-events-none absolute -right-6 -top-6 h-24 w-24 rounded-full opacity-20 blur-2xl"
+                    style={{ background: "var(--color-gold)" }}
+                  />
+                  <span className="relative flex h-11 w-11 items-center justify-center rounded-full border border-gold/50 bg-ink/50 text-gold transition-transform group-hover:scale-110">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden>
+                      <path d="M8 5v14l11-7z" />
+                    </svg>
+                  </span>
+                  <span className="absolute left-2.5 top-2.5 rounded bg-gold px-2 py-0.5 text-[0.6rem] font-bold uppercase tracking-wide text-black">
                     {FORMAT_NAME[item.formatId]}
                   </span>
-                  <span className="mt-1 block font-medium text-white">
+                </div>
+                <div className="flex items-center justify-between gap-2 px-3.5 py-3">
+                  <span className="truncate text-sm font-medium text-white">
                     {item.client}
                   </span>
-                </span>
-                <span className="text-muted-2 transition-colors group-hover:text-gold">
-                  ↗
-                </span>
+                  <span className="shrink-0 text-muted-2 transition-colors group-hover:text-gold">
+                    ↗
+                  </span>
+                </div>
               </a>
             </Reveal>
           ))}

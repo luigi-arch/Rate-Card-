@@ -121,10 +121,18 @@ function LogoTile({ logo, tag }: { logo?: string; tag: string }) {
       />
     );
   }
+  // Placeholder until the logo file is added to /public/formats
   return (
-    <span className="display relative text-center text-5xl text-white/90 sm:text-6xl">
-      {tag}
-    </span>
+    <div className="relative flex flex-col items-center gap-2">
+      <span className="display text-center text-5xl text-white/90 sm:text-6xl">
+        {tag}
+      </span>
+      {logo && (
+        <span className="rounded-full border border-dashed border-line-strong px-3 py-1 font-mono text-[0.65rem] text-muted-2">
+          add {logo.replace("/formats/", "")}
+        </span>
+      )}
+    </div>
   );
 }
 

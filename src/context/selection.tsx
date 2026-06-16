@@ -7,7 +7,8 @@ import {
   useMemo,
   useState,
 } from "react";
-import { FORMATS, HEADACHES, type FormatId } from "@/lib/content";
+import { type FormatId } from "@/lib/content";
+import { useContent } from "@/context/content";
 
 interface SelectionState {
   // Step 1 — headaches
@@ -46,6 +47,7 @@ const SelectionContext = createContext<SelectionState | null>(null);
 const DEFAULT_FORMAT: FormatId = "explained";
 
 export function SelectionProvider({ children }: { children: React.ReactNode }) {
+  const { formats: FORMATS, headaches: HEADACHES } = useContent();
   const [selected, setSelected] = useState<string[]>([]);
   const [manualFormatId, setManualFormatId] = useState<FormatId | null>(null);
   const [selectedPackage, setSelectedPackage] = useState<string | null>(null);
@@ -70,7 +72,7 @@ export function SelectionProvider({ children }: { children: React.ReactNode }) {
       selected
         .map((id) => HEADACHES.find((h) => h.id === id)?.label)
         .filter((l): l is string => Boolean(l)),
-    [selected]
+    [selected, HEADACHES]
   );
 
   // Recommended formats, ordered by how many selected headaches map to them.
@@ -85,7 +87,7 @@ export function SelectionProvider({ children }: { children: React.ReactNode }) {
       .sort((a, b) => b[1] - a[1])
       .map(([fid]) => fid)
       .filter((fid) => FORMATS.some((f) => f.id === fid));
-  }, [selected]);
+  }, [selected, FORMATS, HEADACHES]);
 
   // Active format = manual pin, else top recommendation, else default.
   const activeFormatId: FormatId =

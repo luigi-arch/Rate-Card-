@@ -1,23 +1,25 @@
 "use client";
 
-import { FORMATS, HOW_IT_WORKS } from "@/lib/content";
+import { type ContentFormat } from "@/lib/content";
 import { useSelection } from "@/context/selection";
+import { useContent } from "@/context/content";
 import { JourneyHeader } from "./JourneyHeader";
 import BrainAnimation from "./BrainAnimation";
 
 export default function HeadachePicker() {
   const { selected, clear, recommendedFormatIds } = useSelection();
+  const { formats, howItWorks } = useContent();
 
   const recommended = recommendedFormatIds
-    .map((id) => FORMATS.find((f) => f.id === id))
-    .filter((f): f is (typeof FORMATS)[number] => Boolean(f));
+    .map((id) => formats.find((f) => f.id === id))
+    .filter((f): f is ContentFormat => Boolean(f));
 
   return (
     <section id="headaches" className="scroll-mt-20 border-t border-line py-14 sm:py-20">
       <div className="mx-auto max-w-6xl px-5 sm:px-8">
         <JourneyHeader
           step="01"
-          title={HOW_IT_WORKS[0].title}
+          title={howItWorks[0].title}
           body="Click the headaches that sound like you. We’ll match each to the format built to solve it — and build your brief as you go."
           done={selected.length > 0}
         />

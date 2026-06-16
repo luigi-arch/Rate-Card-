@@ -1,7 +1,7 @@
 "use client";
 
-import { PACKAGES, ADD_ONS, HOW_IT_WORKS } from "@/lib/content";
 import { useSelection } from "@/context/selection";
+import { useContent } from "@/context/content";
 import { JourneyHeader } from "./JourneyHeader";
 import Reveal from "./Reveal";
 
@@ -20,6 +20,7 @@ export default function Packages() {
     toggleAddOn,
     isAddOnSelected,
   } = useSelection();
+  const { packages, addOns, howItWorks } = useContent();
 
   function choose(name: string) {
     const next = selectedPackage === name ? null : name;
@@ -32,13 +33,13 @@ export default function Packages() {
       <div className="mx-auto max-w-6xl px-5 sm:px-8">
         <JourneyHeader
           step="03"
-          title={HOW_IT_WORKS[2].title}
+          title={howItWorks[2].title}
           body="Start from a ready-made package or a single format, then tune it with add-ons. Pick a starting point to add it to your brief."
           done={Boolean(selectedPackage)}
         />
 
         <div className="mt-10 grid gap-5 md:grid-cols-3">
-          {PACKAGES.map((p, i) => {
+          {packages.map((p, i) => {
             const isChosen = selectedPackage === p.name;
             return (
               <Reveal
@@ -115,7 +116,7 @@ export default function Packages() {
             Tap any to add them to your brief — we’ll quote them with your package.
           </p>
           <div className="mt-6 grid gap-5 md:grid-cols-2">
-            {[ADD_ONS.creative, ADD_ONS.distribution].map((group) => (
+            {addOns.map((group) => (
               <div
                 key={group.title}
                 className="rounded-2xl border border-zinc-200 bg-zinc-50 p-7"

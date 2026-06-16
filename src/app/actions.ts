@@ -2,7 +2,8 @@
 
 import { getSupabaseClient, LEADS_TABLE } from "@/lib/supabase";
 import { sendBriefEmails } from "@/lib/email";
-import { FORMATS, type FormatId } from "@/lib/content";
+import { getSiteContent } from "@/lib/site-content";
+import { type FormatId } from "@/lib/content";
 
 export interface LeadInput {
   name: string;
@@ -44,10 +45,11 @@ export async function submitLead(input: LeadInput): Promise<LeadResult> {
     return { ok: false, error: "Please enter a valid email address." };
   }
 
-  const validFormatIds = new Set(FORMATS.map((f) => f.id));
+  const content = await getSiteContent();
+  const validFormatIds = new Set(content.formats.map((f) => f.id));
   const recommended = (input.recommendedFormats ?? [])
     .filter((id): id is FormatId => validFormatIds.has(id))
-    .map((id) => FORMATS.find((f) => f.id === id)?.name ?? id);
+    .map((id) => content.formats.find((f) => f.id === id)?.name ?? id);
 
   const row = {
     name,
@@ -101,6 +103,8 @@ export async function submitLead(input: LeadInput): Promise<LeadResult> {
       budget: row.budget,
       timeline: row.timeline,
       message: row.message,
+      recipients: content.salesRecipients,
+      bookingUrl: content.bookingUrl,
     });
   } catch (e) {
     console.error("sendBriefEmails threw:", e);

@@ -1,25 +1,26 @@
 "use client";
 
 import { useState } from "react";
-import { PORTFOLIO, FORMATS, type FormatId } from "@/lib/content";
+import { type FormatId } from "@/lib/content";
+import { useContent } from "@/context/content";
 import { SectionHeading } from "./Section";
 
-const FORMAT_NAME: Record<FormatId, string> = Object.fromEntries(
-  FORMATS.map((f) => [f.id, f.tag])
-) as Record<FormatId, string>;
-
-// only show filters for formats that actually have portfolio items
-const FILTERS = FORMATS.filter((f) =>
-  PORTFOLIO.some((p) => p.formatId === f.id)
-);
-
 export default function Portfolio() {
+  const { portfolio, formats } = useContent();
   const [active, setActive] = useState<FormatId | "all">("all");
+
+  const formatTag = (id: FormatId) =>
+    formats.find((f) => f.id === id)?.tag ?? "";
+
+  // only show filters for formats that actually have portfolio items
+  const filters = formats.filter((f) =>
+    portfolio.some((p) => p.formatId === f.id)
+  );
 
   const items =
     active === "all"
-      ? PORTFOLIO
-      : PORTFOLIO.filter((p) => p.formatId === active);
+      ? portfolio
+      : portfolio.filter((p) => p.formatId === active);
 
   return (
     <section id="work" className="scroll-mt-20 border-t border-line py-14 sm:py-20">
@@ -38,7 +39,7 @@ export default function Portfolio() {
           >
             All
           </FilterButton>
-          {FILTERS.map((f) => (
+          {filters.map((f) => (
             <FilterButton
               key={f.id}
               active={active === f.id}
@@ -50,28 +51,39 @@ export default function Portfolio() {
         </div>
 
         <div className="snap-row mt-8 flex gap-3 overflow-x-auto pb-4">
-          {items.map((item) => (
-            <div key={item.url} className="w-[200px] shrink-0 sm:w-[230px]">
+          {items.map((item, i) => (
+            <div key={`${item.url}-${i}`} className="w-[200px] shrink-0 sm:w-[230px]">
               <a
                 href={item.url}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="hover-lift hover-gold group block overflow-hidden rounded-xl border border-line bg-surface"
               >
-                {/* reel thumbnail placeholder (9:16) */}
+                {/* reel thumbnail (9:16) — uploaded image or styled placeholder */}
                 <div className="relative flex aspect-[4/5] items-center justify-center overflow-hidden bg-gradient-to-br from-[#1c1c1f] to-[#0b0b0c]">
-                  <div
-                    aria-hidden
-                    className="pointer-events-none absolute -right-6 -top-6 h-24 w-24 rounded-full opacity-20 blur-2xl"
-                    style={{ background: "var(--color-gold)" }}
-                  />
-                  <span className="relative flex h-11 w-11 items-center justify-center rounded-full border border-gold/50 bg-ink/50 text-gold transition-transform group-hover:scale-110">
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden>
-                      <path d="M8 5v14l11-7z" />
-                    </svg>
-                  </span>
+                  {item.thumbnail ? (
+                    // eslint-disable-next-line @next/next/no-img-element
+                    <img
+                      src={item.thumbnail}
+                      alt={item.client}
+                      className="h-full w-full object-cover transition-transform group-hover:scale-105"
+                    />
+                  ) : (
+                    <>
+                      <div
+                        aria-hidden
+                        className="pointer-events-none absolute -right-6 -top-6 h-24 w-24 rounded-full opacity-20 blur-2xl"
+                        style={{ background: "var(--color-gold)" }}
+                      />
+                      <span className="relative flex h-11 w-11 items-center justify-center rounded-full border border-gold/50 bg-ink/50 text-gold transition-transform group-hover:scale-110">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden>
+                          <path d="M8 5v14l11-7z" />
+                        </svg>
+                      </span>
+                    </>
+                  )}
                   <span className="absolute left-2.5 top-2.5 rounded bg-gold px-2 py-0.5 text-[0.6rem] font-bold uppercase tracking-wide text-black">
-                    {FORMAT_NAME[item.formatId]}
+                    {formatTag(item.formatId)}
                   </span>
                 </div>
                 <div className="flex items-center justify-between gap-2 px-3.5 py-3">

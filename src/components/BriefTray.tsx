@@ -1,8 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import { FORMATS } from "@/lib/content";
 import { useSelection } from "@/context/selection";
+import { useContent } from "@/context/content";
 
 function scrollTo(id: string) {
   document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
@@ -18,11 +18,12 @@ export default function BriefTray() {
     progress,
     briefCount,
   } = useSelection();
+  const { formats } = useContent();
   const [open, setOpen] = useState(true);
 
   if (briefCount === 0) return null;
 
-  const activeFormatName = FORMATS.find((f) => f.id === activeFormatId)?.name;
+  const activeFormatName = formats.find((f) => f.id === activeFormatId)?.name;
   const steps = [
     { n: "01", label: "Headache", done: progress.step1, href: "headaches" },
     { n: "02", label: "Format", done: progress.step2, href: "formats" },

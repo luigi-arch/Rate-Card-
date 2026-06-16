@@ -16,9 +16,9 @@ import BriefTray from "@/components/BriefTray";
 export const dynamic = "force-dynamic";
 
 export default async function Home() {
-  const overrides = await getSiteContent();
+  const content = await getSiteContent();
   return (
-    <ContentProvider value={overrides}>
+    <ContentProvider value={content}>
       <SelectionProvider>
         <Nav />
         <main>

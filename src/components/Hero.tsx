@@ -1,6 +1,5 @@
 "use client";
 
-import { AUDIENCE, HEADACHES } from "@/lib/content";
 import { useSelection } from "@/context/selection";
 import { useContent } from "@/context/content";
 import { StatBar } from "./PlatformStats";
@@ -22,10 +21,10 @@ function scrollTo(id: string) {
 
 export default function Hero() {
   const { toggle, isSelected } = useSelection();
-  const { asset, text } = useContent();
-  const teasers = HEADACHES.filter((h) => TEASER_IDS.includes(h.id));
-  const heroVideo = asset("hero.video");
-  const heroImage = asset("hero.image");
+  const { hero, audience, headaches } = useContent();
+  const teasers = headaches.filter((h) => TEASER_IDS.includes(h.id));
+  const heroVideo = hero.videoUrl;
+  const heroImage = hero.imageUrl;
 
   return (
     <section
@@ -36,21 +35,17 @@ export default function Hero() {
         <Reveal>
           <span className="inline-flex items-center gap-2 rounded-full border border-line bg-surface px-4 py-1.5 text-xs font-bold uppercase tracking-[0.18em] text-muted shadow-sm">
             <span className="h-1.5 w-1.5 rounded-full bg-gold" />
-            {text("tagline", AUDIENCE.tagline)}
+            {audience.tagline}
           </span>
         </Reveal>
 
         <h1 className="display mt-7 text-6xl text-fg sm:text-7xl md:text-8xl">
-          <span className="block animate-clip-up">
-            {text("hero.line1", "You bring the headache.")}
-          </span>
+          <span className="block animate-clip-up">{hero.line1}</span>
           <span
             className="relative mt-1 inline-block animate-clip-up"
             style={{ animationDelay: "0.12s" }}
           >
-            <span className="relative z-10">
-              {text("hero.line2", "We build the story.")}
-            </span>
+            <span className="relative z-10">{hero.line2}</span>
             <span
               aria-hidden
               className="animate-underline absolute inset-x-[-4px] bottom-1 z-0 h-[38%] -skew-x-6 bg-gold"
@@ -60,10 +55,7 @@ export default function Hero() {
 
         <Reveal delay={120}>
           <p className="mx-auto mt-7 max-w-xl text-lg leading-relaxed text-muted">
-            {text(
-              "hero.sub",
-              "This isn’t a list of deliverables. It’s a rate card built around your problem — pick the headache, we’ll prescribe the fix."
-            )}
+            {hero.sub}
           </p>
         </Reveal>
 

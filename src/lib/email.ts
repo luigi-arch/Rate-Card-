@@ -1,6 +1,5 @@
 import "server-only";
 import nodemailer from "nodemailer";
-import { SALES_RECIPIENTS, BOOKING_URL } from "@/lib/content";
 
 export interface BriefEmailData {
   name: string;
@@ -16,6 +15,10 @@ export interface BriefEmailData {
   budget?: string | null;
   timeline?: string | null;
   message?: string | null;
+  /** Internal recipients that receive the brief. */
+  recipients: string[];
+  /** Booking page URL for the client's "book a call" CTA (empty = fallback). */
+  bookingUrl: string;
 }
 
 const GOLD = "#ffb600";
@@ -97,8 +100,8 @@ export async function sendBriefEmails(data: BriefEmailData): Promise<void> {
      <p style="margin:20px 0 0"><a href="mailto:${esc(data.email)}" style="background:${GOLD};color:#000;text-decoration:none;font-weight:700;padding:10px 18px;border-radius:999px;font-size:14px">Reply to ${esc(data.name)}</a></p>`
   );
 
-  const bookingBtn = BOOKING_URL
-    ? `<p style="margin:20px 0 0"><a href="${esc(BOOKING_URL)}" style="background:${GOLD};color:#000;text-decoration:none;font-weight:700;padding:12px 22px;border-radius:999px;font-size:15px">Book your call →</a></p>`
+  const bookingBtn = data.bookingUrl
+    ? `<p style="margin:20px 0 0"><a href="${esc(data.bookingUrl)}" style="background:${GOLD};color:#000;text-decoration:none;font-weight:700;padding:12px 22px;border-radius:999px;font-size:15px">Book your call →</a></p>`
     : `<p style="color:#56565d;font-size:14px;margin:20px 0 0">We’ll be in touch shortly to set up a call.</p>`;
 
   const clientHtml = shell(
@@ -112,7 +115,7 @@ export async function sendBriefEmails(data: BriefEmailData): Promise<void> {
   const results = await Promise.allSettled([
     transport.sendMail({
       from,
-      to: SALES_RECIPIENTS,
+      to: data.recipients,
       replyTo: data.email,
       subject: `New brief — ${data.name}${data.company ? ` · ${data.company}` : ""}`,
       html: internalHtml,

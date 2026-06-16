@@ -5,12 +5,16 @@
  * Edit here to update the page.
  */
 
-export type FormatId =
-  | "explained"
-  | "street-views"
-  | "guides"
-  | "mini-docs"
-  | "interviews";
+/**
+ * A format id. Was a literal union; relaxed to `string` so new formats can be
+ * added from the CMS. Headaches and portfolio items reference a format by id.
+ */
+export type FormatId = string;
+
+export interface IncludeGroup {
+  group: string;
+  items: string[];
+}
 
 export interface ContentFormat {
   id: FormatId;
@@ -24,7 +28,8 @@ export interface ContentFormat {
   length: string;
   reach: string;
   idealFor: string;
-  includes: { group: string; items: string[] }[];
+  logo?: string; // public URL of an uploaded logo; falls back to a monogram
+  includes: IncludeGroup[];
   solves: string[]; // client headache quotes this format answers
 }
 
@@ -408,8 +413,13 @@ export const PACKAGES: Package[] = [
 /* Add-on system                                                       */
 /* ------------------------------------------------------------------ */
 
-export const ADD_ONS = {
-  creative: {
+export interface AddOnGroup {
+  title: string;
+  items: string[];
+}
+
+export const ADD_ONS: AddOnGroup[] = [
+  {
     title: "Creative & production",
     items: [
       "Extra filming day",
@@ -419,7 +429,7 @@ export const ADD_ONS = {
       "Maltese subtitling",
     ],
   },
-  distribution: {
+  {
     title: "Distribution",
     items: [
       "Paid boosting & ad management",
@@ -430,13 +440,25 @@ export const ADD_ONS = {
       "Story reshares",
     ],
   },
-};
+];
 
 /* ------------------------------------------------------------------ */
 /* Proof — campaign results & rating                                   */
 /* ------------------------------------------------------------------ */
 
-export const RESULTS = [
+export interface ResultStat {
+  value: string;
+  label: string;
+}
+
+export interface ResultItem {
+  client: string;
+  project: string;
+  image?: string; // public URL of an uploaded case-study image
+  stats: ResultStat[];
+}
+
+export const RESULTS: ResultItem[] = [
   {
     client: "APS Bank",
     project: "Pension Reform Explained",
@@ -497,6 +519,7 @@ export interface PortfolioItem {
   client: string;
   formatId: FormatId;
   url: string;
+  thumbnail?: string; // public URL of an uploaded thumbnail
 }
 
 export const PORTFOLIO: PortfolioItem[] = [
@@ -586,14 +609,126 @@ export const BOOKING_URL =
 
 /* ------------------------------------------------------------------ */
 /* Format logos                                                        */
-/* Drop uploaded logos in /public/formats (e.g. street-views.svg) and  */
-/* map them here. Anything left out falls back to a styled monogram.   */
+/* Default logos live in /public/formats. The CMS can override any     */
+/* format's `logo` with an uploaded file; anything left out falls back */
+/* to a styled monogram.                                               */
 /* ------------------------------------------------------------------ */
 
-export const FORMAT_LOGOS: Partial<Record<FormatId, string>> = {
+export const FORMAT_LOGOS: Record<string, string> = {
   explained: "/formats/explained.svg",
   "street-views": "/formats/street-views.svg",
   guides: "/formats/guides.svg",
   "mini-docs": "/formats/mini-docs.svg",
   interviews: "/formats/interviews.svg",
+};
+
+/* ------------------------------------------------------------------ */
+/* The full editable site document                                     */
+/* DEFAULT_CONTENT is built from the exports above; the CMS stores a    */
+/* document that overrides these defaults per top-level key.            */
+/* ------------------------------------------------------------------ */
+
+export interface AudienceStat {
+  value: string;
+  label: string;
+}
+
+export interface ChannelStat {
+  name: string;
+  value: string;
+}
+
+export interface AgeRow {
+  range: string;
+  pct: number;
+}
+
+export interface GenderRow {
+  label: string;
+  pct: number;
+}
+
+export interface Audience {
+  tagline: string;
+  headline: AudienceStat[];
+  channels: ChannelStat[];
+  age: AgeRow[];
+  gender: GenderRow[];
+}
+
+export interface HowItWorksStep {
+  step: string;
+  title: string;
+  body: string;
+}
+
+export interface DistributionChannel {
+  title: string;
+  body: string;
+}
+
+export interface Distribution {
+  channels: DistributionChannel[];
+  pullQuote: string;
+}
+
+export interface HeroContent {
+  line1: string;
+  line2: string;
+  sub: string;
+  videoUrl?: string; // uploaded showreel video
+  imageUrl?: string; // uploaded showreel image / poster
+}
+
+export interface Contact {
+  email: string;
+  site: string;
+  instagram: string;
+}
+
+export interface SiteContent {
+  hero: HeroContent;
+  audience: Audience;
+  howItWorks: HowItWorksStep[];
+  alwaysIncluded: string[];
+  formats: ContentFormat[];
+  headaches: Headache[];
+  packages: Package[];
+  addOns: AddOnGroup[];
+  results: ResultItem[];
+  clientRating: string;
+  clients: string[];
+  portfolio: PortfolioItem[];
+  distribution: Distribution;
+  budgetOptions: string[];
+  timelineOptions: string[];
+  contact: Contact;
+  salesRecipients: string[];
+  bookingUrl: string;
+}
+
+export const DEFAULT_CONTENT: SiteContent = {
+  hero: {
+    line1: "You bring the headache.",
+    line2: "We build the story.",
+    sub: "This isn’t a list of deliverables. It’s a rate card built around your problem — pick the headache, we’ll prescribe the fix.",
+  },
+  audience: AUDIENCE,
+  howItWorks: HOW_IT_WORKS,
+  alwaysIncluded: ALWAYS_INCLUDED,
+  // Fold default logos onto each format so the CMS can override per-format.
+  formats: FORMATS.map((f) => ({ ...f, logo: f.logo ?? FORMAT_LOGOS[f.id] })),
+  headaches: HEADACHES,
+  packages: PACKAGES,
+  addOns: ADD_ONS,
+  results: RESULTS,
+  clientRating: CLIENT_RATING,
+  clients: CLIENTS,
+  portfolio: PORTFOLIO,
+  distribution: DISTRIBUTION,
+  budgetOptions: BUDGET_OPTIONS,
+  timelineOptions: TIMELINE_OPTIONS,
+  contact: CONTACT,
+  salesRecipients: SALES_RECIPIENTS,
+  bookingUrl: BOOKING_URL,
 };

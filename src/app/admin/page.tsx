@@ -7,6 +7,6 @@ export const dynamic = "force-dynamic";
 
 export default async function AdminPage() {
   if (!(await isAdminAuthed())) redirect("/admin/login");
-  const overrides = await getSiteContent();
-  return <AdminEditor initial={overrides} />;
+  const content = await getSiteContent();
+  return <AdminEditor initial={content} />;
 }

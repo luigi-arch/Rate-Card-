@@ -1,7 +1,10 @@
-import { CONTACT } from "@/lib/content";
+"use client";
+
+import { useContent } from "@/context/content";
 import Logo from "./Logo";
 
 export default function Footer() {
+  const { contact } = useContent();
   return (
     <footer className="bg-ink py-12 text-white">
       <div className="mx-auto flex max-w-6xl flex-col items-start justify-between gap-8 px-5 sm:px-8 md:flex-row md:items-center">
@@ -15,13 +18,13 @@ export default function Footer() {
 
         <div className="flex flex-col gap-3 text-sm md:items-end">
           <a
-            href={`mailto:${CONTACT.email}`}
+            href={`mailto:${contact.email}`}
             className="text-white/60 transition-colors hover:text-white"
           >
-            {CONTACT.email}
+            {contact.email}
           </a>
           <a
-            href={CONTACT.instagram}
+            href={contact.instagram}
             target="_blank"
             rel="noopener noreferrer"
             className="text-white/60 transition-colors hover:text-white"
@@ -29,12 +32,12 @@ export default function Footer() {
             @sidestreetmalta
           </a>
           <a
-            href={`https://${CONTACT.site}`}
+            href={`https://${contact.site}`}
             target="_blank"
             rel="noopener noreferrer"
             className="font-semibold text-gold hover:underline"
           >
-            {CONTACT.site}
+            {contact.site}
           </a>
         </div>
       </div>

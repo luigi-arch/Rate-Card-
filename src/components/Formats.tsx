@@ -1,13 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import {
-  FORMATS,
-  FORMAT_LOGOS,
-  ALWAYS_INCLUDED,
-  DISTRIBUTION,
-  HOW_IT_WORKS,
-} from "@/lib/content";
+import { type ContentFormat } from "@/lib/content";
 import { useSelection } from "@/context/selection";
 import { useContent } from "@/context/content";
 import { JourneyHeader } from "./JourneyHeader";
@@ -16,15 +10,16 @@ import Reveal from "./Reveal";
 export default function Formats() {
   const { recommendedFormatIds, activeFormatId, setActiveFormat, formatEngaged } =
     useSelection();
+  const { formats, alwaysIncluded, howItWorks } = useContent();
   const recommended = new Set(recommendedFormatIds);
-  const active = FORMATS.find((f) => f.id === activeFormatId) ?? FORMATS[0];
+  const active = formats.find((f) => f.id === activeFormatId) ?? formats[0];
 
   return (
     <section id="formats" className="scroll-mt-20 border-t border-line py-14 sm:py-20">
       <div className="mx-auto max-w-6xl px-5 sm:px-8">
         <JourneyHeader
           step="02"
-          title={HOW_IT_WORKS[1].title}
+          title={howItWorks[1].title}
           body="Each format is engineered around one outcome. Pick one to explore — we’ve starred the fit for your headaches."
           done={formatEngaged}
         />
@@ -32,7 +27,7 @@ export default function Formats() {
         {/* always included */}
         <Reveal className="mt-8 flex flex-wrap items-center gap-x-6 gap-y-2 rounded-2xl border border-line bg-surface/40 px-6 py-4">
           <span className="eyebrow">Every format includes</span>
-          {ALWAYS_INCLUDED.map((item) => (
+          {alwaysIncluded.map((item) => (
             <span key={item} className="flex items-center gap-2 text-sm text-muted">
               <span className="text-gold">✓</span>
               {item}
@@ -43,7 +38,7 @@ export default function Formats() {
         <div className="mt-8 grid gap-6 lg:grid-cols-[5fr_7fr]">
           {/* selector list */}
           <Reveal className="flex gap-2 overflow-x-auto pb-2 lg:flex-col lg:gap-1.5 lg:overflow-visible lg:pb-0">
-            {FORMATS.map((f) => {
+            {formats.map((f) => {
               const isActive = f.id === active.id;
               return (
                 <button
@@ -114,7 +109,7 @@ function LogoTile({ logo, tag }: { logo?: string; tag: string }) {
       <span className="display text-center text-5xl text-white/90 sm:text-6xl">
         {tag}
       </span>
-      {logo && (
+      {logo?.startsWith("/formats/") && (
         <span className="rounded-full border border-dashed border-white/20 px-3 py-1 font-mono text-[0.65rem] text-white/40">
           add {logo.replace("/formats/", "")}
         </span>
@@ -127,11 +122,11 @@ function FeaturePanel({
   format: f,
   recommended,
 }: {
-  format: (typeof FORMATS)[number];
+  format: ContentFormat;
   recommended: boolean;
 }) {
-  const { asset } = useContent();
-  const logo = asset(`format.${f.id}`, FORMAT_LOGOS[f.id]);
+  const { distribution } = useContent();
+  const logo = f.logo;
 
   return (
     <div className="card overflow-hidden">
@@ -236,7 +231,7 @@ function FeaturePanel({
             </span>
           </summary>
           <div className="mt-5 grid gap-4 sm:grid-cols-3">
-            {DISTRIBUTION.channels.map((c, i) => (
+            {distribution.channels.map((c, i) => (
               <div key={c.title}>
                 <p className="font-display text-2xl text-gold/40">0{i + 1}</p>
                 <p className="text-sm font-bold text-fg">{c.title}</p>
@@ -245,7 +240,7 @@ function FeaturePanel({
             ))}
           </div>
           <p className="mt-4 border-l-2 border-gold pl-4 text-sm italic text-muted">
-            {DISTRIBUTION.pullQuote}
+            {distribution.pullQuote}
           </p>
         </details>
 

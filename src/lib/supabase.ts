@@ -9,8 +9,17 @@ import { createClient, type SupabaseClient } from "@supabase/supabase-js";
  *   SUPABASE_URL  /  NEXT_PUBLIC_SUPABASE_URL
  *   SUPABASE_ANON_KEY  /  NEXT_PUBLIC_SUPABASE_ANON_KEY
  */
-const DEFAULT_URL = "https://otucjmkjmsbojghkgnxm.supabase.co";
-const DEFAULT_ANON_KEY = "sb_publishable_gGmrajsiBz_jR-FBwMLCCw_u_5gAW2k";
+export const SUPABASE_URL =
+  process.env.SUPABASE_URL ??
+  process.env.NEXT_PUBLIC_SUPABASE_URL ??
+  "https://otucjmkjmsbojghkgnxm.supabase.co";
+export const SUPABASE_ANON_KEY =
+  process.env.SUPABASE_ANON_KEY ??
+  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ??
+  "sb_publishable_gGmrajsiBz_jR-FBwMLCCw_u_5gAW2k";
+
+const DEFAULT_URL = SUPABASE_URL;
+const DEFAULT_ANON_KEY = SUPABASE_ANON_KEY;
 
 export function getSupabaseClient(): SupabaseClient | null {
   const url =

@@ -2,6 +2,7 @@
 
 import { AUDIENCE, HEADACHES } from "@/lib/content";
 import { useSelection } from "@/context/selection";
+import { useContent } from "@/context/content";
 import { StatBar } from "./PlatformStats";
 import Reveal from "./Reveal";
 
@@ -21,7 +22,10 @@ function scrollTo(id: string) {
 
 export default function Hero() {
   const { toggle, isSelected } = useSelection();
+  const { asset, text } = useContent();
   const teasers = HEADACHES.filter((h) => TEASER_IDS.includes(h.id));
+  const heroVideo = asset("hero.video");
+  const heroImage = asset("hero.image");
 
   return (
     <section
@@ -32,17 +36,21 @@ export default function Hero() {
         <Reveal>
           <span className="inline-flex items-center gap-2 rounded-full border border-line bg-surface px-4 py-1.5 text-xs font-bold uppercase tracking-[0.18em] text-muted shadow-sm">
             <span className="h-1.5 w-1.5 rounded-full bg-gold" />
-            {AUDIENCE.tagline}
+            {text("tagline", AUDIENCE.tagline)}
           </span>
         </Reveal>
 
         <h1 className="display mt-7 text-6xl text-fg sm:text-7xl md:text-8xl">
-          <span className="block animate-clip-up">You bring the headache.</span>
+          <span className="block animate-clip-up">
+            {text("hero.line1", "You bring the headache.")}
+          </span>
           <span
             className="relative mt-1 inline-block animate-clip-up"
             style={{ animationDelay: "0.12s" }}
           >
-            <span className="relative z-10">We build the story.</span>
+            <span className="relative z-10">
+              {text("hero.line2", "We build the story.")}
+            </span>
             <span
               aria-hidden
               className="animate-underline absolute inset-x-[-4px] bottom-1 z-0 h-[38%] -skew-x-6 bg-gold"
@@ -52,8 +60,10 @@ export default function Hero() {
 
         <Reveal delay={120}>
           <p className="mx-auto mt-7 max-w-xl text-lg leading-relaxed text-muted">
-            This isn’t a list of deliverables. It’s a rate card built around your
-            problem — pick the headache, we’ll prescribe the fix.
+            {text(
+              "hero.sub",
+              "This isn’t a list of deliverables. It’s a rate card built around your problem — pick the headache, we’ll prescribe the fix."
+            )}
           </p>
         </Reveal>
 
@@ -102,8 +112,48 @@ export default function Hero() {
           </div>
         </Reveal>
 
+        {/* showreel — CMS media with placeholder fallback */}
+        <Reveal delay={320} className="mt-12">
+          <div className="relative mx-auto flex aspect-video w-full max-w-3xl items-center justify-center overflow-hidden rounded-2xl bg-ink shadow-[0_30px_80px_-30px_rgba(0,0,0,0.45)]">
+            {heroVideo ? (
+              <video
+                src={heroVideo}
+                poster={heroImage}
+                autoPlay
+                muted
+                loop
+                playsInline
+                className="h-full w-full object-cover"
+              />
+            ) : heroImage ? (
+              // eslint-disable-next-line @next/next/no-img-element
+              <img
+                src={heroImage}
+                alt="SideStreet showreel"
+                className="h-full w-full object-cover"
+              />
+            ) : (
+              <>
+                <div
+                  aria-hidden
+                  className="pointer-events-none absolute -right-10 -top-10 h-40 w-40 rounded-full opacity-40 blur-3xl"
+                  style={{ background: "var(--color-gold)" }}
+                />
+                <span className="relative flex h-16 w-16 items-center justify-center rounded-full bg-gold text-black">
+                  <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor" aria-hidden>
+                    <path d="M8 5v14l11-7z" />
+                  </svg>
+                </span>
+                <span className="absolute bottom-4 left-5 font-mono text-[0.68rem] text-white/50">
+                  Add a showreel in /admin
+                </span>
+              </>
+            )}
+          </div>
+        </Reveal>
+
         {/* platform-native stat bar */}
-        <Reveal delay={340} className="mt-14">
+        <Reveal delay={360} className="mt-14">
           <StatBar />
         </Reveal>
 

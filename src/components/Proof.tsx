@@ -1,10 +1,18 @@
+"use client";
+
 import { AUDIENCE, RESULTS, CLIENT_RATING } from "@/lib/content";
+import { useContent } from "@/context/content";
 import { SectionHeading } from "./Section";
 import { PlatformCards, CountStat } from "./PlatformStats";
 import Placeholder from "./Placeholder";
 import Reveal from "./Reveal";
 
+function slug(s: string) {
+  return s.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
+}
+
 export default function Proof() {
+  const { asset } = useContent();
   return (
     <section id="audience" className="py-14 sm:py-20">
       <div className="mx-auto max-w-6xl px-5 sm:px-8">
@@ -77,15 +85,26 @@ export default function Proof() {
         </div>
 
         <div className="mt-6 grid gap-3 md:grid-cols-3">
-          {RESULTS.map((r, i) => (
+          {RESULTS.map((r, i) => {
+            const img = asset(`work.${slug(r.client)}`);
+            return (
             <Reveal key={r.client} delay={i * 80} className="card hover-lift overflow-hidden">
-              <Placeholder
-                label={r.client}
-                sublabel={`public/work/${r.client.toLowerCase().replace(/[^a-z0-9]+/g, "-")}.jpg`}
-                aspect="video"
-                variant="play"
-                className="rounded-none border-x-0 border-t-0"
-              />
+              {img ? (
+                // eslint-disable-next-line @next/next/no-img-element
+                <img
+                  src={img}
+                  alt={`${r.client} — ${r.project}`}
+                  className="aspect-video w-full object-cover"
+                />
+              ) : (
+                <Placeholder
+                  label={r.client}
+                  sublabel="add in /admin"
+                  aspect="video"
+                  variant="play"
+                  className="rounded-none border-x-0 border-t-0"
+                />
+              )}
               <div className="p-6">
                 <p className="eyebrow !text-muted-2">{r.client}</p>
                 <h4 className="mt-1 font-display text-2xl text-fg">{r.project}</h4>
@@ -104,7 +123,8 @@ export default function Proof() {
                 </dl>
               </div>
             </Reveal>
-          ))}
+            );
+          })}
         </div>
 
         <Reveal className="mt-8 text-center">

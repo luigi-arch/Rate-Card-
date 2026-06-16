@@ -9,6 +9,7 @@ import {
   HOW_IT_WORKS,
 } from "@/lib/content";
 import { useSelection } from "@/context/selection";
+import { useContent } from "@/context/content";
 import { JourneyHeader } from "./JourneyHeader";
 import Reveal from "./Reveal";
 
@@ -129,7 +130,8 @@ function FeaturePanel({
   format: (typeof FORMATS)[number];
   recommended: boolean;
 }) {
-  const logo = FORMAT_LOGOS[f.id];
+  const { asset } = useContent();
+  const logo = asset(`format.${f.id}`, FORMAT_LOGOS[f.id]);
 
   return (
     <div className="card overflow-hidden">

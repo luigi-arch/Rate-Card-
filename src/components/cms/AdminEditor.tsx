@@ -1,23 +1,14 @@
 "use client";
 
 import { useState } from "react";
-import { createClient } from "@/lib/supabase/browser";
 import {
   ASSET_SLOTS,
   TEXT_FIELDS,
   type SiteOverrides,
 } from "@/lib/site-content";
-import { saveSiteContent, signOutAction } from "@/app/admin/actions";
+import { saveSiteContent, signOutAction, uploadAsset } from "@/app/admin/actions";
 
-const BUCKET = "site-assets";
-
-export default function AdminEditor({
-  initial,
-  email,
-}: {
-  initial: SiteOverrides;
-  email: string;
-}) {
+export default function AdminEditor({ initial }: { initial: SiteOverrides }) {
   const [assets, setAssets] = useState<Record<string, string>>(
     initial.assets ?? {}
   );
@@ -30,15 +21,12 @@ export default function AdminEditor({
     setMsg(null);
     setUploading(slot);
     try {
-      const supabase = createClient();
-      const safe = file.name.replace(/[^a-zA-Z0-9.\-_]/g, "-");
-      const path = `${slot.replace(/\./g, "-")}/${Date.now()}-${safe}`;
-      const { error } = await supabase.storage
-        .from(BUCKET)
-        .upload(path, file, { upsert: true, cacheControl: "3600" });
-      if (error) throw error;
-      const { data } = supabase.storage.from(BUCKET).getPublicUrl(path);
-      setAssets((prev) => ({ ...prev, [slot]: data.publicUrl }));
+      const fd = new FormData();
+      fd.set("file", file);
+      fd.set("slot", slot);
+      const res = await uploadAsset(fd);
+      if (!res.ok || !res.url) throw new Error(res.error ?? "Upload failed");
+      setAssets((prev) => ({ ...prev, [slot]: res.url! }));
     } catch (e) {
       setMsg({ ok: false, text: `Upload failed: ${(e as Error).message}` });
     } finally {
@@ -74,7 +62,7 @@ export default function AdminEditor({
           <p className="font-display text-2xl tracking-[0.04em]">
             SIDE<span className="text-gold">STREET</span> CMS
           </p>
-          <p className="text-xs text-muted">{email}</p>
+          <p className="text-xs text-muted">Content management</p>
         </div>
         <div className="flex items-center gap-3">
           <a

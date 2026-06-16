@@ -1,160 +1,162 @@
+"use client";
+
+import { HEADACHES } from "@/lib/content";
+import { useSelection } from "@/context/selection";
+
 /**
- * Animated "headache" brain: a pulsing brain with client problems
- * drifting out of it. Pure CSS animation (respects reduced-motion).
+ * Interactive "headache brain" on a light background: a pulsing brain with the
+ * real client headaches as clickable nodes arranged around it. Selecting a node
+ * toggles it in the journey. Pure CSS motion, gated by prefers-reduced-motion.
  */
 
-const THOUGHTS: {
+const DURATIONS = ["5.5s", "6.2s", "5.8s", "6.6s", "6s", "5.3s", "6.4s", "5.6s", "6.1s", "5.9s"];
+const DELAYS = ["0s", "0.6s", "1.1s", "0.3s", "1.4s", "0.9s", "0.2s", "1.2s", "0.5s", "0.8s"];
+
+function Node({
+  label,
+  active,
+  onClick,
+  index,
+  align = "left",
+}: {
   label: string;
-  className: string; // position
-  dur: string;
-  delay: string;
-  hideOnMobile?: boolean;
-}[] = [
-  {
-    label: "“People don’t understand what we do”",
-    className: "left-0 top-4 sm:top-6",
-    dur: "5.5s",
-    delay: "0s",
-  },
-  {
-    label: "“We feel corporate and out of touch”",
-    className: "right-0 top-2 sm:top-4",
-    dur: "6.2s",
-    delay: "0.6s",
-  },
-  {
-    label: "“People don’t feel our impact”",
-    className: "left-2 top-1/2 -translate-y-1/2",
-    dur: "5.8s",
-    delay: "1.1s",
-    hideOnMobile: true,
-  },
-  {
-    label: "“Our leadership feels distant”",
-    className: "right-1 top-1/2 -translate-y-1/2",
-    dur: "6.6s",
-    delay: "0.3s",
-    hideOnMobile: true,
-  },
-  {
-    label: "“People don’t know what to do”",
-    className: "left-4 bottom-6 sm:bottom-10",
-    dur: "6s",
-    delay: "1.4s",
-  },
-  {
-    label: "“We need authentic engagement”",
-    className: "right-3 bottom-4 sm:bottom-8",
-    dur: "5.3s",
-    delay: "0.9s",
-  },
-];
+  active: boolean;
+  onClick: () => void;
+  index: number;
+  align?: "left" | "right";
+}) {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      aria-pressed={active}
+      style={
+        {
+          "--dur": DURATIONS[index % DURATIONS.length],
+          "--delay": DELAYS[index % DELAYS.length],
+        } as React.CSSProperties
+      }
+      className={`animate-thought press max-w-[15rem] rounded-xl border px-3.5 py-2 text-sm font-medium shadow-sm transition-colors ${
+        align === "right" ? "text-right" : "text-left"
+      } ${
+        active
+          ? "border-gold bg-gold text-black"
+          : "border-line-strong bg-surface text-muted hover:border-fg hover:text-fg"
+      }`}
+    >
+      “{label}”
+    </button>
+  );
+}
 
 export default function BrainAnimation() {
+  const { toggle, isSelected } = useSelection();
+  const left = HEADACHES.slice(0, Math.ceil(HEADACHES.length / 2));
+  const right = HEADACHES.slice(Math.ceil(HEADACHES.length / 2));
+
   return (
-    <div className="relative mx-auto h-[360px] w-full max-w-3xl select-none sm:h-[420px]">
-      {/* pulsing glow */}
-      <div
-        aria-hidden
-        className="animate-brain-glow pointer-events-none absolute left-1/2 top-1/2 h-56 w-56 rounded-full blur-3xl sm:h-72 sm:w-72"
-        style={{ background: "var(--color-gold)" }}
-      />
-
-      {/* radial emanation lines */}
-      <svg
-        aria-hidden
-        viewBox="0 0 400 400"
-        className="pointer-events-none absolute left-1/2 top-1/2 h-[300px] w-[300px] -translate-x-1/2 -translate-y-1/2 opacity-20 sm:h-[360px] sm:w-[360px]"
-      >
-        {Array.from({ length: 12 }).map((_, i) => {
-          const angle = (i / 12) * Math.PI * 2;
-          const x1 = 200 + Math.cos(angle) * 70;
-          const y1 = 200 + Math.sin(angle) * 70;
-          const x2 = 200 + Math.cos(angle) * 185;
-          const y2 = 200 + Math.sin(angle) * 185;
-          return (
-            <line
-              key={i}
-              x1={x1}
-              y1={y1}
-              x2={x2}
-              y2={y2}
-              stroke="var(--color-gold)"
-              strokeWidth="1"
-              strokeDasharray="2 7"
+    <div className="relative select-none">
+      <div className="items-center gap-6 lg:grid lg:grid-cols-[1fr_auto_1fr]">
+        {/* left column (desktop) */}
+        <div className="hidden flex-col items-end gap-3 lg:flex">
+          {left.map((h) => (
+            <Node
+              key={h.id}
+              label={h.label}
+              active={isSelected(h.id)}
+              onClick={() => toggle(h.id)}
+              index={HEADACHES.indexOf(h)}
+              align="right"
             />
-          );
-        })}
-      </svg>
+          ))}
+        </div>
 
-      {/* brain */}
-      <div className="animate-brain-throb absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">
-        <svg
-          width="220"
-          height="190"
-          viewBox="0 0 240 200"
-          fill="none"
-          aria-hidden
-          className="h-auto w-[160px] sm:w-[210px]"
-        >
-          <g
-            stroke="var(--color-gold)"
-            strokeWidth="3.5"
-            fill="rgba(255,182,0,0.06)"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          >
-            {/* left hemisphere */}
-            <path d="M118 32 C 96 18, 60 22, 50 44 C 30 48, 22 72, 34 88 C 20 100, 26 124, 44 132 C 46 154, 72 166, 94 158 C 106 170, 118 166, 118 150 Z" />
-            {/* right hemisphere */}
-            <path d="M122 32 C 144 18, 180 22, 190 44 C 210 48, 218 72, 206 88 C 220 100, 214 124, 196 132 C 194 154, 168 166, 146 158 C 134 170, 122 166, 122 150 Z" />
-            {/* inner gyri — left */}
-            <path d="M72 60 C 86 64, 80 80, 94 84" />
-            <path d="M56 98 C 72 98, 70 112, 88 114" />
-            <path d="M76 132 C 88 126, 94 136, 106 132" />
-            {/* inner gyri — right */}
-            <path d="M168 60 C 154 64, 160 80, 146 84" />
-            <path d="M184 98 C 168 98, 170 112, 152 114" />
-            <path d="M164 132 C 152 126, 146 136, 134 132" />
-          </g>
-        </svg>
+        {/* brain */}
+        <div className="relative mx-auto flex h-[240px] w-[240px] items-center justify-center sm:h-[300px] sm:w-[300px]">
+          <div
+            aria-hidden
+            className="animate-brain-glow pointer-events-none absolute left-1/2 top-1/2 h-44 w-44 rounded-full opacity-50 blur-3xl sm:h-56 sm:w-56"
+            style={{ background: "var(--color-gold)" }}
+          />
+          <div className="animate-brain-throb relative">
+            <svg
+              width="240"
+              height="200"
+              viewBox="0 0 240 200"
+              fill="none"
+              aria-hidden
+              className="h-auto w-[180px] sm:w-[230px]"
+            >
+              <g
+                stroke="var(--color-fg)"
+                strokeWidth="3.5"
+                fill="none"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
+                <path d="M118 32 C 96 18, 60 22, 50 44 C 30 48, 22 72, 34 88 C 20 100, 26 124, 44 132 C 46 154, 72 166, 94 158 C 106 170, 118 166, 118 150 Z" />
+                <path d="M122 32 C 144 18, 180 22, 190 44 C 210 48, 218 72, 206 88 C 220 100, 214 124, 196 132 C 194 154, 168 166, 146 158 C 134 170, 122 166, 122 150 Z" />
+              </g>
+              <g
+                stroke="var(--color-gold)"
+                strokeWidth="2.5"
+                fill="none"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
+                <path d="M72 60 C 86 64, 80 80, 94 84" />
+                <path d="M56 98 C 72 98, 70 112, 88 114" />
+                <path d="M76 132 C 88 126, 94 136, 106 132" />
+                <path d="M168 60 C 154 64, 160 80, 146 84" />
+                <path d="M184 98 C 168 98, 170 112, 152 114" />
+                <path d="M164 132 C 152 126, 146 136, 134 132" />
+              </g>
+            </svg>
 
-        {/* pain sparks */}
-        <span
-          className="animate-spark absolute -left-3 -top-2 text-gold"
-          style={{ "--dur": "2.2s" } as React.CSSProperties}
-          aria-hidden
-        >
-          <Spark />
-        </span>
-        <span
-          className="animate-spark absolute -right-2 top-2 text-gold"
-          style={{ "--dur": "2.8s", "--delay": "0.5s" } as React.CSSProperties}
-          aria-hidden
-        >
-          <Spark />
-        </span>
+            <span
+              className="animate-spark absolute -left-2 -top-1 text-gold"
+              style={{ "--dur": "2.2s" } as React.CSSProperties}
+              aria-hidden
+            >
+              <Spark />
+            </span>
+            <span
+              className="animate-spark absolute -right-1 top-2 text-gold"
+              style={{ "--dur": "2.8s", "--delay": "0.5s" } as React.CSSProperties}
+              aria-hidden
+            >
+              <Spark />
+            </span>
+          </div>
+        </div>
+
+        {/* right column (desktop) */}
+        <div className="hidden flex-col items-start gap-3 lg:flex">
+          {right.map((h) => (
+            <Node
+              key={h.id}
+              label={h.label}
+              active={isSelected(h.id)}
+              onClick={() => toggle(h.id)}
+              index={HEADACHES.indexOf(h)}
+              align="left"
+            />
+          ))}
+        </div>
       </div>
 
-      {/* floating thoughts */}
-      {THOUGHTS.map((t) => (
-        <div
-          key={t.label}
-          className={`absolute ${t.className} ${
-            t.hideOnMobile ? "hidden sm:block" : ""
-          }`}
-        >
-          <span
-            className="animate-thought inline-flex max-w-[44vw] items-center gap-2 rounded-full border border-line-strong bg-surface/80 px-3.5 py-2 text-xs font-medium text-muted shadow-lg backdrop-blur-sm sm:max-w-none sm:text-sm"
-            style={
-              { "--dur": t.dur, "--delay": t.delay } as React.CSSProperties
-            }
-          >
-            <span className="h-1.5 w-1.5 shrink-0 rounded-full bg-gold" />
-            {t.label}
-          </span>
-        </div>
-      ))}
+      {/* mobile / tablet: clickable cloud */}
+      <div className="mt-8 flex flex-wrap justify-center gap-2 lg:hidden">
+        {HEADACHES.map((h, i) => (
+          <Node
+            key={h.id}
+            label={h.label}
+            active={isSelected(h.id)}
+            onClick={() => toggle(h.id)}
+            index={i}
+          />
+        ))}
+      </div>
     </div>
   );
 }

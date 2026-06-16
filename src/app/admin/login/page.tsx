@@ -1,28 +1,27 @@
 "use client";
 
-import { useState } from "react";
-import { createClient } from "@/lib/supabase/browser";
+import { useState, useTransition } from "react";
+import { useRouter } from "next/navigation";
+import { login } from "../actions";
 
 export default function AdminLogin() {
-  const [email, setEmail] = useState("");
-  const [sent, setSent] = useState(false);
+  const router = useRouter();
+  const [password, setPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
-  const [loading, setLoading] = useState(false);
+  const [pending, startTransition] = useTransition();
 
-  async function handleSubmit(e: React.FormEvent) {
+  function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     setError(null);
-    setLoading(true);
-    const supabase = createClient();
-    const { error } = await supabase.auth.signInWithOtp({
-      email: email.trim(),
-      options: {
-        emailRedirectTo: `${window.location.origin}/admin/auth/callback`,
-      },
+    startTransition(async () => {
+      const res = await login(password);
+      if (res.ok) {
+        router.replace("/admin");
+        router.refresh();
+      } else {
+        setError(res.error ?? "Login failed.");
+      }
     });
-    setLoading(false);
-    if (error) setError(error.message);
-    else setSent(true);
   }
 
   return (
@@ -31,48 +30,37 @@ export default function AdminLogin() {
         <p className="font-display text-2xl tracking-[0.04em]">
           SIDE<span className="text-gold">STREET</span> CMS
         </p>
-        {sent ? (
-          <p className="mt-6 text-sm text-muted">
-            Check your inbox — we’ve sent a magic sign-in link to{" "}
-            <span className="font-semibold text-fg">{email}</span>. Open it on
-            this device to continue.
-          </p>
-        ) : (
-          <form onSubmit={handleSubmit} className="mt-6 space-y-4">
-            <div>
-              <label
-                htmlFor="email"
-                className="mb-1.5 block text-sm font-medium text-fg"
-              >
-                Work email
-              </label>
-              <input
-                id="email"
-                type="email"
-                required
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                placeholder="you@sidestreetmalta.com"
-                className="w-full rounded-xl border border-line bg-white px-4 py-3 text-sm text-fg outline-none focus:border-gold"
-              />
-            </div>
-            {error && (
-              <p className="rounded-lg border border-red-300 bg-red-50 px-3 py-2 text-sm text-red-600">
-                {error}
-              </p>
-            )}
-            <button
-              type="submit"
-              disabled={loading}
-              className="press w-full rounded-full bg-gold py-3 text-sm font-bold uppercase tracking-wide text-black disabled:opacity-60"
+        <form onSubmit={handleSubmit} className="mt-6 space-y-4">
+          <div>
+            <label
+              htmlFor="password"
+              className="mb-1.5 block text-sm font-medium text-fg"
             >
-              {loading ? "Sending…" : "Send magic link"}
-            </button>
-            <p className="text-center text-xs text-muted-2">
-              Access is limited to approved SideStreet team members.
+              Admin password
+            </label>
+            <input
+              id="password"
+              type="password"
+              required
+              autoFocus
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              className="w-full rounded-xl border border-line bg-white px-4 py-3 text-sm text-fg outline-none focus:border-gold"
+            />
+          </div>
+          {error && (
+            <p className="rounded-lg border border-red-300 bg-red-50 px-3 py-2 text-sm text-red-600">
+              {error}
             </p>
-          </form>
-        )}
+          )}
+          <button
+            type="submit"
+            disabled={pending}
+            className="press w-full rounded-full bg-gold py-3 text-sm font-bold uppercase tracking-wide text-black disabled:opacity-60"
+          >
+            {pending ? "Checking…" : "Enter CMS"}
+          </button>
+        </form>
       </div>
     </div>
   );

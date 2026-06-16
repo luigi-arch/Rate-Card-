@@ -1,13 +1,12 @@
 "use client";
 
-import { HEADACHES, FORMATS, HOW_IT_WORKS } from "@/lib/content";
+import { FORMATS, HOW_IT_WORKS } from "@/lib/content";
 import { useSelection } from "@/context/selection";
 import { JourneyHeader } from "./JourneyHeader";
 import BrainAnimation from "./BrainAnimation";
 
 export default function HeadachePicker() {
-  const { selected, toggle, clear, isSelected, recommendedFormatIds } =
-    useSelection();
+  const { selected, clear, recommendedFormatIds } = useSelection();
 
   const recommended = recommendedFormatIds
     .map((id) => FORMATS.find((f) => f.id === id))
@@ -19,42 +18,18 @@ export default function HeadachePicker() {
         <JourneyHeader
           step="01"
           title={HOW_IT_WORKS[0].title}
-          body="Pick the ones that sound like you. We’ll match each to the format built to solve it — and build your brief as you go."
+          body="Click the headaches that sound like you. We’ll match each to the format built to solve it — and build your brief as you go."
           done={selected.length > 0}
         />
 
-        {/* brain on a black feature panel */}
-        <div className="relative mt-10 overflow-hidden rounded-3xl bg-ink px-4 py-8 sm:py-10">
+        {/* interactive brain — the headaches are the selectors */}
+        <div className="mt-10">
           <BrainAnimation />
         </div>
 
-        <div className="mt-8 grid gap-8 lg:grid-cols-[1.15fr_0.85fr]">
-          {/* chips */}
-          <div className="flex flex-wrap content-start gap-2.5">
-            {HEADACHES.map((h) => {
-              const active = isSelected(h.id);
-              return (
-                <button
-                  key={h.id}
-                  type="button"
-                  onClick={() => toggle(h.id)}
-                  aria-pressed={active}
-                  className={`group rounded-full border px-4 py-2.5 text-left text-sm font-medium transition-all ${
-                    active
-                      ? "border-gold bg-gold text-black"
-                      : "border-line-strong text-muted hover:border-fg hover:text-fg"
-                  }`}
-                >
-                  <span className="mr-1.5 opacity-60">“</span>
-                  {h.label}
-                  <span className="ml-1.5 opacity-60">”</span>
-                </button>
-              );
-            })}
-          </div>
-
-          {/* result panel */}
-          <div className="card sticky top-24 self-start p-6 sm:p-7">
+        {/* matched formats */}
+        <div className="mx-auto mt-10 max-w-2xl">
+          <div className="card p-6 sm:p-7">
             <div className="flex items-center justify-between">
               <p className="eyebrow">Your matched formats</p>
               {selected.length > 0 && (
@@ -70,15 +45,15 @@ export default function HeadachePicker() {
 
             {recommended.length === 0 ? (
               <p className="mt-5 text-sm leading-relaxed text-muted">
-                Select a headache and we’ll show you the format engineered to fix
-                it. Choose as many as apply.
+                Click a headache above and we’ll show you the format engineered to
+                fix it. Choose as many as apply.
               </p>
             ) : (
               <div className="mt-5 space-y-3">
                 {recommended.map((f) => (
                   <a
                     key={f.id}
-                    href={`#format-${f.id}`}
+                    href="#formats"
                     className="flex items-center justify-between gap-3 rounded-xl border border-line bg-surface-2 px-4 py-3 transition-colors hover:border-gold"
                   >
                     <span>
@@ -93,14 +68,11 @@ export default function HeadachePicker() {
                   </a>
                 ))}
                 <a
-                  href="#contact"
-                  className="mt-2 block rounded-full bg-gold px-5 py-3 text-center text-sm font-bold text-black transition-transform hover:scale-[1.02]"
+                  href="#formats"
+                  className="press mt-2 block rounded-full bg-gold px-5 py-3 text-center text-sm font-bold text-black"
                 >
-                  Build my package →
+                  Explore your formats →
                 </a>
-                <p className="text-center text-xs text-muted-2">
-                  We’ll pre-fill your brief with these.
-                </p>
               </div>
             )}
           </div>

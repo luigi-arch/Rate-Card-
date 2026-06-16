@@ -569,6 +569,21 @@ export const CONTACT = {
   instagram: "https://www.instagram.com/sidestreetmalta/",
 };
 
+/** Internal recipients that receive every brief. */
+export const SALES_RECIPIENTS = [
+  "sales@sidestreetmalta.com",
+  "luigi@sidestreetmalta.com",
+];
+
+/**
+ * Google Calendar appointment-schedule booking page.
+ * Set NEXT_PUBLIC_BOOKING_URL (e.g. the public
+ * https://calendar.google.com/calendar/appointments/schedules/... URL) to
+ * enable the embedded "book a call" step. Empty = show a graceful fallback.
+ */
+export const BOOKING_URL =
+  process.env.NEXT_PUBLIC_BOOKING_URL ?? "";
+
 /* ------------------------------------------------------------------ */
 /* Format logos                                                        */
 /* Drop uploaded logos in /public/formats (e.g. street-views.svg) and  */

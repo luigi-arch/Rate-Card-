@@ -1,6 +1,7 @@
 "use server";
 
 import { getSupabaseClient, LEADS_TABLE } from "@/lib/supabase";
+import { sendBriefEmails } from "@/lib/email";
 import { FORMATS, type FormatId } from "@/lib/content";
 
 export interface LeadInput {
@@ -82,6 +83,27 @@ export async function submitLead(input: LeadInput): Promise<LeadResult> {
   if (error) {
     console.error("Failed to store lead:", error.message);
     return { ok: false, error: "Something went wrong. Please try again or email us directly." };
+  }
+
+  // Best-effort notifications — never block a saved lead on email failure.
+  try {
+    await sendBriefEmails({
+      name: row.name!,
+      email: row.email!,
+      company: row.company,
+      role: row.role,
+      phone: row.phone,
+      headaches: row.headaches,
+      recommendedFormats: row.recommended_formats,
+      activeFormat: row.active_format,
+      package: row.package,
+      addOns: row.add_ons,
+      budget: row.budget,
+      timeline: row.timeline,
+      message: row.message,
+    });
+  } catch (e) {
+    console.error("sendBriefEmails threw:", e);
   }
 
   return { ok: true };

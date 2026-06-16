@@ -6,6 +6,7 @@ import {
   BUDGET_OPTIONS,
   TIMELINE_OPTIONS,
   CONTACT,
+  BOOKING_URL,
 } from "@/lib/content";
 import { useSelection } from "@/context/selection";
 import { submitLead } from "@/app/actions";
@@ -26,6 +27,7 @@ export default function LeadForm() {
   } = useSelection();
   const [isPending, startTransition] = useTransition();
   const [done, setDone] = useState(false);
+  const [submittedName, setSubmittedName] = useState("");
   const [error, setError] = useState<string | null>(null);
 
   const recommendedNames = recommendedFormatIds
@@ -60,12 +62,23 @@ export default function LeadForm() {
       });
 
       if (res.ok) {
+        setSubmittedName(String(data.get("name") ?? ""));
         setDone(true);
         form.reset();
       } else {
         setError(res.error ?? "Something went wrong.");
       }
     });
+  }
+
+  if (done) {
+    return (
+      <section id="contact" className="py-20 sm:py-28">
+        <div className="mx-auto max-w-3xl px-5 sm:px-8">
+          <BookCall name={submittedName} onReset={() => setDone(false)} />
+        </div>
+      </section>
+    );
   }
 
   return (
@@ -169,27 +182,6 @@ export default function LeadForm() {
 
           {/* right: form */}
           <div className="p-8 sm:p-10">
-            {done ? (
-              <div className="flex h-full min-h-[300px] flex-col items-center justify-center text-center">
-                <div className="flex h-14 w-14 items-center justify-center rounded-full bg-gold text-2xl text-black">
-                  ✓
-                </div>
-                <h3 className="mt-5 font-display text-3xl text-fg">
-                  Brief received.
-                </h3>
-                <p className="mt-2 max-w-sm text-sm text-muted">
-                  Thanks — we’ve got your details and we’ll be in touch shortly
-                  with a tailored recommendation.
-                </p>
-                <button
-                  type="button"
-                  onClick={() => setDone(false)}
-                  className="mt-6 text-sm text-gold hover:underline"
-                >
-                  Send another brief
-                </button>
-              </div>
-            ) : (
               <form onSubmit={handleSubmit} className="space-y-4">
                 <div className="grid gap-4 sm:grid-cols-2">
                   <Field label="Name" name="name" required autoComplete="name" />
@@ -259,11 +251,69 @@ export default function LeadForm() {
                   We’ll only use your details to respond to your enquiry.
                 </p>
               </form>
-            )}
           </div>
         </div>
       </div>
     </section>
+  );
+}
+
+function BookCall({ name, onReset }: { name: string; onReset: () => void }) {
+  const first = name.trim().split(" ")[0] || "there";
+  return (
+    <div className="card overflow-hidden">
+      <div className="bg-ink px-8 py-10 text-center text-white sm:px-10">
+        <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-gold text-2xl text-black">
+          ✓
+        </div>
+        <h3 className="mt-5 font-display text-4xl text-white sm:text-5xl">
+          Brief received, {first}.
+        </h3>
+        <p className="mx-auto mt-3 max-w-md text-sm text-white/70">
+          We’ve emailed you a copy and our team is on it. The fastest next step:
+          grab a time that suits you and let’s talk it through.
+        </p>
+      </div>
+
+      <div className="p-4 sm:p-6">
+        {BOOKING_URL ? (
+          <iframe
+            src={BOOKING_URL}
+            title="Book a call with SideStreet"
+            className="h-[640px] w-full rounded-xl border border-line"
+            loading="lazy"
+          />
+        ) : (
+          <div className="flex flex-col items-center justify-center rounded-xl border border-dashed border-line-strong bg-surface-2 px-6 py-14 text-center">
+            <span className="text-3xl">📅</span>
+            <p className="mt-4 font-display text-2xl text-fg">Book your intro call</p>
+            <p className="mt-2 max-w-sm text-sm text-muted">
+              Our scheduling link is being finalised. We’ll include a booking link
+              in your confirmation email — or reach us directly below.
+            </p>
+            <a
+              href={`mailto:${CONTACT.email}?subject=Booking%20a%20call%20with%20SideStreet`}
+              className="press mt-5 rounded-full bg-gold px-6 py-3 text-sm font-bold uppercase tracking-wide text-black"
+            >
+              Email us to book →
+            </a>
+            <p className="mt-3 font-mono text-[0.65rem] text-muted-2">
+              set NEXT_PUBLIC_BOOKING_URL to embed your calendar
+            </p>
+          </div>
+        )}
+
+        <div className="mt-4 text-center">
+          <button
+            type="button"
+            onClick={onReset}
+            className="text-sm text-muted hover:text-fg hover:underline"
+          >
+            ← Start another brief
+          </button>
+        </div>
+      </div>
+    </div>
   );
 }
 

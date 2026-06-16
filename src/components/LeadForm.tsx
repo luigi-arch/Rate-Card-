@@ -12,7 +12,18 @@ import { submitLead } from "@/app/actions";
 import { SectionHeading } from "./Section";
 
 export default function LeadForm() {
-  const { selectedHeadacheLabels, recommendedFormatIds } = useSelection();
+  const {
+    selectedHeadacheLabels,
+    recommendedFormatIds,
+    activeFormatId,
+    formatEngaged,
+    selectedPackage,
+    selectedAddOns,
+    budget,
+    setBudget,
+    timeline,
+    setTimeline,
+  } = useSelection();
   const [isPending, startTransition] = useTransition();
   const [done, setDone] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -20,6 +31,7 @@ export default function LeadForm() {
   const recommendedNames = recommendedFormatIds
     .map((id) => FORMATS.find((f) => f.id === id)?.name)
     .filter((n): n is string => Boolean(n));
+  const activeFormatName = FORMATS.find((f) => f.id === activeFormatId)?.name;
 
   function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -34,11 +46,14 @@ export default function LeadForm() {
         company: String(data.get("company") ?? ""),
         role: String(data.get("role") ?? ""),
         phone: String(data.get("phone") ?? ""),
-        budget: String(data.get("budget") ?? ""),
-        timeline: String(data.get("timeline") ?? ""),
+        budget,
+        timeline,
         message: String(data.get("message") ?? ""),
         headaches: selectedHeadacheLabels,
         recommendedFormats: recommendedFormatIds,
+        activeFormat: formatEngaged ? activeFormatName : undefined,
+        package: selectedPackage ?? undefined,
+        addOns: selectedAddOns,
         referrer: typeof document !== "undefined" ? document.referrer : "",
         userAgent:
           typeof navigator !== "undefined" ? navigator.userAgent : "",
@@ -111,6 +126,35 @@ export default function LeadForm() {
                 </div>
               )}
 
+              {selectedPackage && (
+                <div>
+                  <p className="mb-2 text-xs font-bold uppercase tracking-[0.2em] text-white/50">
+                    Your package
+                  </p>
+                  <span className="rounded-full border border-gold/40 bg-white/5 px-3 py-1 text-xs text-white">
+                    {selectedPackage}
+                  </span>
+                </div>
+              )}
+
+              {selectedAddOns.length > 0 && (
+                <div>
+                  <p className="mb-2 text-xs font-bold uppercase tracking-[0.2em] text-white/50">
+                    Add-ons
+                  </p>
+                  <ul className="flex flex-wrap gap-2">
+                    {selectedAddOns.map((a) => (
+                      <li
+                        key={a}
+                        className="rounded-full border border-white/15 bg-white/5 px-3 py-1 text-xs text-white/80"
+                      >
+                        {a}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+
               <div className="border-t border-white/10 pt-5 text-sm text-white/60">
                 Prefer email?{" "}
                 <a
@@ -167,12 +211,20 @@ export default function LeadForm() {
                 </div>
                 <div className="grid gap-4 sm:grid-cols-2">
                   <Field label="Phone (optional)" name="phone" type="tel" autoComplete="tel" />
-                  <SelectField label="Budget" name="budget" options={BUDGET_OPTIONS} />
+                  <SelectField
+                    label="Budget"
+                    name="budget"
+                    options={BUDGET_OPTIONS}
+                    value={budget}
+                    onChange={setBudget}
+                  />
                 </div>
                 <SelectField
                   label="Timeline"
                   name="timeline"
                   options={TIMELINE_OPTIONS}
+                  value={timeline}
+                  onChange={setTimeline}
                 />
                 <div>
                   <label
@@ -250,10 +302,14 @@ function SelectField({
   label,
   name,
   options,
+  value,
+  onChange,
 }: {
   label: string;
   name: string;
   options: string[];
+  value?: string;
+  onChange?: (v: string) => void;
 }) {
   return (
     <div>
@@ -263,7 +319,8 @@ function SelectField({
       <select
         id={name}
         name={name}
-        defaultValue=""
+        value={value}
+        onChange={(e) => onChange?.(e.target.value)}
         className="w-full rounded-xl border border-line bg-white px-4 py-3 text-sm text-fg outline-none transition-colors focus:border-gold"
       >
         <option value="" disabled>

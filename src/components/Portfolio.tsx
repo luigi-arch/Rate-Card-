@@ -3,7 +3,6 @@
 import { useState } from "react";
 import { PORTFOLIO, FORMATS, type FormatId } from "@/lib/content";
 import { SectionHeading } from "./Section";
-import Reveal from "./Reveal";
 
 const FORMAT_NAME: Record<FormatId, string> = Object.fromEntries(
   FORMATS.map((f) => [f.id, f.tag])
@@ -23,12 +22,12 @@ export default function Portfolio() {
       : PORTFOLIO.filter((p) => p.formatId === active);
 
   return (
-    <section id="work" className="border-b border-line py-20 sm:py-28">
+    <section id="work" className="scroll-mt-20 border-t border-line py-14 sm:py-20">
       <div className="mx-auto max-w-6xl px-5 sm:px-8">
         <SectionHeading
           eyebrow="Selected work"
           title="Real stories. Real people. Real impact."
-          intro="A snapshot of recent work across formats — for government, finance, culture, retail and purpose-driven brands."
+          intro="A snapshot of recent work across formats — swipe through. For government, finance, culture, retail and purpose-driven brands."
         />
 
         {/* filters */}
@@ -50,14 +49,14 @@ export default function Portfolio() {
           ))}
         </div>
 
-        <div className="mt-8 grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4">
-          {items.map((item, i) => (
-            <Reveal key={item.url} delay={(i % 4) * 50}>
+        <div className="snap-row mt-8 flex gap-3 overflow-x-auto pb-4">
+          {items.map((item) => (
+            <div key={item.url} className="w-[200px] shrink-0 sm:w-[230px]">
               <a
                 href={item.url}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="group block overflow-hidden rounded-xl border border-line bg-surface transition-colors hover:border-gold/50"
+                className="hover-lift hover-gold group block overflow-hidden rounded-xl border border-line bg-surface"
               >
                 {/* reel thumbnail placeholder (9:16) */}
                 <div className="relative flex aspect-[4/5] items-center justify-center overflow-hidden bg-gradient-to-br from-[#1c1c1f] to-[#0b0b0c]">
@@ -84,7 +83,7 @@ export default function Portfolio() {
                   </span>
                 </div>
               </a>
-            </Reveal>
+            </div>
           ))}
         </div>
       </div>

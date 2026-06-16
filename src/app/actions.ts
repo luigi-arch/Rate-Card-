@@ -11,6 +11,9 @@ export interface LeadInput {
   phone?: string;
   headaches?: string[];
   recommendedFormats?: FormatId[];
+  activeFormat?: string;
+  package?: string;
+  addOns?: string[];
   budget?: string;
   timeline?: string;
   message?: string;
@@ -53,6 +56,9 @@ export async function submitLead(input: LeadInput): Promise<LeadResult> {
     phone: clean(input.phone, 60),
     headaches: (input.headaches ?? []).slice(0, 20).map((h) => h.slice(0, 200)),
     recommended_formats: recommended.slice(0, 12),
+    active_format: clean(input.activeFormat, 120),
+    package: clean(input.package, 120),
+    add_ons: (input.addOns ?? []).slice(0, 20).map((a) => a.slice(0, 200)),
     budget: clean(input.budget, 120),
     timeline: clean(input.timeline, 120),
     message: clean(input.message, 4000),

@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import Logo from "./Logo";
 
 const LINKS = [
-  { href: "#approach", label: "Approach" },
+  { href: "#audience", label: "Platform" },
   { href: "#headaches", label: "Find your fix" },
   { href: "#formats", label: "Formats" },
   { href: "#pricing", label: "Pricing" },
@@ -14,12 +14,32 @@ const LINKS = [
 export default function Nav() {
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
+  const [activeId, setActiveId] = useState<string>("");
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 16);
     onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
+  // Scrollspy — highlight the section currently in view.
+  useEffect(() => {
+    const ids = LINKS.map((l) => l.href.slice(1));
+    const els = ids
+      .map((id) => document.getElementById(id))
+      .filter((e): e is HTMLElement => Boolean(e));
+    if (!els.length || typeof IntersectionObserver === "undefined") return;
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((e) => {
+          if (e.isIntersecting) setActiveId(e.target.id);
+        });
+      },
+      { rootMargin: "-45% 0px -50% 0px", threshold: 0 }
+    );
+    els.forEach((el) => observer.observe(el));
+    return () => observer.disconnect();
   }, []);
 
   return (
@@ -38,14 +58,18 @@ export default function Nav() {
             <a
               key={l.href}
               href={l.href}
-              className="text-sm font-semibold text-white/70 transition-colors hover:text-white"
+              className={`text-sm font-semibold transition-colors ${
+                activeId === l.href.slice(1)
+                  ? "text-gold"
+                  : "text-white/70 hover:text-white"
+              }`}
             >
               {l.label}
             </a>
           ))}
           <a
             href="#contact"
-            className="rounded-full bg-gold px-5 py-2 text-sm font-bold text-black transition-transform hover:scale-[1.03]"
+            className="press rounded-full bg-gold px-5 py-2 text-sm font-bold text-black transition-transform hover:scale-[1.03]"
           >
             Start a project
           </a>

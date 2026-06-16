@@ -1,8 +1,8 @@
 "use client";
 
-import { HEADACHES, FORMATS } from "@/lib/content";
+import { HEADACHES, FORMATS, HOW_IT_WORKS } from "@/lib/content";
 import { useSelection } from "@/context/selection";
-import { SectionHeading } from "./Section";
+import { JourneyHeader } from "./JourneyHeader";
 import BrainAnimation from "./BrainAnimation";
 
 export default function HeadachePicker() {
@@ -14,12 +14,13 @@ export default function HeadachePicker() {
     .filter((f): f is (typeof FORMATS)[number] => Boolean(f));
 
   return (
-    <section id="headaches" className="border-b border-line py-20 sm:py-28">
+    <section id="headaches" className="scroll-mt-20 border-t border-line py-14 sm:py-20">
       <div className="mx-auto max-w-6xl px-5 sm:px-8">
-        <SectionHeading
-          eyebrow="Find your fix"
-          title="What’s your headache?"
-          intro="Pick the ones that sound like you. We’ll match each to the format built to solve it — and build your shortlist as you go."
+        <JourneyHeader
+          step="01"
+          title={HOW_IT_WORKS[0].title}
+          body="Pick the ones that sound like you. We’ll match each to the format built to solve it — and build your brief as you go."
+          done={selected.length > 0}
         />
 
         {/* brain on a black feature panel */}

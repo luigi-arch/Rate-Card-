@@ -1,48 +1,35 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useState } from "react";
 import {
   FORMATS,
   FORMAT_LOGOS,
   ALWAYS_INCLUDED,
-  type FormatId,
+  DISTRIBUTION,
+  HOW_IT_WORKS,
 } from "@/lib/content";
 import { useSelection } from "@/context/selection";
-import { SectionHeading } from "./Section";
+import { JourneyHeader } from "./JourneyHeader";
 import Reveal from "./Reveal";
 
 export default function Formats() {
-  const { recommendedFormatIds } = useSelection();
+  const { recommendedFormatIds, activeFormatId, setActiveFormat, formatEngaged } =
+    useSelection();
   const recommended = new Set(recommendedFormatIds);
-
-  const [activeId, setActiveId] = useState<FormatId>("explained");
-  const touched = useRef(false);
-
-  // Until the visitor manually picks a format, follow their top recommendation.
-  useEffect(() => {
-    if (!touched.current && recommendedFormatIds.length > 0) {
-      setActiveId(recommendedFormatIds[0]);
-    }
-  }, [recommendedFormatIds]);
-
-  const active = FORMATS.find((f) => f.id === activeId) ?? FORMATS[0];
-
-  function select(id: FormatId) {
-    touched.current = true;
-    setActiveId(id);
-  }
+  const active = FORMATS.find((f) => f.id === activeFormatId) ?? FORMATS[0];
 
   return (
-    <section id="formats" className="border-b border-line py-20 sm:py-28">
+    <section id="formats" className="scroll-mt-20 border-t border-line py-14 sm:py-20">
       <div className="mx-auto max-w-6xl px-5 sm:px-8">
-        <SectionHeading
-          eyebrow="Our formats"
-          title="Five formats. Five problems solved."
-          intro="Native, organic and built to feel real — never like an ad. Pick a format to explore it."
+        <JourneyHeader
+          step="02"
+          title={HOW_IT_WORKS[1].title}
+          body="Each format is engineered around one outcome. Pick one to explore — we’ve starred the fit for your headaches."
+          done={formatEngaged}
         />
 
         {/* always included */}
-        <Reveal className="mt-10 flex flex-wrap items-center gap-x-6 gap-y-2 rounded-2xl border border-line bg-surface/40 px-6 py-4">
+        <Reveal className="mt-8 flex flex-wrap items-center gap-x-6 gap-y-2 rounded-2xl border border-line bg-surface/40 px-6 py-4">
           <span className="eyebrow">Every format includes</span>
           {ALWAYS_INCLUDED.map((item) => (
             <span key={item} className="flex items-center gap-2 text-sm text-muted">
@@ -52,7 +39,7 @@ export default function Formats() {
           ))}
         </Reveal>
 
-        <div className="mt-10 grid gap-6 lg:grid-cols-[5fr_7fr]">
+        <div className="mt-8 grid gap-6 lg:grid-cols-[5fr_7fr]">
           {/* selector list */}
           <Reveal className="flex gap-2 overflow-x-auto pb-2 lg:flex-col lg:gap-1.5 lg:overflow-visible lg:pb-0">
             {FORMATS.map((f) => {
@@ -61,11 +48,11 @@ export default function Formats() {
                 <button
                   key={f.id}
                   type="button"
-                  onClick={() => select(f.id)}
-                  className={`group flex shrink-0 items-center justify-between gap-4 rounded-xl border px-5 py-4 text-left transition-all lg:shrink ${
+                  onClick={() => setActiveFormat(f.id)}
+                  className={`press group flex shrink-0 items-center justify-between gap-4 rounded-xl border px-5 py-4 text-left transition-all lg:shrink ${
                     isActive
                       ? "border-gold bg-gold-soft"
-                      : "border-line hover:border-line-strong"
+                      : "border-line hover:border-line-strong hover:bg-surface-2"
                   }`}
                 >
                   <span className="flex items-baseline gap-3">
@@ -121,14 +108,13 @@ function LogoTile({ logo, tag }: { logo?: string; tag: string }) {
       />
     );
   }
-  // Placeholder until the logo file is added to /public/formats
   return (
     <div className="relative flex flex-col items-center gap-2">
       <span className="display text-center text-5xl text-white/90 sm:text-6xl">
         {tag}
       </span>
       {logo && (
-        <span className="rounded-full border border-dashed border-line-strong px-3 py-1 font-mono text-[0.65rem] text-muted-2">
+        <span className="rounded-full border border-dashed border-white/20 px-3 py-1 font-mono text-[0.65rem] text-white/40">
           add {logo.replace("/formats/", "")}
         </span>
       )}
@@ -239,11 +225,33 @@ function FeaturePanel({
           </div>
         </details>
 
+        {/* distribution (folded in) */}
+        <details className="group mt-3 border-t border-line pt-5">
+          <summary className="flex cursor-pointer list-none items-center justify-between text-sm font-bold uppercase tracking-wide text-fg">
+            How it’s distributed
+            <span className="text-lg text-fg transition-transform group-open:rotate-45">
+              +
+            </span>
+          </summary>
+          <div className="mt-5 grid gap-4 sm:grid-cols-3">
+            {DISTRIBUTION.channels.map((c, i) => (
+              <div key={c.title}>
+                <p className="font-display text-2xl text-gold/40">0{i + 1}</p>
+                <p className="text-sm font-bold text-fg">{c.title}</p>
+                <p className="mt-1 text-xs leading-relaxed text-muted">{c.body}</p>
+              </div>
+            ))}
+          </div>
+          <p className="mt-4 border-l-2 border-gold pl-4 text-sm italic text-muted">
+            {DISTRIBUTION.pullQuote}
+          </p>
+        </details>
+
         <a
           href="#contact"
-          className="mt-7 block rounded-full bg-gold py-3.5 text-center text-sm font-bold uppercase tracking-wide text-black transition-transform hover:scale-[1.01]"
+          className="press mt-7 block rounded-full bg-gold py-3.5 text-center text-sm font-bold uppercase tracking-wide text-black transition-transform hover:scale-[1.01]"
         >
-          Brief us on this
+          Add to my brief
         </a>
       </div>
     </div>

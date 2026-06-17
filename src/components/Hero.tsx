@@ -21,10 +21,11 @@ function scrollTo(id: string) {
 
 export default function Hero() {
   const { toggle, isSelected } = useSelection();
-  const { hero, audience, headaches } = useContent();
+  const { hero, audience, headaches, teamPhotos } = useContent();
   const teasers = headaches.filter((h) => TEASER_IDS.includes(h.id));
   const heroVideo = hero.videoUrl;
   const heroImage = hero.imageUrl;
+  const collage = teamPhotos.slice(0, 3);
 
   return (
     <section
@@ -115,6 +116,18 @@ export default function Hero() {
                 alt="SideStreet showreel"
                 className="h-full w-full object-cover"
               />
+            ) : collage.length ? (
+              <div className="grid h-full w-full grid-cols-3 gap-1">
+                {collage.map((p, i) => (
+                  // eslint-disable-next-line @next/next/no-img-element
+                  <img
+                    key={i}
+                    src={p.url}
+                    alt={p.alt || "The SideStreet crew"}
+                    className="h-full w-full object-cover"
+                  />
+                ))}
+              </div>
             ) : (
               <>
                 <div

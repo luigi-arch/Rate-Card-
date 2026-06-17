@@ -12,6 +12,7 @@ import type {
   IncludeGroup,
   ServiceItem,
   AboutPillar,
+  TeamPhoto,
 } from "@/lib/content";
 import { saveSiteContent, signOutAction } from "@/app/admin/actions";
 import {
@@ -163,6 +164,34 @@ export default function AdminEditor({ initial }: { initial: SiteContent }) {
               )}
             </Repeater>
           </Group>
+        </Panel>
+
+        {/* ---- Team / behind-the-scenes photos ---- */}
+        <Panel title="Team / behind-the-scenes photos">
+          <Repeater<TeamPhoto>
+            items={content.teamPhotos}
+            onChange={(v) => set("teamPhotos", v)}
+            makeBlank={() => ({ url: "", alt: "" })}
+            itemTitle={(_p, i) => `Photo ${i + 1}`}
+            addLabel="Add photo"
+          >
+            {(item, update, i) => (
+              <>
+                <ImageField
+                  label="Photo"
+                  slot={`team-${i}`}
+                  value={item.url || undefined}
+                  onChange={(url) => update({ url: url ?? "" })}
+                  onError={fail}
+                />
+                <TextField
+                  label="Alt text"
+                  value={item.alt ?? ""}
+                  onChange={(v) => update({ alt: v })}
+                />
+              </>
+            )}
+          </Repeater>
         </Panel>
 
         {/* ---- Audience / platform stats ---- */}

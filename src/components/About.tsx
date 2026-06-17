@@ -5,7 +5,7 @@ import Reveal from "./Reveal";
 
 export default function About() {
   const { about, teamPhotos } = useContent();
-  const photos = teamPhotos.slice(0, 2);
+  const feature = teamPhotos[1] ?? teamPhotos[0];
 
   return (
     <section id="about" className="scroll-mt-20 border-b border-line py-14 sm:py-20">
@@ -22,25 +22,16 @@ export default function About() {
             </p>
           </Reveal>
 
-          {/* photo collage */}
-          {photos.length > 0 && (
-            <Reveal delay={120} className="relative mx-auto w-full max-w-sm">
-              <div className="flex gap-4">
-                {photos.map((p, i) => (
-                  <div
-                    key={i}
-                    className={`relative flex-1 overflow-hidden rounded-2xl border border-line shadow-lg ${
-                      i === 1 ? "mt-8" : ""
-                    }`}
-                  >
-                    {/* eslint-disable-next-line @next/next/no-img-element */}
-                    <img
-                      src={p.url}
-                      alt={p.alt || "The SideStreet crew"}
-                      className="aspect-[3/4] w-full object-cover"
-                    />
-                  </div>
-                ))}
+          {/* feature photo */}
+          {feature && (
+            <Reveal delay={120} className="relative mx-auto w-full max-w-md">
+              <div className="relative overflow-hidden rounded-2xl border border-line shadow-lg">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src={feature.url}
+                  alt={feature.alt || "The SideStreet crew on a shoot"}
+                  className="aspect-[4/3] w-full object-cover"
+                />
               </div>
               <span
                 aria-hidden

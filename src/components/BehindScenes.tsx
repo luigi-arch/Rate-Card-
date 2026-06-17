@@ -26,13 +26,13 @@ export default function BehindScenes() {
         {teamPhotos.map((p, i) => (
           <div
             key={i}
-            className="group relative w-[220px] shrink-0 overflow-hidden rounded-2xl border border-white/10 sm:w-[260px]"
+            className="group relative w-[300px] shrink-0 overflow-hidden rounded-2xl border border-white/10 sm:w-[360px]"
           >
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               src={p.url}
               alt={p.alt || "The SideStreet crew on a shoot"}
-              className="aspect-[3/4] w-full object-cover transition-transform duration-500 group-hover:scale-105"
+              className="aspect-[4/3] w-full object-cover transition-transform duration-500 group-hover:scale-105"
             />
             <span
               aria-hidden

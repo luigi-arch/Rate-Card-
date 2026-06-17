@@ -11,6 +11,7 @@ import Formats from "@/components/Formats";
 import Services from "@/components/Services";
 import Packages from "@/components/Packages";
 import Portfolio from "@/components/Portfolio";
+import BehindScenes from "@/components/BehindScenes";
 import LeadForm from "@/components/LeadForm";
 import Footer from "@/components/Footer";
 import BriefTray from "@/components/BriefTray";
@@ -33,6 +34,7 @@ export default async function Home() {
           <Services />
           <Packages />
           <Portfolio />
+          <BehindScenes />
           <LeadForm />
         </main>
         <Footer />

@@ -783,6 +783,25 @@ export const FORMAT_LOGOS: Record<string, string> = {
 };
 
 /* ------------------------------------------------------------------ */
+/* Team / behind-the-scenes photos                                     */
+/* ------------------------------------------------------------------ */
+
+export interface TeamPhoto {
+  url: string;
+  alt?: string;
+}
+
+export const TEAM_PHOTOS: TeamPhoto[] = [
+  { url: "/team/dsc06394-2.jpg", alt: "The SideStreet crew" },
+  { url: "/team/dsc06330.jpg", alt: "SideStreet on a shoot" },
+  { url: "/team/dsc06347.jpg", alt: "SideStreet on a shoot" },
+  { url: "/team/dsc06358.jpg", alt: "SideStreet on a shoot" },
+  { url: "/team/dsc06442.jpg", alt: "The SideStreet crew" },
+  { url: "/team/dsc06471.jpg", alt: "SideStreet on a shoot" },
+  { url: "/team/dsc06337.jpg", alt: "The SideStreet crew" },
+];
+
+/* ------------------------------------------------------------------ */
 /* The full editable site document                                     */
 /* DEFAULT_CONTENT is built from the exports above; the CMS stores a    */
 /* document that overrides these defaults per top-level key.            */
@@ -849,6 +868,7 @@ export interface Contact {
 export interface SiteContent {
   hero: HeroContent;
   about: About;
+  teamPhotos: TeamPhoto[];
   audience: Audience;
   howItWorks: HowItWorksStep[];
   alwaysIncluded: string[];
@@ -876,6 +896,7 @@ export const DEFAULT_CONTENT: SiteContent = {
     sub: "This isn’t a list of deliverables. It’s a rate card built around your problem — pick the headache, we’ll prescribe the fix.",
   },
   about: ABOUT,
+  teamPhotos: TEAM_PHOTOS,
   audience: AUDIENCE,
   howItWorks: HOW_IT_WORKS,
   alwaysIncluded: ALWAYS_INCLUDED,

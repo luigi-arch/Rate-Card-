@@ -82,23 +82,36 @@ export default function Proof() {
         <div className="mt-6 grid gap-3 md:grid-cols-3">
           {results.map((r, i) => {
             const img = r.image;
+            const thumb = img ? (
+              // eslint-disable-next-line @next/next/no-img-element
+              <img
+                src={img}
+                alt={`${r.client} — ${r.project}`}
+                className="aspect-video w-full object-cover"
+              />
+            ) : (
+              <Placeholder
+                label={r.client}
+                sublabel={r.link ? "watch" : "add in /admin"}
+                aspect="video"
+                variant="play"
+                className="rounded-none border-x-0 border-t-0"
+              />
+            );
             return (
             <Reveal key={`${r.client}-${i}`} delay={i * 80} className="card hover-lift overflow-hidden">
-              {img ? (
-                // eslint-disable-next-line @next/next/no-img-element
-                <img
-                  src={img}
-                  alt={`${r.client} — ${r.project}`}
-                  className="aspect-video w-full object-cover"
-                />
+              {r.link ? (
+                <a
+                  href={r.link}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="hover-gold group block overflow-hidden"
+                  aria-label={`Watch ${r.client} — ${r.project}`}
+                >
+                  {thumb}
+                </a>
               ) : (
-                <Placeholder
-                  label={r.client}
-                  sublabel="add in /admin"
-                  aspect="video"
-                  variant="play"
-                  className="rounded-none border-x-0 border-t-0"
-                />
+                thumb
               )}
               <div className="p-6">
                 <p className="eyebrow !text-muted-2">{r.client}</p>

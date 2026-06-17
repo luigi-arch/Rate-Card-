@@ -52,9 +52,9 @@ export const AUDIENCE = {
     { value: "50%", label: "Audience under 35" },
   ],
   channels: [
-    { name: "Instagram", value: "56K" },
-    { name: "TikTok", value: "53K" },
-    { name: "Facebook", value: "51K" },
+    { name: "Instagram", value: "56K", url: "https://www.instagram.com/sidestreetmalta/" },
+    { name: "TikTok", value: "53K", url: "https://www.tiktok.com/@sidestreetmalta" },
+    { name: "Facebook", value: "51K", url: "https://www.facebook.com/sidestreetmalta" },
   ],
   age: [
     { range: "25–34", pct: 35.6 },
@@ -615,6 +615,7 @@ export interface ResultItem {
   client: string;
   project: string;
   image?: string; // public URL of an uploaded case-study image
+  link?: string; // opens when the card thumbnail is clicked
   stats: ResultStat[];
 }
 
@@ -819,6 +820,7 @@ export interface AudienceStat {
 export interface ChannelStat {
   name: string;
   value: string;
+  url?: string; // link to the platform page
 }
 
 export interface AgeRow {

@@ -14,6 +14,7 @@ import type {
   AboutPillar,
   TeamPhoto,
   Client,
+  ChannelStat,
 } from "@/lib/content";
 import { saveSiteContent, signOutAction } from "@/app/admin/actions";
 import {
@@ -233,7 +234,7 @@ export default function AdminEditor({ initial }: { initial: SiteContent }) {
           </Group>
 
           <Group title="Follower channels">
-            <Repeater<{ name: string; value: string }>
+            <Repeater<ChannelStat>
               items={content.audience.channels}
               onChange={(channels) =>
                 set("audience", { ...content.audience, channels })
@@ -243,18 +244,25 @@ export default function AdminEditor({ initial }: { initial: SiteContent }) {
               addLabel="Add channel"
             >
               {(item, update) => (
-                <div className="grid gap-3 sm:grid-cols-2">
+                <>
+                  <div className="grid gap-3 sm:grid-cols-2">
+                    <TextField
+                      label="Name"
+                      value={item.name}
+                      onChange={(v) => update({ name: v })}
+                    />
+                    <TextField
+                      label="Followers"
+                      value={item.value}
+                      onChange={(v) => update({ value: v })}
+                    />
+                  </div>
                   <TextField
-                    label="Name"
-                    value={item.name}
-                    onChange={(v) => update({ name: v })}
+                    label="Page link (opens on click)"
+                    value={item.url ?? ""}
+                    onChange={(v) => update({ url: v })}
                   />
-                  <TextField
-                    label="Followers"
-                    value={item.value}
-                    onChange={(v) => update({ value: v })}
-                  />
-                </div>
+                </>
               )}
             </Repeater>
           </Group>
@@ -730,6 +738,11 @@ export default function AdminEditor({ initial }: { initial: SiteContent }) {
                   value={item.image}
                   onChange={(url) => update({ image: url })}
                   onError={fail}
+                />
+                <TextField
+                  label="Link (opens when the thumbnail is clicked)"
+                  value={item.link ?? ""}
+                  onChange={(v) => update({ link: v })}
                 />
                 <div>
                   <p className="mb-2 text-sm font-medium">Stats</p>

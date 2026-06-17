@@ -95,10 +95,14 @@ export function PlatformCards() {
       {audience.channels.map((c) => {
         const p = PLATFORM[c.name];
         const Icon = p?.icon ?? IGIcon;
+        const Tag = c.url ? "a" : "div";
         return (
-          <div
+          <Tag
             key={c.name}
-            className="hover-lift card flex items-center gap-4 p-5"
+            {...(c.url
+              ? { href: c.url, target: "_blank", rel: "noopener noreferrer" }
+              : {})}
+            className="hover-lift hover-gold card flex items-center gap-4 p-5"
           >
             <span
               className={`flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br p-[2px] ${
@@ -119,7 +123,7 @@ export function PlatformCards() {
             <span className="ml-auto text-[0.6rem] font-bold uppercase tracking-[0.14em] text-muted-2">
               {c.name}
             </span>
-          </div>
+          </Tag>
         );
       })}
     </div>

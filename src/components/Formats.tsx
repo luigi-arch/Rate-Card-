@@ -100,7 +100,7 @@ function LogoTile({ logo, tag }: { logo?: string; tag: string }) {
         src={logo}
         alt={`${tag} logo`}
         onError={() => setFailed(true)}
-        className="relative h-20 w-auto max-w-[80%] object-contain px-6 sm:h-24"
+        className="relative h-20 w-auto max-w-[90%] object-contain px-4 sm:h-24"
       />
     );
   }

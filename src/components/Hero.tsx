@@ -1,6 +1,5 @@
 "use client";
 
-import { AUDIENCE, HEADACHES } from "@/lib/content";
 import { useSelection } from "@/context/selection";
 import { useContent } from "@/context/content";
 import { StatBar } from "./PlatformStats";
@@ -22,10 +21,10 @@ function scrollTo(id: string) {
 
 export default function Hero() {
   const { toggle, isSelected } = useSelection();
-  const { asset, text } = useContent();
-  const teasers = HEADACHES.filter((h) => TEASER_IDS.includes(h.id));
-  const heroVideo = asset("hero.video");
-  const heroImage = asset("hero.image");
+  const { hero, audience, headaches } = useContent();
+  const teasers = headaches.filter((h) => TEASER_IDS.includes(h.id));
+  const heroVideo = hero.videoUrl;
+  const heroImage = hero.imageUrl;
 
   return (
     <section
@@ -36,21 +35,17 @@ export default function Hero() {
         <Reveal>
           <span className="inline-flex items-center gap-2 rounded-full border border-line bg-surface px-4 py-1.5 text-xs font-bold uppercase tracking-[0.18em] text-muted shadow-sm">
             <span className="h-1.5 w-1.5 rounded-full bg-gold" />
-            {text("tagline", AUDIENCE.tagline)}
+            {audience.tagline}
           </span>
         </Reveal>
 
         <h1 className="display mt-7 text-6xl text-fg sm:text-7xl md:text-8xl">
-          <span className="block animate-clip-up">
-            {text("hero.line1", "You bring the headache.")}
-          </span>
+          <span className="block animate-clip-up">{hero.line1}</span>
           <span
             className="relative mt-1 inline-block animate-clip-up"
             style={{ animationDelay: "0.12s" }}
           >
-            <span className="relative z-10">
-              {text("hero.line2", "We build the story.")}
-            </span>
+            <span className="relative z-10">{hero.line2}</span>
             <span
               aria-hidden
               className="animate-underline absolute inset-x-[-4px] bottom-1 z-0 h-[38%] -skew-x-6 bg-gold"
@@ -60,31 +55,22 @@ export default function Hero() {
 
         <Reveal delay={120}>
           <p className="mx-auto mt-7 max-w-xl text-lg leading-relaxed text-muted">
-            {text(
-              "hero.sub",
-              "This isn’t a list of deliverables. It’s a rate card built around your problem — pick the headache, we’ll prescribe the fix."
-            )}
+            {hero.sub}
           </p>
         </Reveal>
 
         <Reveal delay={200}>
           <div className="mt-9 flex flex-wrap items-center justify-center gap-3">
             <button
-              onClick={() => scrollTo("headaches")}
+              onClick={() => scrollTo("about")}
               className="press rounded-full bg-gold px-8 py-4 text-sm font-bold uppercase tracking-wide text-black transition-transform hover:scale-[1.03]"
             >
-              Start your brief →
-            </button>
-            <button
-              onClick={() => scrollTo("formats")}
-              className="press rounded-full border border-fg/20 px-8 py-4 text-sm font-bold uppercase tracking-wide text-fg transition-colors hover:border-fg"
-            >
-              See the formats
+              Meet the platform ↓
             </button>
           </div>
         </Reveal>
 
-        {/* live teaser chips — seed the journey from the hero */}
+        {/* live teaser chips — seed the journey from the hero (select, don't skip ahead) */}
         <Reveal delay={280}>
           <div className="mt-8 flex flex-wrap items-center justify-center gap-2">
             <span className="text-xs font-semibold uppercase tracking-wide text-muted-2">
@@ -95,10 +81,7 @@ export default function Hero() {
               return (
                 <button
                   key={h.id}
-                  onClick={() => {
-                    if (!active) toggle(h.id);
-                    scrollTo("headaches");
-                  }}
+                  onClick={() => toggle(h.id)}
                   className={`press rounded-full border px-3.5 py-1.5 text-xs font-medium transition-all ${
                     active
                       ? "border-gold bg-gold text-black"

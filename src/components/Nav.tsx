@@ -4,10 +4,9 @@ import { useEffect, useState } from "react";
 import Logo from "./Logo";
 
 const LINKS = [
-  { href: "#audience", label: "Platform" },
-  { href: "#headaches", label: "Find your fix" },
-  { href: "#formats", label: "Formats" },
-  { href: "#pricing", label: "Pricing" },
+  { href: "#about", label: "About" },
+  { href: "#audience", label: "Audience" },
+  { href: "#formats", label: "Video formats" },
   { href: "#work", label: "Work" },
 ];
 
@@ -67,12 +66,6 @@ export default function Nav() {
               {l.label}
             </a>
           ))}
-          <a
-            href="#contact"
-            className="press rounded-full bg-gold px-5 py-2 text-sm font-bold text-black transition-transform hover:scale-[1.03]"
-          >
-            Start a project
-          </a>
         </div>
 
         <button
@@ -115,13 +108,6 @@ export default function Nav() {
                 {l.label}
               </a>
             ))}
-            <a
-              href="#contact"
-              onClick={() => setOpen(false)}
-              className="mt-2 rounded-full bg-gold px-5 py-3 text-center text-sm font-bold text-black"
-            >
-              Start a project
-            </a>
           </div>
         </div>
       )}

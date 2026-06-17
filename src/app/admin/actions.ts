@@ -6,7 +6,7 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { ADMIN_COOKIE, adminToken, isAdminAuthed } from "@/lib/admin-auth";
 import { getAdminClient } from "@/lib/supabase/admin";
-import type { SiteOverrides } from "@/lib/site-content";
+import type { SiteContent } from "@/lib/content";
 
 export async function login(
   password: string
@@ -39,7 +39,7 @@ export async function signOutAction() {
 }
 
 export async function saveSiteContent(
-  overrides: SiteOverrides
+  content: SiteContent
 ): Promise<{ ok: boolean; error?: string }> {
   if (!(await isAdminAuthed())) return { ok: false, error: "Not signed in." };
   const supabase = getAdminClient();
@@ -48,7 +48,7 @@ export async function saveSiteContent(
   }
   const { error } = await supabase
     .from("site_content")
-    .update({ data: overrides, updated_at: new Date().toISOString() })
+    .update({ data: content, updated_at: new Date().toISOString() })
     .eq("id", 1);
   if (error) return { ok: false, error: error.message };
   revalidatePath("/");

@@ -1,50 +1,35 @@
 "use client";
 
-import { PACKAGES, ADD_ONS, HOW_IT_WORKS } from "@/lib/content";
+import { useContent } from "@/context/content";
 import { useSelection } from "@/context/selection";
-import { JourneyHeader } from "./JourneyHeader";
+import { SectionHeading } from "./Section";
 import Reveal from "./Reveal";
 
-// Map a package tier to the closest budget band so the brief form pre-fills.
-const PKG_BUDGET: Record<string, string> = {
-  Starter: "€2,500 – €5,000",
-  Growth: "€5,000 – €10,000",
-  "Always On": "€10,000+ / monthly partnership",
-};
-
 export default function Packages() {
-  const {
-    selectedPackage,
-    setSelectedPackage,
-    setBudget,
-    toggleAddOn,
-    isAddOnSelected,
-  } = useSelection();
+  const { packages } = useContent();
+  const { selectedPackage, setSelectedPackage } = useSelection();
 
   function choose(name: string) {
-    const next = selectedPackage === name ? null : name;
-    setSelectedPackage(next);
-    if (next && PKG_BUDGET[next]) setBudget(PKG_BUDGET[next]);
+    setSelectedPackage(selectedPackage === name ? null : name);
   }
 
   return (
-    <section id="pricing" className="scroll-mt-20 border-t border-line py-14 sm:py-20">
+    <section id="packages" className="scroll-mt-20 border-t border-line bg-surface/40 py-14 sm:py-20">
       <div className="mx-auto max-w-6xl px-5 sm:px-8">
-        <JourneyHeader
-          step="03"
-          title={HOW_IT_WORKS[2].title}
-          body="Start from a ready-made package or a single format, then tune it with add-ons. Pick a starting point to add it to your brief."
-          done={Boolean(selectedPackage)}
+        <SectionHeading
+          eyebrow="Prefer a bundle?"
+          title="Or pick a ready-made package."
+          intro="Don’t want to build your own? These bundle our most popular formats at a discounted rate — an easy alternative to the brief above. Pick one to add it to your enquiry."
         />
 
-        <div className="mt-10 grid gap-5 md:grid-cols-3">
-          {PACKAGES.map((p, i) => {
+        <div className="mt-10 grid gap-5 md:grid-cols-2 lg:grid-cols-4">
+          {packages.map((p, i) => {
             const isChosen = selectedPackage === p.name;
             return (
               <Reveal
                 key={p.name}
-                delay={i * 90}
-                className={`hover-lift relative flex flex-col rounded-2xl border bg-white p-7 ${
+                delay={i * 80}
+                className={`hover-lift relative flex flex-col rounded-2xl border bg-white p-6 ${
                   isChosen
                     ? "border-gold ring-2 ring-gold"
                     : p.popular
@@ -62,24 +47,33 @@ export default function Packages() {
                     ✓ In your brief
                   </span>
                 )}
-                <h3 className="font-display text-2xl text-zinc-900">{p.name}</h3>
+
+                {p.tier && (
+                  <p className="text-[0.65rem] font-bold uppercase tracking-[0.18em] text-gold">
+                    {p.tier}
+                  </p>
+                )}
+                <h3 className="mt-1 font-display text-2xl text-zinc-900">{p.name}</h3>
                 <p className="mt-1 text-sm text-zinc-500">{p.blurb}</p>
-                <div className="mt-5 flex items-baseline gap-1">
-                  <span className="font-display text-5xl text-zinc-900">
-                    {p.price}
-                  </span>
-                  {p.name === "Always On" && (
-                    <span className="text-sm text-zinc-500">/ mo</span>
+
+                <div className="mt-5 flex items-baseline gap-2">
+                  <span className="font-display text-4xl text-zinc-900">{p.price}</span>
+                  {p.save && (
+                    <span className="rounded-full bg-gold/15 px-2 py-0.5 text-xs font-semibold text-zinc-700">
+                      {p.save}
+                    </span>
                   )}
                 </div>
+
                 <ul className="mt-6 flex-1 space-y-3">
                   {p.features.map((feat) => (
                     <li key={feat} className="flex gap-2.5 text-sm text-zinc-600">
-                      <span className="font-bold text-zinc-900">✓</span>
+                      <span className="font-bold text-zinc-900">+</span>
                       {feat}
                     </li>
                   ))}
                 </ul>
+
                 <button
                   type="button"
                   onClick={() => choose(p.name)}
@@ -91,14 +85,14 @@ export default function Packages() {
                       : "border border-zinc-300 text-zinc-900 hover:border-zinc-900"
                   }`}
                 >
-                  {isChosen ? "Selected" : `Choose ${p.name}`}
+                  {isChosen ? "Selected" : "Choose"}
                 </button>
               </Reveal>
             );
           })}
         </div>
 
-        <Reveal className="mt-5 rounded-2xl border border-dashed border-zinc-300 px-6 py-4 text-center text-sm text-zinc-600">
+        <Reveal className="mt-6 rounded-2xl border border-dashed border-zinc-300 bg-white px-6 py-4 text-center text-sm text-zinc-600">
           Custom packages available to fit your goals and budget.{" "}
           <a
             href="#contact"
@@ -107,48 +101,6 @@ export default function Packages() {
             Tell us what you need →
           </a>
         </Reveal>
-
-        {/* selectable add-ons */}
-        <div id="add-ons" className="mt-14">
-          <h3 className="display text-3xl text-fg sm:text-4xl">Add-ons</h3>
-          <p className="mt-2 max-w-xl text-sm text-muted">
-            Tap any to add them to your brief — we’ll quote them with your package.
-          </p>
-          <div className="mt-6 grid gap-5 md:grid-cols-2">
-            {[ADD_ONS.creative, ADD_ONS.distribution].map((group) => (
-              <div
-                key={group.title}
-                className="rounded-2xl border border-zinc-200 bg-zinc-50 p-7"
-              >
-                <h4 className="font-display text-xl text-zinc-900">
-                  {group.title}
-                </h4>
-                <ul className="mt-4 flex flex-wrap gap-2">
-                  {group.items.map((item) => {
-                    const on = isAddOnSelected(item);
-                    return (
-                      <li key={item}>
-                        <button
-                          type="button"
-                          onClick={() => toggleAddOn(item)}
-                          aria-pressed={on}
-                          className={`press rounded-full border px-3 py-1.5 text-sm transition-all ${
-                            on
-                              ? "border-gold bg-gold text-black"
-                              : "border-zinc-200 bg-white text-zinc-600 hover:border-zinc-400"
-                          }`}
-                        >
-                          {on ? "✓ " : "+ "}
-                          {item}
-                        </button>
-                      </li>
-                    );
-                  })}
-                </ul>
-              </div>
-            ))}
-          </div>
-        </div>
       </div>
     </section>
   );

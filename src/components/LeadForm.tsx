@@ -1,18 +1,14 @@
 "use client";
 
 import { useState, useTransition } from "react";
-import {
-  FORMATS,
-  BUDGET_OPTIONS,
-  TIMELINE_OPTIONS,
-  CONTACT,
-  BOOKING_URL,
-} from "@/lib/content";
 import { useSelection } from "@/context/selection";
+import { useContent } from "@/context/content";
 import { submitLead } from "@/app/actions";
 import { SectionHeading } from "./Section";
 
 export default function LeadForm() {
+  const { formats, budgetOptions, timelineOptions, contact, bookingUrl } =
+    useContent();
   const {
     selectedHeadacheLabels,
     recommendedFormatIds,
@@ -31,9 +27,9 @@ export default function LeadForm() {
   const [error, setError] = useState<string | null>(null);
 
   const recommendedNames = recommendedFormatIds
-    .map((id) => FORMATS.find((f) => f.id === id)?.name)
+    .map((id) => formats.find((f) => f.id === id)?.name)
     .filter((n): n is string => Boolean(n));
-  const activeFormatName = FORMATS.find((f) => f.id === activeFormatId)?.name;
+  const activeFormatName = formats.find((f) => f.id === activeFormatId)?.name;
 
   function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -75,7 +71,12 @@ export default function LeadForm() {
     return (
       <section id="contact" className="py-20 sm:py-28">
         <div className="mx-auto max-w-3xl px-5 sm:px-8">
-          <BookCall name={submittedName} onReset={() => setDone(false)} />
+          <BookCall
+            name={submittedName}
+            onReset={() => setDone(false)}
+            bookingUrl={bookingUrl}
+            contactEmail={contact.email}
+          />
         </div>
       </section>
     );
@@ -171,10 +172,10 @@ export default function LeadForm() {
               <div className="border-t border-white/10 pt-5 text-sm text-white/60">
                 Prefer email?{" "}
                 <a
-                  href={`mailto:${CONTACT.email}`}
+                  href={`mailto:${contact.email}`}
                   className="font-semibold text-gold hover:underline"
                 >
-                  {CONTACT.email}
+                  {contact.email}
                 </a>
               </div>
             </div>
@@ -206,7 +207,7 @@ export default function LeadForm() {
                   <SelectField
                     label="Budget"
                     name="budget"
-                    options={BUDGET_OPTIONS}
+                    options={budgetOptions}
                     value={budget}
                     onChange={setBudget}
                   />
@@ -214,7 +215,7 @@ export default function LeadForm() {
                 <SelectField
                   label="Timeline"
                   name="timeline"
-                  options={TIMELINE_OPTIONS}
+                  options={timelineOptions}
                   value={timeline}
                   onChange={setTimeline}
                 />
@@ -258,7 +259,17 @@ export default function LeadForm() {
   );
 }
 
-function BookCall({ name, onReset }: { name: string; onReset: () => void }) {
+function BookCall({
+  name,
+  onReset,
+  bookingUrl,
+  contactEmail,
+}: {
+  name: string;
+  onReset: () => void;
+  bookingUrl: string;
+  contactEmail: string;
+}) {
   const first = name.trim().split(" ")[0] || "there";
   return (
     <div className="card overflow-hidden">
@@ -276,9 +287,9 @@ function BookCall({ name, onReset }: { name: string; onReset: () => void }) {
       </div>
 
       <div className="p-4 sm:p-6">
-        {BOOKING_URL ? (
+        {bookingUrl ? (
           <iframe
-            src={BOOKING_URL}
+            src={bookingUrl}
             title="Book a call with SideStreet"
             className="h-[640px] w-full rounded-xl border border-line"
             loading="lazy"
@@ -292,7 +303,7 @@ function BookCall({ name, onReset }: { name: string; onReset: () => void }) {
               in your confirmation email — or reach us directly below.
             </p>
             <a
-              href={`mailto:${CONTACT.email}?subject=Booking%20a%20call%20with%20SideStreet`}
+              href={`mailto:${contactEmail}?subject=Booking%20a%20call%20with%20SideStreet`}
               className="press mt-5 rounded-full bg-gold px-6 py-3 text-sm font-bold uppercase tracking-wide text-black"
             >
               Email us to book →

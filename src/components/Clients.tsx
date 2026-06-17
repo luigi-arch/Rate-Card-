@@ -1,7 +1,10 @@
-import { CLIENTS } from "@/lib/content";
+"use client";
+
+import { useContent } from "@/context/content";
 
 export default function Clients() {
-  const row = [...CLIENTS, ...CLIENTS];
+  const { clients } = useContent();
+  const row = [...clients, ...clients];
   return (
     <section className="bg-ink py-14 text-white">
       <div className="mx-auto max-w-6xl px-5 sm:px-8">

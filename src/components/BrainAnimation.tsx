@@ -1,7 +1,7 @@
 "use client";
 
-import { HEADACHES } from "@/lib/content";
 import { useSelection } from "@/context/selection";
+import { useContent } from "@/context/content";
 
 /**
  * Interactive "headache brain" on a light background: a pulsing brain with the
@@ -51,6 +51,7 @@ function Node({
 
 export default function BrainAnimation() {
   const { toggle, isSelected } = useSelection();
+  const { headaches: HEADACHES } = useContent();
   const left = HEADACHES.slice(0, Math.ceil(HEADACHES.length / 2));
   const right = HEADACHES.slice(Math.ceil(HEADACHES.length / 2));
 

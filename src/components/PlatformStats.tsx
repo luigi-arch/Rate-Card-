@@ -1,6 +1,6 @@
 "use client";
 
-import { AUDIENCE } from "@/lib/content";
+import { useContent } from "@/context/content";
 import { useCountUp } from "@/lib/useCountUp";
 
 /* ---- a single count-up number ---- */
@@ -58,13 +58,14 @@ const PLATFORM: Record<
 
 /* ---- the headline stat bar (social "insights") ---- */
 export function StatBar({ dark = false }: { dark?: boolean }) {
+  const { audience } = useContent();
   return (
     <dl
       className={`grid grid-cols-2 gap-px overflow-hidden rounded-2xl sm:grid-cols-4 ${
         dark ? "bg-white/10" : "bg-line"
       }`}
     >
-      {AUDIENCE.headline.map((s) => (
+      {audience.headline.map((s) => (
         <div
           key={s.label}
           className={`flex flex-col items-center px-4 py-6 text-center ${
@@ -88,9 +89,10 @@ export function StatBar({ dark = false }: { dark?: boolean }) {
 
 /* ---- the per-platform follower cards ---- */
 export function PlatformCards() {
+  const { audience } = useContent();
   return (
     <div className="grid gap-3 sm:grid-cols-3">
-      {AUDIENCE.channels.map((c) => {
+      {audience.channels.map((c) => {
         const p = PLATFORM[c.name];
         const Icon = p?.icon ?? IGIcon;
         return (

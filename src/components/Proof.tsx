@@ -1,18 +1,13 @@
 "use client";
 
-import { AUDIENCE, RESULTS, CLIENT_RATING } from "@/lib/content";
 import { useContent } from "@/context/content";
 import { SectionHeading } from "./Section";
 import { PlatformCards, CountStat } from "./PlatformStats";
 import Placeholder from "./Placeholder";
 import Reveal from "./Reveal";
 
-function slug(s: string) {
-  return s.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
-}
-
 export default function Proof() {
-  const { asset } = useContent();
+  const { audience, results, clientRating } = useContent();
   return (
     <section id="audience" className="py-14 sm:py-20">
       <div className="mx-auto max-w-6xl px-5 sm:px-8">
@@ -32,7 +27,7 @@ export default function Proof() {
           <Reveal className="card p-6">
             <p className="eyebrow mb-5">Age distribution</p>
             <ul className="space-y-3.5">
-              {AUDIENCE.age.map((a) => (
+              {audience.age.map((a) => (
                 <li key={a.range}>
                   <div className="mb-1 flex items-center justify-between text-sm">
                     <span className="text-muted">{a.range}</span>
@@ -52,7 +47,7 @@ export default function Proof() {
           <Reveal delay={90} className="card flex flex-col p-6">
             <p className="eyebrow mb-5">Gender split</p>
             <div className="flex flex-1 flex-col justify-center gap-6">
-              {AUDIENCE.gender.map((g) => (
+              {audience.gender.map((g) => (
                 <div key={g.label}>
                   <div className="flex items-baseline justify-between">
                     <span className="text-muted">{g.label}</span>
@@ -78,17 +73,17 @@ export default function Proof() {
           <span className="flex items-center gap-2">
             <span className="text-gold">★★★★★</span>
             <span className="text-sm text-muted">
-              <span className="font-display text-lg text-fg">{CLIENT_RATING}</span>{" "}
+              <span className="font-display text-lg text-fg">{clientRating}</span>{" "}
               avg. client rating
             </span>
           </span>
         </div>
 
         <div className="mt-6 grid gap-3 md:grid-cols-3">
-          {RESULTS.map((r, i) => {
-            const img = asset(`work.${slug(r.client)}`);
+          {results.map((r, i) => {
+            const img = r.image;
             return (
-            <Reveal key={r.client} delay={i * 80} className="card hover-lift overflow-hidden">
+            <Reveal key={`${r.client}-${i}`} delay={i * 80} className="card hover-lift overflow-hidden">
               {img ? (
                 // eslint-disable-next-line @next/next/no-img-element
                 <img
@@ -131,6 +126,22 @@ export default function Proof() {
           <p className="display text-xl text-fg sm:text-2xl">
             “Content that informs. Stories that connect. Results that speak.”
           </p>
+        </Reveal>
+
+        {/* journey CTAs — placed after the audience info so it isn’t skipped */}
+        <Reveal className="mt-10 flex flex-wrap items-center justify-center gap-3">
+          <a
+            href="#headaches"
+            className="press rounded-full bg-gold px-8 py-4 text-sm font-bold uppercase tracking-wide text-black transition-transform hover:scale-[1.03]"
+          >
+            Start your brief →
+          </a>
+          <a
+            href="#formats"
+            className="press rounded-full border border-fg/20 px-8 py-4 text-sm font-bold uppercase tracking-wide text-fg transition-colors hover:border-fg"
+          >
+            See the video formats
+          </a>
         </Reveal>
       </div>
     </section>

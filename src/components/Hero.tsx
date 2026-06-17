@@ -25,7 +25,7 @@ export default function Hero() {
   const teasers = headaches.filter((h) => TEASER_IDS.includes(h.id));
   const heroVideo = hero.videoUrl;
   const heroImage = hero.imageUrl;
-  const collage = teamPhotos.slice(0, 3);
+  const heroTeam = teamPhotos[0];
 
   return (
     <section
@@ -116,18 +116,13 @@ export default function Hero() {
                 alt="SideStreet showreel"
                 className="h-full w-full object-cover"
               />
-            ) : collage.length ? (
-              <div className="grid h-full w-full grid-cols-3 gap-1">
-                {collage.map((p, i) => (
-                  // eslint-disable-next-line @next/next/no-img-element
-                  <img
-                    key={i}
-                    src={p.url}
-                    alt={p.alt || "The SideStreet crew"}
-                    className="h-full w-full object-cover"
-                  />
-                ))}
-              </div>
+            ) : heroTeam ? (
+              // eslint-disable-next-line @next/next/no-img-element
+              <img
+                src={heroTeam.url}
+                alt={heroTeam.alt || "The SideStreet crew on a shoot"}
+                className="h-full w-full object-cover"
+              />
             ) : (
               <>
                 <div

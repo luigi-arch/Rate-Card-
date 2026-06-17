@@ -792,13 +792,12 @@ export interface TeamPhoto {
 }
 
 export const TEAM_PHOTOS: TeamPhoto[] = [
-  { url: "/team/dsc06394-2.jpg", alt: "The SideStreet crew" },
-  { url: "/team/dsc06330.jpg", alt: "SideStreet on a shoot" },
-  { url: "/team/dsc06347.jpg", alt: "SideStreet on a shoot" },
-  { url: "/team/dsc06358.jpg", alt: "SideStreet on a shoot" },
-  { url: "/team/dsc06442.jpg", alt: "The SideStreet crew" },
-  { url: "/team/dsc06471.jpg", alt: "SideStreet on a shoot" },
-  { url: "/team/dsc06337.jpg", alt: "The SideStreet crew" },
+  { url: "/team/team-interview-1.jpg", alt: "SideStreet host interviewing a guest on location" },
+  { url: "/team/team-on-set-1.jpg", alt: "Filming talent on location" },
+  { url: "/team/team-on-set-2.jpg", alt: "SideStreet filming an interview" },
+  { url: "/team/team-interview-2.jpg", alt: "SideStreet host and guest on the street" },
+  { url: "/team/team-out-1.jpg", alt: "SideStreet out shooting content" },
+  { url: "/team/team-interview-3.jpg", alt: "SideStreet host and guest" },
 ];
 
 /* ------------------------------------------------------------------ */

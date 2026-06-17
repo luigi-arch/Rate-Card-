@@ -13,6 +13,7 @@ import type {
   ServiceItem,
   AboutPillar,
   TeamPhoto,
+  Client,
 } from "@/lib/content";
 import { saveSiteContent, signOutAction } from "@/app/admin/actions";
 import {
@@ -817,11 +818,30 @@ export default function AdminEditor({ initial }: { initial: SiteContent }) {
 
         {/* ---- Clients ---- */}
         <Panel title="Trusted-by clients">
-          <StringListEditor
+          <Repeater<Client>
             items={content.clients}
             onChange={(v) => set("clients", v)}
+            makeBlank={() => ({ name: "" })}
+            itemTitle={(c) => c.name || "Client"}
             addLabel="Add client"
-          />
+          >
+            {(item, update, i) => (
+              <>
+                <TextField
+                  label="Name"
+                  value={item.name}
+                  onChange={(v) => update({ name: v })}
+                />
+                <ImageField
+                  label="Logo (white / transparent reads best)"
+                  slot={`client-${i}`}
+                  value={item.logo || undefined}
+                  onChange={(url) => update({ logo: url })}
+                  onError={fail}
+                />
+              </>
+            )}
+          </Repeater>
         </Panel>
 
         {/* ---- Contact & booking ---- */}

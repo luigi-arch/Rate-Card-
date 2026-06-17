@@ -654,21 +654,26 @@ export const CLIENT_RATING = "4.9 / 5";
 /* Trusted-by logos (text wordmarks)                                   */
 /* ------------------------------------------------------------------ */
 
-export const CLIENTS = [
-  "APS Bank",
-  "FORM",
-  "ERA",
-  "Embassy Cinemas",
-  "Malta Tourism Authority",
-  "Government of Malta",
-  "L-Università ta’ Malta",
-  "HSBC",
-  "humm",
-  "BOV",
-  "MGA",
-  "VisitMalta",
-  "National Book Council",
-  "Puttinu Cares",
+export interface Client {
+  name: string;
+  logo?: string; // public URL of an uploaded logo (white/mono reads best)
+}
+
+export const CLIENTS: Client[] = [
+  { name: "APS Bank" },
+  { name: "FORM" },
+  { name: "ERA" },
+  { name: "Embassy Cinemas" },
+  { name: "Malta Tourism Authority" },
+  { name: "Government of Malta" },
+  { name: "L-Università ta’ Malta" },
+  { name: "HSBC" },
+  { name: "humm" },
+  { name: "BOV" },
+  { name: "MGA" },
+  { name: "VisitMalta" },
+  { name: "National Book Council" },
+  { name: "Puttinu Cares" },
 ];
 
 /* ------------------------------------------------------------------ */
@@ -878,7 +883,7 @@ export interface SiteContent {
   addOns: AddOnGroup[];
   results: ResultItem[];
   clientRating: string;
-  clients: string[];
+  clients: Client[];
   portfolio: PortfolioItem[];
   distribution: Distribution;
   budgetOptions: string[];

@@ -80,8 +80,8 @@ export const HOW_IT_WORKS = [
   },
   {
     step: "02",
-    title: "We match it to a format",
-    body: "Street Views, Explained, Mini Docs, Guides or Interviews — each one engineered to solve a specific problem.",
+    title: "We match it to a video format",
+    body: "Street Views, Explained, Guides, Spotlight Reels, Mini Docs or Interviews — each one engineered to solve a specific problem.",
   },
   {
     step: "03",
@@ -95,11 +95,14 @@ export const HOW_IT_WORKS = [
 /* ------------------------------------------------------------------ */
 
 export const ALWAYS_INCLUDED = [
-  "Strategy & concept",
-  "Filming & production",
-  "Editing & graphics",
-  "Organic cross-posting",
-  "Analytics report",
+  "Customised campaign timeline",
+  "Idea generation & brainstorming",
+  "Narrative storyboards",
+  "Final files delivered to you",
+  "Regular progress check-ins",
+  "Comprehensive analytics report",
+  "Provision for revisions",
+  "Flexible payment structure",
 ];
 
 /* ------------------------------------------------------------------ */
@@ -161,7 +164,7 @@ export const FORMATS: ContentFormat[] = [
     name: "Street Views",
     tag: "Vox Pop",
     keyword: "Authenticity",
-    priceFrom: 1350,
+    priceFrom: 1300,
     oneLiner: "Real, unscripted opinions from people on the street — the message comes from the public, not the brand.",
     description:
       "Anchored by a SideStreet host who frames the conversation toward a clear theme. The value is in its unpredictability and honesty — instant relatability and social proof. Intentionally raw, fast-paced and culturally current.",
@@ -208,7 +211,7 @@ export const FORMATS: ContentFormat[] = [
     name: "SideStreet Guides",
     tag: "How-To",
     keyword: "Utility",
-    priceFrom: 1200,
+    priceFrom: 1250,
     oneLiner: "Step-by-step content that shows people exactly how to do something, from start to finish.",
     description:
       "Removes intimidation and confusion by breaking processes into clear, human-sized steps. Structured, repeatable and designed to be saved and revisited. It positions the brand as helpful and competent — content people use, not just watch.",
@@ -251,11 +254,59 @@ export const FORMATS: ContentFormat[] = [
     ],
   },
   {
+    id: "spotlight-reel",
+    name: "Spotlight Reel",
+    tag: "Brand Reel",
+    keyword: "Energy",
+    priceFrom: 1250,
+    oneLiner: "A high-energy, narrative-driven brand reel that lands your story in under 90 seconds.",
+    description:
+      "A punchy, fast-cut brand film built to grab attention and carry one clear narrative. Designed to feel native to the feed — energetic, current and made to be shared, not skipped.",
+    bestFor: "Brand reach",
+    length: "Under 90 sec",
+    reach: "20K–60K",
+    idealFor: "Brands, Retail, Events",
+    includes: [
+      {
+        group: "Strategy & creative",
+        items: [
+          "Concept & narrative angle",
+          "Shot list & treatment",
+          "Music & pacing direction",
+        ],
+      },
+      {
+        group: "Production",
+        items: [
+          "1 SideStreet host (optional)",
+          "1 videographer",
+          "Dynamic location or studio capture",
+          "Pro lighting & audio",
+        ],
+      },
+      {
+        group: "Post-production",
+        items: [
+          "High-energy vertical edit (9:16)",
+          "Sound design & motion accents",
+          "Subtitles + light branding",
+          "Exports for IG / TikTok / FB",
+        ],
+      },
+    ],
+    solves: [
+      "We need to grab attention fast",
+      "Our content feels flat and forgettable",
+      "We want a hero reel for a launch or campaign",
+      "We need something punchy and on-trend",
+    ],
+  },
+  {
     id: "mini-docs",
     name: "Mini Docs",
     tag: "Storytelling",
     keyword: "Trust",
-    priceFrom: 1200,
+    priceFrom: 1250,
     oneLiner: "Short-form documentary pieces about real people, real stories and real impact.",
     description:
       "Prioritises narrative, emotion and context over quick hooks. Designed to humanise organisations and build emotional connection rather than immediate clicks. This is where brands show who they are, not just what they sell.",
@@ -303,7 +354,7 @@ export const FORMATS: ContentFormat[] = [
     name: "Interviewed by SideStreet",
     tag: "Interview Series",
     keyword: "Credibility",
-    priceFrom: 1250,
+    priceFrom: 2500,
     oneLiner: "A structured editorial interview that humanises leadership and builds thought leadership without PR cringe.",
     description:
       "Blends serious questions with accessible language — avoiding both PR fluff and aggressive interrogation. It positions the interviewee as human, thoughtful and accountable, and produces months of assets from a single sitting.",
@@ -362,6 +413,8 @@ export const HEADACHES: Headache[] = [
   { id: "csr", label: "Our good work goes unseen", formatId: "mini-docs" },
   { id: "leadership", label: "Our leadership feels distant", formatId: "interviews" },
   { id: "credibility", label: "We need credibility & thought leadership", formatId: "interviews" },
+  { id: "attention", label: "We need to grab attention fast", formatId: "spotlight-reel" },
+  { id: "forgettable", label: "Our content feels flat and forgettable", formatId: "spotlight-reel" },
 ];
 
 /* ------------------------------------------------------------------ */
@@ -370,7 +423,9 @@ export const HEADACHES: Headache[] = [
 
 export interface Package {
   name: string;
+  tier?: string; // e.g. "Starter", "Awareness"
   price: string;
+  save?: string; // e.g. "Save €250"
   blurb: string;
   features: string[];
   popular?: boolean;
@@ -378,36 +433,141 @@ export interface Package {
 
 export const PACKAGES: Package[] = [
   {
-    name: "Starter",
+    tier: "Starter",
+    name: "Launch Pack",
+    price: "€1,950",
+    save: "Save €250",
+    blurb: "Perfect for a first campaign",
+    features: ["Spotlight Reel", "Carousel Post", "Social Stories (Set of 6)"],
+  },
+  {
+    tier: "Awareness",
+    name: "Buzz Pack",
+    price: "€2,000",
+    save: "Save €250",
+    blurb: "Drive street-level attention",
+    features: ["Street Views (Vox Pop)", "Carousel Post", "Social Stories (Set of 6)"],
+  },
+  {
+    tier: "Authority",
+    name: "Expert Pack",
     price: "€2,500",
-    blurb: "Perfect for one-off campaigns",
-    features: ["1× Explained or Street Views", "1× Carousel post", "6× Social stories"],
-  },
-  {
-    name: "Growth",
-    price: "€5,000",
-    blurb: "The most popular choice",
+    save: "Save €400",
+    blurb: "Build trust and expertise",
     popular: true,
-    features: [
-      "2× Videos (any format)",
-      "2× Carousel posts",
-      "6× Social stories",
-      "Analytics report",
-    ],
+    features: ["SideStreet Explained", "SideStreet Guides", "Carousel Post"],
   },
   {
-    name: "Always On",
-    price: "€10,000+",
-    blurb: "Monthly content partnership",
-    features: [
-      "4× Videos / month",
-      "4× Carousels / month",
-      "Stories & community",
-      "Monthly strategy call",
-      "Analytics & reporting",
-    ],
+    tier: "Premium",
+    name: "Full Feature",
+    price: "€3,650",
+    save: "Save €500",
+    blurb: "Maximum editorial impact",
+    features: ["Interviewed by SideStreet", "Spotlight Reel", "Social Stories (Set of 6)"],
   },
 ];
+
+/* ------------------------------------------------------------------ */
+/* Other (non-video) services                                          */
+/* ------------------------------------------------------------------ */
+
+export interface ServiceItem {
+  id: string;
+  name: string;
+  category: string; // "Static" | "Stories" | "Platform"
+  blurb: string;
+  priceFrom: number | null;
+}
+
+export const SERVICES: ServiceItem[] = [
+  {
+    id: "carousel",
+    name: "Carousel Post",
+    category: "Static",
+    blurb: "Multi-slide swipe post with custom visuals and copy.",
+    priceFrom: 550,
+  },
+  {
+    id: "static",
+    name: "Static Post",
+    category: "Static",
+    blurb: "Single impactful visual with copywriting.",
+    priceFrom: 300,
+  },
+  {
+    id: "stories",
+    name: "Social Stories (Set of 6)",
+    category: "Stories",
+    blurb: "Branded stories with polls, quizzes or CTAs.",
+    priceFrom: 400,
+  },
+  {
+    id: "giveaway",
+    name: "Giveaway",
+    category: "Platform",
+    blurb: "Branded giveaway campaign management & execution.",
+    priceFrom: 600,
+  },
+  {
+    id: "banners-10",
+    name: "Banner Ads — Set of 10",
+    category: "Platform",
+    blurb: "Custom branded digital banners, set of 10.",
+    priceFrom: 650,
+  },
+  {
+    id: "banners-15",
+    name: "Banner Ads — Set of 15",
+    category: "Platform",
+    blurb: "Custom branded digital banners, set of 15.",
+    priceFrom: 800,
+  },
+  {
+    id: "banners-20",
+    name: "Banner Ads — Set of 20",
+    category: "Platform",
+    blurb: "Custom branded digital banners, set of 20.",
+    priceFrom: 900,
+  },
+];
+
+/* ------------------------------------------------------------------ */
+/* About — "who we are"                                                */
+/* ------------------------------------------------------------------ */
+
+export interface AboutPillar {
+  number: string;
+  title: string;
+  body: string;
+}
+
+export interface About {
+  title: string;
+  body: string;
+  pillars: AboutPillar[];
+}
+
+export const ABOUT: About = {
+  title: "Who we are",
+  body: "SideStreet is one of Malta’s leading independent news and media platforms, with over 160,000 followers across Instagram, Facebook and TikTok. We create short-form content that informs, entertains and connects — from breaking stories and explainers to documentaries, street interviews and brand partnerships.",
+  pillars: [
+    {
+      number: "01",
+      title: "We don’t make ads",
+      body: "Every format is built to feel native. Content that earns attention, not buys it.",
+    },
+    {
+      number: "02",
+      title: "We’re local",
+      body: "We understand Malta: the culture, the humour, the platforms your audience is on.",
+    },
+    {
+      number: "03",
+      title: "We listen",
+      body: "Every campaign starts fresh. No generic templates, no recycled concepts.",
+    },
+  ],
+};
 
 /* ------------------------------------------------------------------ */
 /* Add-on system                                                       */
@@ -688,10 +848,12 @@ export interface Contact {
 
 export interface SiteContent {
   hero: HeroContent;
+  about: About;
   audience: Audience;
   howItWorks: HowItWorksStep[];
   alwaysIncluded: string[];
   formats: ContentFormat[];
+  services: ServiceItem[];
   headaches: Headache[];
   packages: Package[];
   addOns: AddOnGroup[];
@@ -713,11 +875,13 @@ export const DEFAULT_CONTENT: SiteContent = {
     line2: "We build the story.",
     sub: "This isn’t a list of deliverables. It’s a rate card built around your problem — pick the headache, we’ll prescribe the fix.",
   },
+  about: ABOUT,
   audience: AUDIENCE,
   howItWorks: HOW_IT_WORKS,
   alwaysIncluded: ALWAYS_INCLUDED,
   // Fold default logos onto each format so the CMS can override per-format.
   formats: FORMATS.map((f) => ({ ...f, logo: f.logo ?? FORMAT_LOGOS[f.id] })),
+  services: SERVICES,
   headaches: HEADACHES,
   packages: PACKAGES,
   addOns: ADD_ONS,

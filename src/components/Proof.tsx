@@ -127,6 +127,22 @@ export default function Proof() {
             “Content that informs. Stories that connect. Results that speak.”
           </p>
         </Reveal>
+
+        {/* journey CTAs — placed after the audience info so it isn’t skipped */}
+        <Reveal className="mt-10 flex flex-wrap items-center justify-center gap-3">
+          <a
+            href="#headaches"
+            className="press rounded-full bg-gold px-8 py-4 text-sm font-bold uppercase tracking-wide text-black transition-transform hover:scale-[1.03]"
+          >
+            Start your brief →
+          </a>
+          <a
+            href="#formats"
+            className="press rounded-full border border-fg/20 px-8 py-4 text-sm font-bold uppercase tracking-wide text-fg transition-colors hover:border-fg"
+          >
+            See the video formats
+          </a>
+        </Reveal>
       </div>
     </section>
   );

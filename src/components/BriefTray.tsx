@@ -24,10 +24,13 @@ export default function BriefTray() {
   if (briefCount === 0) return null;
 
   const activeFormatName = formats.find((f) => f.id === activeFormatId)?.name;
+  const serviceCount = selectedPackage
+    ? selectedAddOns.length + 1
+    : selectedAddOns.length;
   const steps = [
     { n: "01", label: "Headache", done: progress.step1, href: "headaches" },
-    { n: "02", label: "Format", done: progress.step2, href: "formats" },
-    { n: "03", label: "Package", done: progress.step3, href: "pricing" },
+    { n: "02", label: "Video format", done: progress.step2, href: "formats" },
+    { n: "03", label: "Services", done: progress.step3, href: "services" },
   ];
 
   return (
@@ -93,8 +96,10 @@ export default function BriefTray() {
                         ? `${selectedHeadacheLabels.length} picked`
                         : s.href === "formats" && formatEngaged
                         ? activeFormatName?.replace("Interviewed by SideStreet", "Interviews")
-                        : s.href === "pricing" && selectedPackage
+                        : s.href === "services" && selectedPackage
                         ? selectedPackage
+                        : s.href === "services" && serviceCount
+                        ? `${serviceCount} added`
                         : ""}
                     </span>
                   </button>

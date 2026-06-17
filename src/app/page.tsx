@@ -4,9 +4,11 @@ import { getSiteContent } from "@/lib/site-content";
 import Nav from "@/components/Nav";
 import Hero from "@/components/Hero";
 import Clients from "@/components/Clients";
+import About from "@/components/About";
 import Proof from "@/components/Proof";
 import HeadachePicker from "@/components/HeadachePicker";
 import Formats from "@/components/Formats";
+import Services from "@/components/Services";
 import Packages from "@/components/Packages";
 import Portfolio from "@/components/Portfolio";
 import LeadForm from "@/components/LeadForm";
@@ -24,9 +26,11 @@ export default async function Home() {
         <main>
           <Hero />
           <Clients />
+          <About />
           <Proof />
           <HeadachePicker />
           <Formats />
+          <Services />
           <Packages />
           <Portfolio />
           <LeadForm />

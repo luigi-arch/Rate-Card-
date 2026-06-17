@@ -26,7 +26,7 @@ export default function Formats() {
 
         {/* always included */}
         <Reveal className="mt-8 flex flex-wrap items-center gap-x-6 gap-y-2 rounded-2xl border border-line bg-surface/40 px-6 py-4">
-          <span className="eyebrow">Every format includes</span>
+          <span className="eyebrow">Every campaign includes</span>
           {alwaysIncluded.map((item) => (
             <span key={item} className="flex items-center gap-2 text-sm text-muted">
               <span className="text-gold">✓</span>
@@ -100,7 +100,7 @@ function LogoTile({ logo, tag }: { logo?: string; tag: string }) {
         src={logo}
         alt={`${tag} logo`}
         onError={() => setFailed(true)}
-        className="relative max-h-28 w-auto max-w-[78%] object-contain px-6"
+        className="relative h-20 w-auto max-w-[80%] object-contain px-6 sm:h-24"
       />
     );
   }

@@ -10,6 +10,8 @@ import type {
   ResultItem,
   AddOnGroup,
   IncludeGroup,
+  ServiceItem,
+  AboutPillar,
 } from "@/lib/content";
 import { saveSiteContent, signOutAction } from "@/app/admin/actions";
 import {
@@ -116,6 +118,51 @@ export default function AdminEditor({ initial }: { initial: SiteContent }) {
               onError={fail}
             />
           </div>
+        </Panel>
+
+        {/* ---- About ---- */}
+        <Panel title="About / who we are">
+          <TextField
+            label="Title"
+            value={content.about.title}
+            onChange={(v) => set("about", { ...content.about, title: v })}
+          />
+          <TextArea
+            label="Intro"
+            value={content.about.body}
+            onChange={(v) => set("about", { ...content.about, body: v })}
+          />
+          <Group title="Pillars">
+            <Repeater<AboutPillar>
+              items={content.about.pillars}
+              onChange={(pillars) => set("about", { ...content.about, pillars })}
+              makeBlank={() => ({ number: "", title: "", body: "" })}
+              itemTitle={(p) => p.title || "Pillar"}
+              addLabel="Add pillar"
+            >
+              {(item, update) => (
+                <>
+                  <div className="grid gap-3 sm:grid-cols-[120px_1fr]">
+                    <TextField
+                      label="Number"
+                      value={item.number}
+                      onChange={(v) => update({ number: v })}
+                    />
+                    <TextField
+                      label="Title"
+                      value={item.title}
+                      onChange={(v) => update({ title: v })}
+                    />
+                  </div>
+                  <TextArea
+                    label="Body"
+                    value={item.body}
+                    onChange={(v) => update({ body: v })}
+                  />
+                </>
+              )}
+            </Repeater>
+          </Group>
         </Panel>
 
         {/* ---- Audience / platform stats ---- */}
@@ -405,6 +452,50 @@ export default function AdminEditor({ initial }: { initial: SiteContent }) {
           </Repeater>
         </Panel>
 
+        {/* ---- Other services ---- */}
+        <Panel title="Other services (non-video)">
+          <Repeater<ServiceItem>
+            items={content.services}
+            onChange={(v) => set("services", v)}
+            makeBlank={() => ({
+              id: `service-${Date.now()}`,
+              name: "",
+              category: "Static",
+              blurb: "",
+              priceFrom: null,
+            })}
+            itemTitle={(s) => s.name || "Service"}
+            addLabel="Add service"
+          >
+            {(item, update) => (
+              <>
+                <div className="grid gap-3 sm:grid-cols-2">
+                  <TextField
+                    label="Name"
+                    value={item.name}
+                    onChange={(v) => update({ name: v })}
+                  />
+                  <TextField
+                    label="Category (Static / Stories / Platform)"
+                    value={item.category}
+                    onChange={(v) => update({ category: v })}
+                  />
+                </div>
+                <TextArea
+                  label="Blurb"
+                  value={item.blurb}
+                  onChange={(v) => update({ blurb: v })}
+                />
+                <NumberField
+                  label="Price from (€)"
+                  value={item.priceFrom}
+                  onChange={(v) => update({ priceFrom: v })}
+                />
+              </>
+            )}
+          </Repeater>
+        </Panel>
+
         {/* ---- Headaches ---- */}
         <Panel title="Headaches → format mapping">
           <Repeater<Headache>
@@ -459,8 +550,10 @@ export default function AdminEditor({ initial }: { initial: SiteContent }) {
             items={content.packages}
             onChange={(v) => set("packages", v)}
             makeBlank={() => ({
+              tier: "",
               name: "",
               price: "",
+              save: "",
               blurb: "",
               features: [],
             })}
@@ -471,6 +564,11 @@ export default function AdminEditor({ initial }: { initial: SiteContent }) {
               <>
                 <div className="grid gap-3 sm:grid-cols-2">
                   <TextField
+                    label="Tier label (e.g. Starter)"
+                    value={item.tier ?? ""}
+                    onChange={(v) => update({ tier: v })}
+                  />
+                  <TextField
                     label="Name"
                     value={item.name}
                     onChange={(v) => update({ name: v })}
@@ -479,6 +577,11 @@ export default function AdminEditor({ initial }: { initial: SiteContent }) {
                     label="Price"
                     value={item.price}
                     onChange={(v) => update({ price: v })}
+                  />
+                  <TextField
+                    label="Savings badge (e.g. Save €250)"
+                    value={item.save ?? ""}
+                    onChange={(v) => update({ save: v })}
                   />
                 </div>
                 <TextField

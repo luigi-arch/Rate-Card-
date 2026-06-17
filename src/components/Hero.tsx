@@ -62,21 +62,15 @@ export default function Hero() {
         <Reveal delay={200}>
           <div className="mt-9 flex flex-wrap items-center justify-center gap-3">
             <button
-              onClick={() => scrollTo("headaches")}
+              onClick={() => scrollTo("about")}
               className="press rounded-full bg-gold px-8 py-4 text-sm font-bold uppercase tracking-wide text-black transition-transform hover:scale-[1.03]"
             >
-              Start your brief →
-            </button>
-            <button
-              onClick={() => scrollTo("formats")}
-              className="press rounded-full border border-fg/20 px-8 py-4 text-sm font-bold uppercase tracking-wide text-fg transition-colors hover:border-fg"
-            >
-              See the formats
+              Meet the platform ↓
             </button>
           </div>
         </Reveal>
 
-        {/* live teaser chips — seed the journey from the hero */}
+        {/* live teaser chips — seed the journey from the hero (select, don't skip ahead) */}
         <Reveal delay={280}>
           <div className="mt-8 flex flex-wrap items-center justify-center gap-2">
             <span className="text-xs font-semibold uppercase tracking-wide text-muted-2">
@@ -87,10 +81,7 @@ export default function Hero() {
               return (
                 <button
                   key={h.id}
-                  onClick={() => {
-                    if (!active) toggle(h.id);
-                    scrollTo("headaches");
-                  }}
+                  onClick={() => toggle(h.id)}
                   className={`press rounded-full border px-3.5 py-1.5 text-xs font-medium transition-all ${
                     active
                       ? "border-gold bg-gold text-black"

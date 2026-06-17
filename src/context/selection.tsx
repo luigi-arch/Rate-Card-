@@ -111,10 +111,12 @@ export function SelectionProvider({ children }: { children: React.ReactNode }) {
   const progress = useMemo(() => {
     const step1 = selected.length > 0;
     const step2 = formatEngaged;
-    const step3 = selectedPackage !== null;
+    // Step 3 = anything that fleshes out the brief: a ready-made package,
+    // an extra service or an add-on.
+    const step3 = selectedPackage !== null || selectedAddOns.length > 0;
     const done = [step1, step2, step3].filter(Boolean).length;
     return { step1, step2, step3, pct: Math.round((done / 3) * 100) };
-  }, [selected.length, formatEngaged, selectedPackage]);
+  }, [selected.length, formatEngaged, selectedPackage, selectedAddOns.length]);
 
   const briefCount =
     selectedHeadacheLabels.length +

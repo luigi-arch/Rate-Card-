@@ -9,6 +9,7 @@ import type {
   PortfolioItem,
   ResultItem,
   AddOnGroup,
+  AddOnItem,
   IncludeGroup,
   ServiceItem,
   ServiceOption,
@@ -696,11 +697,28 @@ export default function AdminEditor({ initial }: { initial: SiteContent }) {
                   value={item.title}
                   onChange={(v) => update({ title: v })}
                 />
-                <StringListEditor
+                <Repeater<AddOnItem>
                   items={item.items}
                   onChange={(items) => update({ items })}
+                  makeBlank={() => ({ label: "", priceFrom: null })}
+                  itemTitle={(a) => a.label || "Add-on"}
                   addLabel="Add add-on"
-                />
+                >
+                  {(ao, updateAo) => (
+                    <div className="grid gap-3 sm:grid-cols-[1fr_160px]">
+                      <TextField
+                        label="Add-on"
+                        value={ao.label}
+                        onChange={(v) => updateAo({ label: v })}
+                      />
+                      <NumberField
+                        label="Price (€)"
+                        value={ao.priceFrom ?? null}
+                        onChange={(v) => updateAo({ priceFrom: v })}
+                      />
+                    </div>
+                  )}
+                </Repeater>
               </>
             )}
           </Repeater>

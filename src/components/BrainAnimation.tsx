@@ -18,13 +18,18 @@ function Node({
   onClick,
   index,
   align = "left",
+  dark = false,
 }: {
   label: string;
   active: boolean;
   onClick: () => void;
   index: number;
   align?: "left" | "right";
+  dark?: boolean;
 }) {
+  const inactive = dark
+    ? "border-white/20 bg-white/5 text-white/70 hover:border-white hover:text-white"
+    : "border-line-strong bg-surface text-muted hover:border-fg hover:text-fg";
   return (
     <button
       type="button"
@@ -38,18 +43,14 @@ function Node({
       }
       className={`animate-thought press max-w-[15rem] rounded-xl border px-3.5 py-2 text-sm font-medium shadow-sm transition-colors ${
         align === "right" ? "text-right" : "text-left"
-      } ${
-        active
-          ? "border-gold bg-gold text-black"
-          : "border-line-strong bg-surface text-muted hover:border-fg hover:text-fg"
-      }`}
+      } ${active ? "border-gold bg-gold text-black" : inactive}`}
     >
       “{label}”
     </button>
   );
 }
 
-export default function BrainAnimation() {
+export default function BrainAnimation({ dark = false }: { dark?: boolean }) {
   const { toggle, isSelected } = useSelection();
   const { headaches: HEADACHES } = useContent();
   const left = HEADACHES.slice(0, Math.ceil(HEADACHES.length / 2));
@@ -68,6 +69,7 @@ export default function BrainAnimation() {
               onClick={() => toggle(h.id)}
               index={HEADACHES.indexOf(h)}
               align="right"
+              dark={dark}
             />
           ))}
         </div>
@@ -89,7 +91,7 @@ export default function BrainAnimation() {
               className="h-auto w-[180px] sm:w-[230px]"
             >
               <g
-                stroke="var(--color-fg)"
+                stroke={dark ? "#ffffff" : "var(--color-fg)"}
                 strokeWidth="3.5"
                 fill="none"
                 strokeLinecap="round"
@@ -141,6 +143,7 @@ export default function BrainAnimation() {
               onClick={() => toggle(h.id)}
               index={HEADACHES.indexOf(h)}
               align="left"
+              dark={dark}
             />
           ))}
         </div>
@@ -155,6 +158,7 @@ export default function BrainAnimation() {
             active={isSelected(h.id)}
             onClick={() => toggle(h.id)}
             index={i}
+            dark={dark}
           />
         ))}
       </div>

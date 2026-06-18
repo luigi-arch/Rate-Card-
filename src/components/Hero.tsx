@@ -5,6 +5,7 @@ import { type ContentFormat } from "@/lib/content";
 import { useSelection } from "@/context/selection";
 import { useContent } from "@/context/content";
 import BrainAnimation from "./BrainAnimation";
+import HeroHeadline from "./HeroHeadline";
 import Reveal from "./Reveal";
 
 function scrollTo(id: string) {
@@ -19,7 +20,7 @@ function joinList(items: string[]) {
 
 export default function Hero() {
   const { hero, formats } = useContent();
-  const { selected, recommendedFormatIds, clear } = useSelection();
+  const { selected, recommendedFormatIds, clear, progress } = useSelection();
   const [revealed, setRevealed] = useState(false);
 
   function startOver() {
@@ -32,6 +33,15 @@ export default function Hero() {
     .filter((f): f is ContentFormat => Boolean(f));
   const diagnosed = recommended.length > 0;
   const keywords = [...new Set(recommended.map((f) => f.keyword))];
+
+  // Journey stepper — previews the flow and lights up with progress.
+  const steps = [
+    { label: "Headaches", done: selected.length > 0, href: "top" },
+    { label: "Diagnosis", done: revealed, href: "top" },
+    { label: "Formats", done: progress.step3, href: "formats" },
+    { label: "Brief", done: false, href: "contact" },
+  ];
+  const activeStep = steps.findIndex((s) => !s.done);
 
   return (
     <section
@@ -52,9 +62,49 @@ export default function Hero() {
 
       <div className="relative mx-auto max-w-5xl px-5 pb-16 pt-32 text-center sm:px-8 sm:pt-36">
         <Reveal>
-          <h1 className="display mx-auto max-w-4xl text-5xl leading-[0.92] text-fg sm:text-6xl md:text-7xl">
-            {hero.line1}
-          </h1>
+          <HeroHeadline text={hero.line1} />
+        </Reveal>
+
+        {/* journey stepper — previews the flow + tracks progress */}
+        <Reveal delay={60}>
+          <div className="mt-6 inline-flex flex-wrap items-center justify-center gap-1 rounded-full border border-line bg-surface/80 px-2 py-1.5 text-xs backdrop-blur">
+            {steps.map((s, i) => {
+              const isActive = i === activeStep;
+              return (
+                <span key={s.label} className="flex items-center">
+                  {i > 0 && (
+                    <span className="px-1 text-muted-2" aria-hidden>
+                      ›
+                    </span>
+                  )}
+                  <button
+                    type="button"
+                    onClick={() => scrollTo(s.href)}
+                    className={`press flex items-center gap-1.5 rounded-full px-2.5 py-1 font-semibold transition-colors ${
+                      s.done
+                        ? "bg-gold text-black"
+                        : isActive
+                        ? "text-fg ring-1 ring-gold"
+                        : "text-muted-2 hover:text-fg"
+                    }`}
+                  >
+                    <span
+                      className={`flex h-4 w-4 items-center justify-center rounded-full text-[0.6rem] ${
+                        s.done
+                          ? "bg-black/15 text-black"
+                          : isActive
+                          ? "bg-gold text-black"
+                          : "border border-line-strong text-muted-2"
+                      }`}
+                    >
+                      {s.done ? "✓" : i + 1}
+                    </span>
+                    {s.label}
+                  </button>
+                </span>
+              );
+            })}
+          </div>
         </Reveal>
 
         <Reveal delay={120}>

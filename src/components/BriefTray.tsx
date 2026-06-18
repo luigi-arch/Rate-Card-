@@ -28,7 +28,7 @@ export default function BriefTray() {
     ? selectedAddOns.length + 1
     : selectedAddOns.length;
   const steps = [
-    { n: "01", label: "Headache", done: progress.step1, href: "headaches" },
+    { n: "01", label: "Headache", done: progress.step1, href: "top" },
     { n: "02", label: "Video format", done: progress.step2, href: "formats" },
     { n: "03", label: "Services", done: progress.step3, href: "services" },
   ];
@@ -92,7 +92,7 @@ export default function BriefTray() {
                       {s.label}
                     </span>
                     <span className="ml-auto truncate text-xs text-white/45">
-                      {s.href === "headaches" && selectedHeadacheLabels.length
+                      {s.href === "top" && selectedHeadacheLabels.length
                         ? `${selectedHeadacheLabels.length} picked`
                         : s.href === "formats" && formatEngaged
                         ? activeFormatName?.replace("Interviewed by SideStreet", "Interviews")

@@ -5,15 +5,8 @@ import { type ContentFormat } from "@/lib/content";
 import { useSelection } from "@/context/selection";
 import { useContent } from "@/context/content";
 import BrainAnimation from "./BrainAnimation";
-import HeroHeadline, { type HeadlineVariant } from "./HeroHeadline";
+import HeroHeadline from "./HeroHeadline";
 import Reveal from "./Reveal";
-
-const HEADLINE_VARIANTS: { id: HeadlineVariant; label: string }[] = [
-  { id: "sleepless", label: "1 · Sleepless" },
-  { id: "coffee", label: "2 · Coffee" },
-  { id: "worry", label: "3 · Worry" },
-  { id: "kinetic", label: "4 · Kinetic" },
-];
 
 function scrollTo(id: string) {
   document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
@@ -27,9 +20,8 @@ function joinList(items: string[]) {
 
 export default function Hero() {
   const { hero, formats } = useContent();
-  const { selected, recommendedFormatIds, clear } = useSelection();
+  const { selected, recommendedFormatIds, clear, progress } = useSelection();
   const [revealed, setRevealed] = useState(false);
-  const [headline, setHeadline] = useState<HeadlineVariant>("sleepless");
 
   function startOver() {
     clear();
@@ -41,6 +33,15 @@ export default function Hero() {
     .filter((f): f is ContentFormat => Boolean(f));
   const diagnosed = recommended.length > 0;
   const keywords = [...new Set(recommended.map((f) => f.keyword))];
+
+  // Journey stepper — previews the flow and lights up with progress.
+  const steps = [
+    { label: "Headaches", done: selected.length > 0, href: "top" },
+    { label: "Diagnosis", done: revealed, href: "top" },
+    { label: "Formats", done: progress.step3, href: "formats" },
+    { label: "Brief", done: false, href: "contact" },
+  ];
+  const activeStep = steps.findIndex((s) => !s.done);
 
   return (
     <section
@@ -61,29 +62,50 @@ export default function Hero() {
 
       <div className="relative mx-auto max-w-5xl px-5 pb-16 pt-32 text-center sm:px-8 sm:pt-36">
         <Reveal>
-          <HeroHeadline variant={headline} text={hero.line1} />
+          <HeroHeadline text={hero.line1} />
         </Reveal>
 
-        {/* TEMPORARY — headline-style preview switcher (remove after choosing) */}
-        <div className="mt-5 inline-flex flex-wrap items-center justify-center gap-1.5 rounded-full border border-line bg-surface/80 px-2 py-1.5 text-[0.7rem] backdrop-blur">
-          <span className="px-1.5 font-semibold uppercase tracking-wide text-muted-2">
-            Headline style
-          </span>
-          {HEADLINE_VARIANTS.map((v) => (
-            <button
-              key={v.id}
-              type="button"
-              onClick={() => setHeadline(v.id)}
-              className={`press rounded-full px-2.5 py-1 font-semibold transition-colors ${
-                headline === v.id
-                  ? "bg-gold text-black"
-                  : "text-muted hover:text-fg"
-              }`}
-            >
-              {v.label}
-            </button>
-          ))}
-        </div>
+        {/* journey stepper — previews the flow + tracks progress */}
+        <Reveal delay={60}>
+          <div className="mt-6 inline-flex flex-wrap items-center justify-center gap-1 rounded-full border border-line bg-surface/80 px-2 py-1.5 text-xs backdrop-blur">
+            {steps.map((s, i) => {
+              const isActive = i === activeStep;
+              return (
+                <span key={s.label} className="flex items-center">
+                  {i > 0 && (
+                    <span className="px-1 text-muted-2" aria-hidden>
+                      ›
+                    </span>
+                  )}
+                  <button
+                    type="button"
+                    onClick={() => scrollTo(s.href)}
+                    className={`press flex items-center gap-1.5 rounded-full px-2.5 py-1 font-semibold transition-colors ${
+                      s.done
+                        ? "bg-gold text-black"
+                        : isActive
+                        ? "text-fg ring-1 ring-gold"
+                        : "text-muted-2 hover:text-fg"
+                    }`}
+                  >
+                    <span
+                      className={`flex h-4 w-4 items-center justify-center rounded-full text-[0.6rem] ${
+                        s.done
+                          ? "bg-black/15 text-black"
+                          : isActive
+                          ? "bg-gold text-black"
+                          : "border border-line-strong text-muted-2"
+                      }`}
+                    >
+                      {s.done ? "✓" : i + 1}
+                    </span>
+                    {s.label}
+                  </button>
+                </span>
+              );
+            })}
+          </div>
+        </Reveal>
 
         <Reveal delay={120}>
           <p className="mx-auto mt-6 max-w-2xl text-base leading-relaxed text-muted sm:text-lg">

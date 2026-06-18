@@ -2,7 +2,7 @@
 
 import { useContent } from "@/context/content";
 import { SectionHeading } from "./Section";
-import { PlatformCards, CountStat } from "./PlatformStats";
+import { PlatformCards, CountStat, StatBar } from "./PlatformStats";
 import Placeholder from "./Placeholder";
 import Reveal from "./Reveal";
 
@@ -17,8 +17,13 @@ export default function Proof() {
           intro="Malta’s largest youth news platform — half the audience under 35, across the feeds your customers actually live in."
         />
 
-        {/* platform follower cards */}
+        {/* headline reach numbers */}
         <Reveal className="mt-10">
+          <StatBar />
+        </Reveal>
+
+        {/* platform follower cards */}
+        <Reveal className="mt-3">
           <PlatformCards />
         </Reveal>
 

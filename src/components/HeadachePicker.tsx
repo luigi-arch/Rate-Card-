@@ -4,11 +4,10 @@ import { type ContentFormat } from "@/lib/content";
 import { useSelection } from "@/context/selection";
 import { useContent } from "@/context/content";
 import { JourneyHeader } from "./JourneyHeader";
-import BrainAnimation from "./BrainAnimation";
 
 export default function HeadachePicker() {
-  const { selected, clear, recommendedFormatIds } = useSelection();
-  const { formats, howItWorks } = useContent();
+  const { selected, clear, recommendedFormatIds, toggle, isSelected } = useSelection();
+  const { formats, headaches, howItWorks } = useContent();
 
   const recommended = recommendedFormatIds
     .map((id) => formats.find((f) => f.id === id))
@@ -20,13 +19,30 @@ export default function HeadachePicker() {
         <JourneyHeader
           step="01"
           title={howItWorks[0].title}
-          body="Click the headaches that sound like you. We’ll match each to the format built to solve it — and build your brief as you go."
+          body="Pick the headaches that sound like you — up in the hero or right here. We’ll match each to the format built to solve it and build your brief as you go."
           done={selected.length > 0}
         />
 
-        {/* interactive brain — the headaches are the selectors */}
-        <div className="mt-10">
-          <BrainAnimation />
+        {/* compact headache chip selector (mirrors the hero brain) */}
+        <div className="mx-auto mt-8 flex max-w-3xl flex-wrap justify-center gap-2">
+          {headaches.map((h) => {
+            const active = isSelected(h.id);
+            return (
+              <button
+                key={h.id}
+                type="button"
+                onClick={() => toggle(h.id)}
+                aria-pressed={active}
+                className={`press rounded-full border px-3.5 py-1.5 text-sm font-medium transition-all ${
+                  active
+                    ? "border-gold bg-gold text-black"
+                    : "border-line-strong text-muted hover:border-fg hover:text-fg"
+                }`}
+              >
+                “{h.label}”
+              </button>
+            );
+          })}
         </div>
 
         {/* reveal matching formats — no duplicate listing, just the bridge */}

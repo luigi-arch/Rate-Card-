@@ -28,8 +28,16 @@ function Node({
   dark?: boolean;
 }) {
   const inactive = dark
-    ? "border-white/20 bg-white/5 text-white/70 hover:border-white hover:text-white"
+    ? "border-white/20 bg-white/5 text-white/70 hover:border-white hover:text-white hover:bg-white/10"
     : "border-line-strong bg-surface text-muted hover:border-fg hover:text-fg";
+  // thought-bubble tail circles, coloured to match the bubble state
+  const tail = active
+    ? "border-gold bg-gold"
+    : dark
+    ? "border-white/25 bg-white/10"
+    : "border-line-strong bg-surface";
+  const tailSide = align === "right" ? "right-4" : "left-4";
+  const tailSide2 = align === "right" ? "right-2" : "left-2";
   return (
     <button
       type="button"
@@ -41,11 +49,20 @@ function Node({
           "--delay": DELAYS[index % DELAYS.length],
         } as React.CSSProperties
       }
-      className={`animate-thought press max-w-[15rem] rounded-xl border px-3.5 py-2 text-sm font-medium shadow-sm transition-colors ${
-        align === "right" ? "text-right" : "text-left"
-      } ${active ? "border-gold bg-gold text-black" : inactive}`}
+      className={`animate-thought press relative max-w-[15rem] rounded-[1.4rem] border px-4 py-2.5 text-center text-sm font-medium shadow-sm transition-colors ${
+        active ? "border-gold bg-gold text-black" : inactive
+      }`}
     >
       “{label}”
+      {/* thought-bubble tail */}
+      <span
+        aria-hidden
+        className={`absolute -bottom-1.5 h-2.5 w-2.5 rounded-full border ${tail} ${tailSide}`}
+      />
+      <span
+        aria-hidden
+        className={`absolute -bottom-3.5 h-1.5 w-1.5 rounded-full border ${tail} ${tailSide2}`}
+      />
     </button>
   );
 }

@@ -4,9 +4,9 @@ import { useEffect, useState } from "react";
 import Logo from "./Logo";
 
 const LINKS = [
+  { href: "#formats", label: "Video formats" },
   { href: "#about", label: "About" },
   { href: "#audience", label: "Audience" },
-  { href: "#formats", label: "Video formats" },
   { href: "#work", label: "Work" },
 ];
 

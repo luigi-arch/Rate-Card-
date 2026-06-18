@@ -5,7 +5,15 @@ import { type ContentFormat } from "@/lib/content";
 import { useSelection } from "@/context/selection";
 import { useContent } from "@/context/content";
 import BrainAnimation from "./BrainAnimation";
+import HeroHeadline, { type HeadlineVariant } from "./HeroHeadline";
 import Reveal from "./Reveal";
+
+const HEADLINE_VARIANTS: { id: HeadlineVariant; label: string }[] = [
+  { id: "sleepless", label: "1 · Sleepless" },
+  { id: "coffee", label: "2 · Coffee" },
+  { id: "worry", label: "3 · Worry" },
+  { id: "kinetic", label: "4 · Kinetic" },
+];
 
 function scrollTo(id: string) {
   document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
@@ -21,6 +29,7 @@ export default function Hero() {
   const { hero, formats } = useContent();
   const { selected, recommendedFormatIds, clear } = useSelection();
   const [revealed, setRevealed] = useState(false);
+  const [headline, setHeadline] = useState<HeadlineVariant>("sleepless");
 
   function startOver() {
     clear();
@@ -52,10 +61,29 @@ export default function Hero() {
 
       <div className="relative mx-auto max-w-5xl px-5 pb-16 pt-32 text-center sm:px-8 sm:pt-36">
         <Reveal>
-          <h1 className="display mx-auto max-w-4xl text-5xl leading-[0.92] text-fg sm:text-6xl md:text-7xl">
-            {hero.line1}
-          </h1>
+          <HeroHeadline variant={headline} text={hero.line1} />
         </Reveal>
+
+        {/* TEMPORARY — headline-style preview switcher (remove after choosing) */}
+        <div className="mt-5 inline-flex flex-wrap items-center justify-center gap-1.5 rounded-full border border-line bg-surface/80 px-2 py-1.5 text-[0.7rem] backdrop-blur">
+          <span className="px-1.5 font-semibold uppercase tracking-wide text-muted-2">
+            Headline style
+          </span>
+          {HEADLINE_VARIANTS.map((v) => (
+            <button
+              key={v.id}
+              type="button"
+              onClick={() => setHeadline(v.id)}
+              className={`press rounded-full px-2.5 py-1 font-semibold transition-colors ${
+                headline === v.id
+                  ? "bg-gold text-black"
+                  : "text-muted hover:text-fg"
+              }`}
+            >
+              {v.label}
+            </button>
+          ))}
+        </div>
 
         <Reveal delay={120}>
           <p className="mx-auto mt-6 max-w-2xl text-base leading-relaxed text-muted sm:text-lg">

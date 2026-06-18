@@ -4,24 +4,23 @@ import { useState } from "react";
 import { type ContentFormat } from "@/lib/content";
 import { useSelection } from "@/context/selection";
 import { useContent } from "@/context/content";
-import { JourneyHeader } from "./JourneyHeader";
+import { SectionHeading } from "./Section";
 import Reveal from "./Reveal";
 
 export default function Formats() {
-  const { recommendedFormatIds, activeFormatId, setActiveFormat, formatEngaged } =
+  const { recommendedFormatIds, activeFormatId, setActiveFormat } =
     useSelection();
-  const { formats, alwaysIncluded, howItWorks } = useContent();
+  const { formats, alwaysIncluded } = useContent();
   const recommended = new Set(recommendedFormatIds);
   const active = formats.find((f) => f.id === activeFormatId) ?? formats[0];
 
   return (
     <section id="formats" className="scroll-mt-20 border-t border-line py-14 sm:py-20">
       <div className="mx-auto max-w-6xl px-5 sm:px-8">
-        <JourneyHeader
-          step="02"
-          title={howItWorks[1].title}
-          body="Each format is engineered around one outcome. Pick one to explore — we’ve starred the fit for your headaches."
-          done={formatEngaged}
+        <SectionHeading
+          eyebrow="Your prescription"
+          title="Video formats"
+          intro="Each format is engineered around one outcome. Pick one to explore — we’ve starred the fit for the headaches you picked."
         />
 
         {/* always included */}

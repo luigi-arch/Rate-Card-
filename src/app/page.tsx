@@ -6,7 +6,6 @@ import Hero from "@/components/Hero";
 import Clients from "@/components/Clients";
 import About from "@/components/About";
 import Proof from "@/components/Proof";
-import HeadachePicker from "@/components/HeadachePicker";
 import Formats from "@/components/Formats";
 import Services from "@/components/Services";
 import Packages from "@/components/Packages";
@@ -25,14 +24,14 @@ export default async function Home() {
       <SelectionProvider>
         <Nav />
         <main>
+          {/* diagnose → prescribe → build → trust → contact */}
           <Hero />
-          <Clients />
-          <About />
-          <Proof />
-          <HeadachePicker />
           <Formats />
           <Services />
           <Packages />
+          <About />
+          <Proof />
+          <Clients />
           <Portfolio />
           <BehindScenes />
           <LeadForm />

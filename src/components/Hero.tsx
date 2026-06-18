@@ -33,40 +33,26 @@ export default function Hero() {
       />
 
       <div className="relative mx-auto max-w-[88rem] px-5 pb-16 pt-32 text-center sm:px-10 sm:pt-36 lg:px-16">
-        {/* stylised kicker tagline */}
+        {/* stylised tagline */}
         <Reveal>
-          <p className="flex flex-wrap items-baseline justify-center gap-x-2.5 gap-y-1">
-            <span className="text-xs font-semibold uppercase tracking-[0.28em] text-white/45 sm:text-sm">
+          <p className="flex flex-wrap items-baseline justify-center gap-x-3 gap-y-1">
+            <span className="text-sm font-semibold uppercase tracking-[0.26em] text-white/55 sm:text-base">
               This is
             </span>
-            <span className="display text-3xl leading-none text-gold sm:text-4xl">
+            <span className="display text-5xl leading-none text-gold sm:text-6xl md:text-7xl">
               not
             </span>
-            <span className="text-xs font-semibold uppercase tracking-[0.28em] text-white/45 sm:text-sm">
+            <span className="text-sm font-semibold uppercase tracking-[0.26em] text-white/55 sm:text-base">
               your
             </span>
-            <span className="text-xs font-semibold uppercase tracking-[0.28em] text-white/35 line-through decoration-gold/70 decoration-2 sm:text-sm">
+            <span className="display text-5xl italic leading-none text-gold sm:text-6xl md:text-7xl">
               typical
             </span>
-            <span className="display text-3xl leading-none text-white sm:text-4xl">
+            <span className="display text-5xl leading-none text-white sm:text-6xl md:text-7xl">
               rate card
             </span>
           </p>
         </Reveal>
-
-        <h1 className="display mt-6 text-6xl text-white sm:text-7xl md:text-8xl lg:text-[8rem] xl:text-[9rem] leading-[0.88]">
-          <span className="block animate-clip-up">{hero.line1}</span>
-          <span
-            className="relative mt-1 inline-block animate-clip-up"
-            style={{ animationDelay: "0.12s" }}
-          >
-            <span className="relative z-10">{hero.line2}</span>
-            <span
-              aria-hidden
-              className="animate-underline absolute inset-x-[-6px] bottom-1 z-0 h-[38%] -skew-x-6 bg-gold"
-            />
-          </span>
-        </h1>
 
         {/* interactive headache brain — the hook + selector */}
         <Reveal delay={160} className="mt-14">

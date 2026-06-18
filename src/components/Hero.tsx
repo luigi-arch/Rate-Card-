@@ -3,6 +3,7 @@
 import { useContent } from "@/context/content";
 import { StatBar } from "./PlatformStats";
 import BrainAnimation from "./BrainAnimation";
+import TypicalWord from "./TypicalWord";
 import Reveal from "./Reveal";
 
 const OLD_WAY = ["1 reel", "1 carousel", "5 stories", "1 shoot day"];
@@ -40,7 +41,7 @@ export default function Hero() {
           </p>
           <h1 className="display mt-3 text-fg">
             <span className="block animate-clip-up text-6xl leading-[0.86] sm:text-7xl md:text-8xl lg:text-[8.5rem]">
-              Not your <span className="italic text-gold">typical</span>
+              Not your <TypicalWord />
             </span>
             <span
               className="relative mt-1 inline-block animate-clip-up text-6xl leading-[0.86] sm:text-7xl md:text-8xl lg:text-[8.5rem]"

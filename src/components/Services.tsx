@@ -41,7 +41,7 @@ function ServiceCard({ service: s }: { service: ServiceItem }) {
 
   return (
     <div
-      className={`hover-lift flex h-full flex-col overflow-hidden rounded-2xl border transition-all ${
+      className={`group hover-lift flex h-full flex-col overflow-hidden rounded-2xl border transition-all ${
         on ? "border-gold ring-1 ring-gold" : "border-line"
       }`}
     >

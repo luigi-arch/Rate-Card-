@@ -523,7 +523,7 @@ export const SERVICES: ServiceItem[] = [
     id: "banners",
     name: "Banner Ads",
     category: "Platform",
-    blurb: "Custom branded digital banners — pick how many you need.",
+    blurb: "A sponsored graphic (AD) slid into the middle of a swipe carousel post — choose how many.",
     priceFrom: 650,
     icon: "banners",
     options: [

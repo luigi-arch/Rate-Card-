@@ -195,6 +195,37 @@ textarea::placeholder {
 .hover-gold:hover {
   border-color: var(--color-gold);
 }
+
+/* Service-card diagram hover motion (the card carries `.group`). */
+@media (prefers-reduced-motion: no-preference) {
+  .svc-illus {
+    transition: transform 0.45s cubic-bezier(0.2, 0.8, 0.2, 1);
+    will-change: transform;
+  }
+  .group:hover .svc-illus {
+    transform: translateY(-3px) scale(1.06);
+  }
+  .svc-accent {
+    transition: transform 0.5s cubic-bezier(0.2, 0.8, 0.2, 1);
+    transform-box: fill-box;
+    transform-origin: center;
+  }
+  .group:hover .svc-fan-l {
+    transform: translate(-3px, 1px) rotate(-5deg);
+  }
+  .group:hover .svc-fan-r {
+    transform: translate(3px, 1px) rotate(5deg);
+  }
+  .group:hover .svc-spin {
+    transform: rotate(22deg) scale(1.15);
+  }
+  .group:hover .svc-pop {
+    transform: scale(1.22);
+  }
+  .group:hover .svc-rise {
+    transform: translateY(-2px);
+  }
+}
 .press {
   transition: transform 0.12s ease;
 }

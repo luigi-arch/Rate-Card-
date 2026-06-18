@@ -900,9 +900,9 @@ export interface SiteContent {
 
 export const DEFAULT_CONTENT: SiteContent = {
   hero: {
-    line1: "You bring the headache.",
-    line2: "We build the story.",
-    sub: "This isn’t a list of deliverables. It’s a rate card built around your problem — pick the headache, we’ll prescribe the fix.",
+    line1: "What’s keeping your marketing team awake?",
+    line2: "",
+    sub: "Most agencies ask what content you want. We start by asking what isn’t working — pick the headache below and we’ll prescribe the fix.",
   },
   about: ABOUT,
   teamPhotos: TEAM_PHOTOS,

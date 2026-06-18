@@ -67,7 +67,13 @@ function Node({
   );
 }
 
-export default function BrainAnimation({ dark = false }: { dark?: boolean }) {
+export default function BrainAnimation({
+  dark = false,
+  active = false,
+}: {
+  dark?: boolean;
+  active?: boolean;
+}) {
   const { toggle, isSelected } = useSelection();
   const { headaches: HEADACHES } = useContent();
   const left = HEADACHES.slice(0, Math.ceil(HEADACHES.length / 2));
@@ -95,7 +101,9 @@ export default function BrainAnimation({ dark = false }: { dark?: boolean }) {
         <div className="relative mx-auto flex h-[240px] w-[240px] items-center justify-center sm:h-[300px] sm:w-[300px]">
           <div
             aria-hidden
-            className="animate-brain-glow pointer-events-none absolute left-1/2 top-1/2 h-44 w-44 rounded-full opacity-50 blur-3xl sm:h-56 sm:w-56"
+            className={`animate-brain-glow pointer-events-none absolute left-1/2 top-1/2 rounded-full blur-3xl transition-all duration-500 ${
+              active ? "h-60 w-60 opacity-90 sm:h-72 sm:w-72" : "h-44 w-44 opacity-50 sm:h-56 sm:w-56"
+            }`}
             style={{ background: "var(--color-gold)" }}
           />
           <div className="animate-brain-throb relative">

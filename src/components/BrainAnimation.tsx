@@ -1,21 +1,47 @@
 "use client";
 
+import { useState } from "react";
 import { useSelection } from "@/context/selection";
 import { useContent } from "@/context/content";
 
 /**
- * Interactive "headache brain" on a light background: a pulsing brain with the
- * real client headaches as clickable nodes arranged around it. Selecting a node
- * toggles it in the journey. Pure CSS motion, gated by prefers-reduced-motion.
+ * Interactive "headache brain": a detailed brain whose regions light up as the
+ * matching headache is hovered or selected. Each headache maps to a node on the
+ * brain (by index); selecting it fires the region + a connecting synapse. Pure
+ * CSS motion, gated by prefers-reduced-motion.
  */
 
 const DURATIONS = ["5.5s", "6.2s", "5.8s", "6.6s", "6s", "5.3s", "6.4s", "5.6s", "6.1s", "5.9s"];
 const DELAYS = ["0s", "0.6s", "1.1s", "0.3s", "1.4s", "0.9s", "0.2s", "1.2s", "0.5s", "0.8s"];
 
+// Region nodes on the 240x200 brain viewBox — first half left hemisphere,
+// second half right, so the left/right pill columns map to their side.
+const NODES: { x: number; y: number }[] = [
+  { x: 74, y: 58 },
+  { x: 58, y: 90 },
+  { x: 88, y: 82 },
+  { x: 68, y: 116 },
+  { x: 98, y: 112 },
+  { x: 86, y: 142 },
+  { x: 166, y: 58 },
+  { x: 182, y: 90 },
+  { x: 152, y: 82 },
+  { x: 172, y: 116 },
+  { x: 142, y: 112 },
+  { x: 154, y: 142 },
+];
+
+// Faint synapse links between nearby nodes (indices into NODES).
+const LINKS: [number, number][] = [
+  [0, 2], [2, 4], [1, 3], [3, 5], [2, 1], [4, 5],
+  [6, 8], [8, 10], [7, 9], [9, 11], [8, 7], [10, 11],
+];
+
 function Node({
   label,
   active,
   onClick,
+  onHover,
   index,
   align = "left",
   dark = false,
@@ -23,6 +49,7 @@ function Node({
   label: string;
   active: boolean;
   onClick: () => void;
+  onHover: (on: boolean) => void;
   index: number;
   align?: "left" | "right";
   dark?: boolean;
@@ -30,7 +57,6 @@ function Node({
   const inactive = dark
     ? "border-white/20 bg-white/5 text-white/70 hover:border-white hover:text-white hover:bg-white/10"
     : "border-line-strong bg-surface text-muted hover:border-fg hover:text-fg";
-  // thought-bubble tail circles, coloured to match the bubble state
   const tail = active
     ? "border-gold bg-gold"
     : dark
@@ -42,6 +68,8 @@ function Node({
     <button
       type="button"
       onClick={onClick}
+      onMouseEnter={() => onHover(true)}
+      onMouseLeave={() => onHover(false)}
       aria-pressed={active}
       style={
         {
@@ -54,15 +82,8 @@ function Node({
       }`}
     >
       “{label}”
-      {/* thought-bubble tail */}
-      <span
-        aria-hidden
-        className={`absolute -bottom-1.5 h-2.5 w-2.5 rounded-full border ${tail} ${tailSide}`}
-      />
-      <span
-        aria-hidden
-        className={`absolute -bottom-3.5 h-1.5 w-1.5 rounded-full border ${tail} ${tailSide2}`}
-      />
+      <span aria-hidden className={`absolute -bottom-1.5 h-2.5 w-2.5 rounded-full border ${tail} ${tailSide}`} />
+      <span aria-hidden className={`absolute -bottom-3.5 h-1.5 w-1.5 rounded-full border ${tail} ${tailSide2}`} />
     </button>
   );
 }
@@ -76,12 +97,21 @@ export default function BrainAnimation({
 }) {
   const { toggle, isSelected } = useSelection();
   const { headaches: HEADACHES } = useContent();
-  const left = HEADACHES.slice(0, Math.ceil(HEADACHES.length / 2));
-  const right = HEADACHES.slice(Math.ceil(HEADACHES.length / 2));
+  const [hovered, setHovered] = useState<string | null>(null);
+
+  const half = Math.ceil(HEADACHES.length / 2);
+  const left = HEADACHES.slice(0, half);
+  const right = HEADACHES.slice(half);
+
+  const outline = dark ? "#ffffff" : "var(--color-fg)";
+  const lit = (i: number) => {
+    const h = HEADACHES[i];
+    return h ? isSelected(h.id) || hovered === h.id : false;
+  };
 
   return (
     <div className="relative select-none">
-      <div className="items-center gap-6 lg:grid lg:grid-cols-[1fr_auto_1fr]">
+      <div className="items-center gap-6 lg:grid lg:grid-cols-[1fr_auto_1fr] lg:gap-10">
         {/* left column (desktop) */}
         <div className="hidden flex-col items-end gap-3 lg:flex">
           {left.map((h) => (
@@ -90,6 +120,7 @@ export default function BrainAnimation({
               label={h.label}
               active={isSelected(h.id)}
               onClick={() => toggle(h.id)}
+              onHover={(on) => setHovered(on ? h.id : null)}
               index={HEADACHES.indexOf(h)}
               align="right"
               dark={dark}
@@ -98,7 +129,7 @@ export default function BrainAnimation({
         </div>
 
         {/* brain */}
-        <div className="relative mx-auto flex h-[240px] w-[240px] items-center justify-center sm:h-[300px] sm:w-[300px]">
+        <div className="relative mx-auto flex h-[260px] w-[260px] items-center justify-center sm:h-[320px] sm:w-[320px]">
           <div
             aria-hidden
             className={`animate-brain-glow pointer-events-none absolute left-1/2 top-1/2 rounded-full blur-3xl transition-all duration-500 ${
@@ -113,32 +144,54 @@ export default function BrainAnimation({
               viewBox="0 0 240 200"
               fill="none"
               aria-hidden
-              className="h-auto w-[180px] sm:w-[230px]"
+              className="h-auto w-[210px] sm:w-[260px]"
+              strokeLinecap="round"
+              strokeLinejoin="round"
             >
-              <g
-                stroke={dark ? "#ffffff" : "var(--color-fg)"}
-                strokeWidth="3.5"
-                fill="none"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              >
-                <path d="M118 32 C 96 18, 60 22, 50 44 C 30 48, 22 72, 34 88 C 20 100, 26 124, 44 132 C 46 154, 72 166, 94 158 C 106 170, 118 166, 118 150 Z" />
-                <path d="M122 32 C 144 18, 180 22, 190 44 C 210 48, 218 72, 206 88 C 220 100, 214 124, 196 132 C 194 154, 168 166, 146 158 C 134 170, 122 166, 122 150 Z" />
+              {/* outline — two hemispheres + stem */}
+              <g stroke={outline} strokeWidth="3.5" fill="none">
+                <path d="M118 30 C 96 16, 58 20, 48 44 C 27 48, 19 74, 33 90 C 18 102, 24 128, 44 134 C 46 158, 74 170, 96 160 C 108 172, 118 168, 118 150 Z" />
+                <path d="M122 30 C 144 16, 182 20, 192 44 C 213 48, 221 74, 207 90 C 222 102, 216 128, 196 134 C 194 158, 166 170, 144 160 C 132 172, 122 168, 122 150 Z" />
+                <path d="M112 160 C 110 176, 130 176, 128 160" />
               </g>
-              <g
-                stroke="var(--color-gold)"
-                strokeWidth="2.5"
-                fill="none"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              >
-                <path d="M72 60 C 86 64, 80 80, 94 84" />
-                <path d="M56 98 C 72 98, 70 112, 88 114" />
-                <path d="M76 132 C 88 126, 94 136, 106 132" />
-                <path d="M168 60 C 154 64, 160 80, 146 84" />
-                <path d="M184 98 C 168 98, 170 112, 152 114" />
-                <path d="M164 132 C 152 126, 146 136, 134 132" />
+
+              {/* gyri detail */}
+              <g stroke={outline} strokeWidth="1.6" fill="none" opacity="0.45">
+                <path d="M70 50 C 84 56, 78 70, 92 74 C 84 84, 96 92, 90 104" />
+                <path d="M52 78 C 68 78, 66 92, 84 94 C 76 104, 86 116, 78 126" />
+                <path d="M64 118 C 78 112, 86 122, 100 120" />
+                <path d="M170 50 C 156 56, 162 70, 148 74 C 156 84, 144 92, 150 104" />
+                <path d="M188 78 C 172 78, 174 92, 156 94 C 164 104, 154 116, 162 126" />
+                <path d="M176 118 C 162 112, 154 122, 140 120" />
+                <path d="M120 38 L120 150" strokeWidth="1.2" opacity="0.6" />
               </g>
+
+              {/* synapse links */}
+              <g stroke="var(--color-gold)" strokeWidth="1.4" opacity="0.35">
+                {LINKS.map(([a, b], i) => (
+                  <line key={i} x1={NODES[a].x} y1={NODES[a].y} x2={NODES[b].x} y2={NODES[b].y} />
+                ))}
+              </g>
+
+              {/* region nodes — light up per headache */}
+              {NODES.map((n, i) => {
+                const on = lit(i);
+                return (
+                  <g key={i}>
+                    {on && (
+                      <circle className="animate-node" cx={n.x} cy={n.y} r="8" fill="var(--color-gold)" />
+                    )}
+                    <circle
+                      cx={n.x}
+                      cy={n.y}
+                      r={on ? 4.5 : 2.6}
+                      fill={on ? "var(--color-gold)" : outline}
+                      opacity={on ? 1 : dark ? 0.4 : 0.3}
+                      style={{ transition: "r 0.3s ease, opacity 0.3s ease" }}
+                    />
+                  </g>
+                );
+              })}
             </svg>
 
             <span
@@ -166,6 +219,7 @@ export default function BrainAnimation({
               label={h.label}
               active={isSelected(h.id)}
               onClick={() => toggle(h.id)}
+              onHover={(on) => setHovered(on ? h.id : null)}
               index={HEADACHES.indexOf(h)}
               align="left"
               dark={dark}
@@ -182,6 +236,7 @@ export default function BrainAnimation({
             label={h.label}
             active={isSelected(h.id)}
             onClick={() => toggle(h.id)}
+            onHover={(on) => setHovered(on ? h.id : null)}
             index={i}
             dark={dark}
           />

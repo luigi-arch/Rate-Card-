@@ -172,12 +172,22 @@ textarea::placeholder {
   animation: spark-flash var(--dur, 2.4s) ease-in-out infinite;
   animation-delay: var(--delay, 0s);
 }
+@keyframes node-pulse {
+  0%, 100% { transform: scale(1); opacity: 0.4; }
+  50% { transform: scale(1.7); opacity: 0.1; }
+}
+.animate-node {
+  animation: node-pulse 1.8s ease-in-out infinite;
+  transform-box: fill-box;
+  transform-origin: center;
+}
 
 @media (prefers-reduced-motion: reduce) {
   .animate-brain-throb,
   .animate-brain-glow,
   .animate-thought,
-  .animate-spark {
+  .animate-spark,
+  .animate-node {
     animation: none;
   }
 }

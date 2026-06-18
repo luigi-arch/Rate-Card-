@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import { type ContentFormat } from "@/lib/content";
 import { useSelection } from "@/context/selection";
 import { useContent } from "@/context/content";
@@ -10,15 +11,27 @@ function scrollTo(id: string) {
   document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
 }
 
+/** "Clarity, Authenticity & Trust" */
+function joinList(items: string[]) {
+  if (items.length <= 1) return items[0] ?? "";
+  return `${items.slice(0, -1).join(", ")} & ${items[items.length - 1]}`;
+}
+
 export default function Hero() {
   const { hero, formats } = useContent();
   const { selected, recommendedFormatIds, clear } = useSelection();
+  const [revealed, setRevealed] = useState(false);
+
+  function startOver() {
+    clear();
+    setRevealed(false);
+  }
 
   const recommended = recommendedFormatIds
     .map((id) => formats.find((f) => f.id === id))
     .filter((f): f is ContentFormat => Boolean(f));
   const diagnosed = recommended.length > 0;
-  const keyword = recommended[0]?.keyword ?? "";
+  const keywords = [...new Set(recommended.map((f) => f.keyword))];
 
   return (
     <section
@@ -55,14 +68,39 @@ export default function Hero() {
           <BrainAnimation active={selected.length > 0} />
         </Reveal>
 
-        {/* live diagnosis + prescription */}
+        {/* diagnosis flow: select → confirm → reveal */}
         <Reveal delay={120} className="mx-auto mt-10 max-w-xl">
-          {diagnosed ? (
+          {selected.length === 0 ? (
+            <p className="text-sm font-semibold uppercase tracking-[0.14em] text-muted-2">
+              ↑ Tap the headaches that sound like you
+            </p>
+          ) : !revealed ? (
+            <div className="flex flex-col items-center gap-4">
+              <p className="text-sm text-muted">
+                <span className="font-bold text-fg">
+                  {selected.length} headache{selected.length > 1 ? "s" : ""}
+                </span>{" "}
+                selected — add as many as apply, then get your diagnosis.
+              </p>
+              <button
+                onClick={() => setRevealed(true)}
+                disabled={!diagnosed}
+                className="press rounded-full bg-gold px-8 py-4 text-sm font-bold uppercase tracking-wide text-black transition-transform hover:scale-[1.03] disabled:opacity-50"
+              >
+                Diagnose me →
+              </button>
+            </div>
+          ) : (
             <div className="card overflow-hidden text-left">
               <div className="bg-ink px-6 py-5 text-white sm:px-8">
                 <p className="eyebrow eyebrow-gold">Diagnosis complete</p>
                 <p className="mt-2 font-display text-3xl leading-none sm:text-4xl">
-                  You need <span className="text-gold">{keyword}</span>.
+                  {keywords.length > 1 ? "You need a mix of " : "You need "}
+                  <span className="text-gold">{joinList(keywords)}</span>.
+                </p>
+                <p className="mt-3 text-sm text-white/60">
+                  Based on the {selected.length} headache
+                  {selected.length > 1 ? "s" : ""} you picked.
                 </p>
               </div>
               <div className="p-6 sm:p-8">
@@ -74,6 +112,7 @@ export default function Hero() {
                         ✓
                       </span>
                       <span className="font-medium">{f.name}</span>
+                      <span className="text-sm text-muted-2">— {f.keyword}</span>
                     </li>
                   ))}
                 </ul>
@@ -85,18 +124,20 @@ export default function Hero() {
                     Get my prescription →
                   </button>
                   <button
-                    onClick={clear}
+                    onClick={() => setRevealed(false)}
                     className="text-xs font-semibold uppercase tracking-wide text-muted-2 hover:text-fg"
                   >
-                    Reset
+                    ← Edit selection
+                  </button>
+                  <button
+                    onClick={startOver}
+                    className="text-xs font-semibold uppercase tracking-wide text-muted-2 hover:text-fg"
+                  >
+                    Start over
                   </button>
                 </div>
               </div>
             </div>
-          ) : (
-            <p className="text-sm font-semibold uppercase tracking-[0.14em] text-muted-2">
-              ↑ Tap a headache to get your diagnosis
-            </p>
           )}
         </Reveal>
       </div>

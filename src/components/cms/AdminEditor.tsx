@@ -11,6 +11,7 @@ import type {
   AddOnGroup,
   IncludeGroup,
   ServiceItem,
+  ServiceOption,
   AboutPillar,
   TeamPhoto,
   Client,
@@ -524,11 +525,47 @@ export default function AdminEditor({ initial }: { initial: SiteContent }) {
                   value={item.blurb}
                   onChange={(v) => update({ blurb: v })}
                 />
-                <NumberField
-                  label="Price from (€)"
-                  value={item.priceFrom}
-                  onChange={(v) => update({ priceFrom: v })}
-                />
+                <div className="grid gap-3 sm:grid-cols-2">
+                  <NumberField
+                    label="Price from (€)"
+                    value={item.priceFrom}
+                    onChange={(v) => update({ priceFrom: v })}
+                  />
+                  <TextField
+                    label="Illustration (carousel / static / stories / giveaway / banners)"
+                    value={item.icon ?? ""}
+                    onChange={(v) => update({ icon: v })}
+                  />
+                </div>
+                <div>
+                  <p className="mb-2 text-sm font-medium">
+                    Quantity options (optional — adds a dropdown)
+                  </p>
+                  <Repeater<ServiceOption>
+                    items={item.options ?? []}
+                    onChange={(options) =>
+                      update({ options: options.length ? options : undefined })
+                    }
+                    makeBlank={() => ({ label: "", priceFrom: null })}
+                    itemTitle={(o) => o.label || "Option"}
+                    addLabel="Add option"
+                  >
+                    {(o, updateOpt) => (
+                      <div className="grid gap-3 sm:grid-cols-2">
+                        <TextField
+                          label="Label (e.g. Set of 10)"
+                          value={o.label}
+                          onChange={(v) => updateOpt({ label: v })}
+                        />
+                        <NumberField
+                          label="Price (€)"
+                          value={o.priceFrom}
+                          onChange={(v) => updateOpt({ priceFrom: v })}
+                        />
+                      </div>
+                    )}
+                  </Repeater>
+                </div>
               </>
             )}
           </Repeater>

@@ -1,17 +1,106 @@
 "use client";
 
+import { useState } from "react";
 import { useContent } from "@/context/content";
 import { useSelection } from "@/context/selection";
+import type { ServiceItem } from "@/lib/content";
 import { SectionHeading } from "./Section";
+import ServiceIllustration from "./ServiceIllustration";
 import Reveal from "./Reveal";
+
+const price = (n: number | null) => (n ? `€${n.toLocaleString()}` : "Custom");
+
+function ServiceCard({ service: s }: { service: ServiceItem }) {
+  const { toggleAddOn, selectedAddOns } = useSelection();
+  const hasOptions = Boolean(s.options?.length);
+  const [optIndex, setOptIndex] = useState(0);
+  const opt = hasOptions ? s.options![optIndex] : undefined;
+
+  const activePrice = opt ? opt.priceFrom : s.priceFrom;
+  // Brief label — includes the chosen option + price for context.
+  const label = `${s.name}${opt ? ` — ${opt.label}` : ""} (${price(activePrice)})`;
+  // A service counts as "added" if any of its variants is in the brief.
+  const existing = selectedAddOns.find((a) => a.startsWith(s.name));
+  const on = Boolean(existing);
+
+  function add() {
+    if (existing) toggleAddOn(existing); // remove whatever variant is in the brief
+    if (existing !== label) toggleAddOn(label); // add the current selection
+  }
+
+  function changeOption(next: number) {
+    setOptIndex(next);
+    if (existing) {
+      // keep the brief in sync with the newly chosen quantity
+      const nextOpt = s.options![next];
+      const nextLabel = `${s.name} — ${nextOpt.label} (${price(nextOpt.priceFrom)})`;
+      toggleAddOn(existing);
+      toggleAddOn(nextLabel);
+    }
+  }
+
+  return (
+    <div
+      className={`hover-lift flex h-full flex-col overflow-hidden rounded-2xl border transition-all ${
+        on ? "border-gold ring-1 ring-gold" : "border-line"
+      }`}
+    >
+      {/* illustration */}
+      <div className="flex h-28 items-center justify-center bg-gradient-to-br from-gold-soft to-surface-2 text-fg/80">
+        <ServiceIllustration icon={s.icon} />
+      </div>
+
+      <div className="flex flex-1 flex-col bg-surface p-6">
+        <div className="flex items-center justify-between gap-2">
+          <span className="rounded-md bg-paper-2 px-2 py-0.5 text-[0.6rem] font-bold uppercase tracking-wide text-muted-2">
+            {s.category}
+          </span>
+          {on && (
+            <span className="rounded-full bg-gold px-2 py-0.5 text-[0.6rem] font-bold uppercase tracking-wide text-black">
+              ✓ In brief
+            </span>
+          )}
+        </div>
+        <h3 className="mt-3 font-display text-2xl leading-none text-fg">{s.name}</h3>
+        <p className="mt-2 flex-1 text-sm leading-relaxed text-muted">{s.blurb}</p>
+
+        {hasOptions && (
+          <select
+            value={optIndex}
+            onChange={(e) => changeOption(Number(e.target.value))}
+            className="mt-4 w-full rounded-xl border border-line bg-white px-3 py-2 text-sm text-fg outline-none focus:border-gold"
+          >
+            {s.options!.map((o, i) => (
+              <option key={o.label} value={i}>
+                {o.label} — {price(o.priceFrom)}
+              </option>
+            ))}
+          </select>
+        )}
+
+        <div className="mt-4 flex items-center justify-between gap-3">
+          <span className="font-display text-2xl text-fg">{price(activePrice)}</span>
+          <button
+            type="button"
+            onClick={add}
+            aria-pressed={on}
+            className={`press rounded-full px-4 py-2 text-sm font-bold transition-all ${
+              on
+                ? "bg-zinc-900 text-white"
+                : "bg-gold text-black hover:scale-[1.03]"
+            }`}
+          >
+            {on ? "Remove" : "+ Add"}
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
 
 export default function Services() {
   const { services, addOns } = useContent();
   const { toggleAddOn, isAddOnSelected } = useSelection();
-
-  // Label used in the brief / lead — keeps the price for context.
-  const serviceLabel = (name: string, price: number | null) =>
-    price ? `${name} (€${price.toLocaleString()})` : name;
 
   return (
     <section id="services" className="scroll-mt-20 border-t border-line py-14 sm:py-20">
@@ -23,46 +112,11 @@ export default function Services() {
         />
 
         <div className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          {services.map((s, i) => {
-            const label = serviceLabel(s.name, s.priceFrom);
-            const on = isAddOnSelected(label);
-            return (
-              <Reveal key={s.id} delay={i * 60}>
-                <button
-                  type="button"
-                  onClick={() => toggleAddOn(label)}
-                  aria-pressed={on}
-                  className={`hover-lift flex h-full w-full flex-col rounded-2xl border p-6 text-left transition-all ${
-                    on
-                      ? "border-gold bg-gold-soft ring-1 ring-gold"
-                      : "border-line bg-surface hover:border-line-strong"
-                  }`}
-                >
-                  <div className="flex items-center justify-between gap-2">
-                    <span className="rounded-md bg-paper-2 px-2 py-0.5 text-[0.6rem] font-bold uppercase tracking-wide text-muted-2">
-                      {s.category}
-                    </span>
-                    <span
-                      className={`flex h-6 w-6 items-center justify-center rounded-full text-xs font-bold ${
-                        on ? "bg-gold text-black" : "border border-line-strong text-muted-2"
-                      }`}
-                    >
-                      {on ? "✓" : "+"}
-                    </span>
-                  </div>
-                  <h3 className="mt-4 font-display text-2xl leading-none text-fg">
-                    {s.name}
-                  </h3>
-                  <p className="mt-2 flex-1 text-sm leading-relaxed text-muted">
-                    {s.blurb}
-                  </p>
-                  <p className="mt-4 font-display text-2xl text-fg">
-                    {s.priceFrom ? `€${s.priceFrom.toLocaleString()}` : "Custom"}
-                  </p>
-                </button>
-              </Reveal>
-            );
-          })}
+          {services.map((s, i) => (
+            <Reveal key={s.id} delay={i * 60} className="h-full">
+              <ServiceCard service={s} />
+            </Reveal>
+          ))}
         </div>
 
         {/* add-ons */}

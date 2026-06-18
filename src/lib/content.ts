@@ -471,12 +471,19 @@ export const PACKAGES: Package[] = [
 /* Other (non-video) services                                          */
 /* ------------------------------------------------------------------ */
 
+export interface ServiceOption {
+  label: string; // e.g. "Set of 10"
+  priceFrom: number | null;
+}
+
 export interface ServiceItem {
   id: string;
   name: string;
   category: string; // "Static" | "Stories" | "Platform"
   blurb: string;
   priceFrom: number | null;
+  icon?: string; // illustration key: carousel | static | stories | giveaway | banners
+  options?: ServiceOption[]; // when present, the card shows a quantity dropdown
 }
 
 export const SERVICES: ServiceItem[] = [
@@ -486,6 +493,7 @@ export const SERVICES: ServiceItem[] = [
     category: "Static",
     blurb: "Multi-slide swipe post with custom visuals and copy.",
     priceFrom: 550,
+    icon: "carousel",
   },
   {
     id: "static",
@@ -493,6 +501,7 @@ export const SERVICES: ServiceItem[] = [
     category: "Static",
     blurb: "Single impactful visual with copywriting.",
     priceFrom: 300,
+    icon: "static",
   },
   {
     id: "stories",
@@ -500,6 +509,7 @@ export const SERVICES: ServiceItem[] = [
     category: "Stories",
     blurb: "Branded stories with polls, quizzes or CTAs.",
     priceFrom: 400,
+    icon: "stories",
   },
   {
     id: "giveaway",
@@ -507,27 +517,20 @@ export const SERVICES: ServiceItem[] = [
     category: "Platform",
     blurb: "Branded giveaway campaign management & execution.",
     priceFrom: 600,
+    icon: "giveaway",
   },
   {
-    id: "banners-10",
-    name: "Banner Ads — Set of 10",
+    id: "banners",
+    name: "Banner Ads",
     category: "Platform",
-    blurb: "Custom branded digital banners, set of 10.",
+    blurb: "Custom branded digital banners — pick how many you need.",
     priceFrom: 650,
-  },
-  {
-    id: "banners-15",
-    name: "Banner Ads — Set of 15",
-    category: "Platform",
-    blurb: "Custom branded digital banners, set of 15.",
-    priceFrom: 800,
-  },
-  {
-    id: "banners-20",
-    name: "Banner Ads — Set of 20",
-    category: "Platform",
-    blurb: "Custom branded digital banners, set of 20.",
-    priceFrom: 900,
+    icon: "banners",
+    options: [
+      { label: "Set of 10", priceFrom: 650 },
+      { label: "Set of 15", priceFrom: 800 },
+      { label: "Set of 20", priceFrom: 900 },
+    ],
   },
 ];
 

@@ -576,31 +576,36 @@ export const ABOUT: About = {
 /* Add-on system                                                       */
 /* ------------------------------------------------------------------ */
 
+export interface AddOnItem {
+  label: string;
+  priceFrom?: number | null; // EUR; null/undefined = no price shown yet
+}
+
 export interface AddOnGroup {
   title: string;
-  items: string[];
+  items: AddOnItem[];
 }
 
 export const ADD_ONS: AddOnGroup[] = [
   {
     title: "Creative & production",
     items: [
-      "Extra filming day",
-      "Additional host",
-      "Motion graphics",
-      "Photography stills from shoot",
-      "Maltese subtitling",
+      { label: "Extra filming day" },
+      { label: "Additional host" },
+      { label: "Motion graphics" },
+      { label: "Photography stills from shoot" },
+      { label: "Maltese subtitling" },
     ],
   },
   {
     title: "Distribution",
     items: [
-      "Paid boosting & ad management",
-      "Companion carousel",
-      "Cross-posting to client channels",
-      "Pinned to Highlights for 1 week",
-      "Broadcast channel push",
-      "Story reshares",
+      { label: "Paid boosting & ad management" },
+      { label: "Companion carousel" },
+      { label: "Cross-posting to client channels" },
+      { label: "Pinned to Highlights for 1 week" },
+      { label: "Broadcast channel push" },
+      { label: "Story reshares" },
     ],
   },
 ];

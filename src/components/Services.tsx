@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { useContent } from "@/context/content";
 import { useSelection } from "@/context/selection";
-import type { ServiceItem } from "@/lib/content";
+import type { ServiceItem, AddOnItem } from "@/lib/content";
 import { SectionHeading } from "./Section";
 import ServiceIllustration from "./ServiceIllustration";
 import Reveal from "./Reveal";
@@ -133,13 +133,19 @@ export default function Services() {
               >
                 <h4 className="font-display text-xl text-zinc-900">{group.title}</h4>
                 <ul className="mt-4 flex flex-wrap gap-2">
-                  {group.items.map((item) => {
-                    const on = isAddOnSelected(item);
+                  {(group.items as (AddOnItem | string)[]).map((raw) => {
+                    // tolerate legacy string items as well as { label, priceFrom }
+                    const item: AddOnItem =
+                      typeof raw === "string" ? { label: raw } : raw;
+                    const label = item.priceFrom
+                      ? `${item.label} (€${item.priceFrom.toLocaleString()})`
+                      : item.label;
+                    const on = isAddOnSelected(label);
                     return (
-                      <li key={item}>
+                      <li key={item.label}>
                         <button
                           type="button"
-                          onClick={() => toggleAddOn(item)}
+                          onClick={() => toggleAddOn(label)}
                           aria-pressed={on}
                           className={`press rounded-full border px-3 py-1.5 text-sm transition-all ${
                             on
@@ -148,7 +154,13 @@ export default function Services() {
                           }`}
                         >
                           {on ? "✓ " : "+ "}
-                          {item}
+                          {item.label}
+                          {item.priceFrom ? (
+                            <span className={on ? "text-black/70" : "text-zinc-400"}>
+                              {" "}
+                              · €{item.priceFrom.toLocaleString()}
+                            </span>
+                          ) : null}
                         </button>
                       </li>
                     );

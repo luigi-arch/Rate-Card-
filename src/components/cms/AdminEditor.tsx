@@ -106,6 +106,12 @@ export default function AdminEditor({ initial }: { initial: SiteContent }) {
             value={content.hero.sub}
             onChange={(v) => set("hero", { ...content.hero, sub: v })}
           />
+          <StringListEditor
+            label="Headline cycle words (the last word of line 1 animates through these — keep them all fitting the sentence)"
+            items={content.hero.cycle ?? []}
+            onChange={(cycle) => set("hero", { ...content.hero, cycle })}
+            addLabel="Add word"
+          />
           <div className="grid gap-4 sm:grid-cols-2">
             <ImageField
               label="Showreel video"

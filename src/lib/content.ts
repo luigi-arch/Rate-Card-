@@ -869,6 +869,9 @@ export interface HeroContent {
   line1: string;
   line2: string;
   sub: string;
+  // Words the last word of line1 animates through (kinetic headline). The first
+  // entry should match line1's last word. Leave empty/one item for no animation.
+  cycle?: string[];
   videoUrl?: string; // uploaded showreel video
   imageUrl?: string; // uploaded showreel image / poster
 }
@@ -905,9 +908,10 @@ export interface SiteContent {
 
 export const DEFAULT_CONTENT: SiteContent = {
   hero: {
-    line1: "What’s keeping your marketing team awake?",
-    line2: "",
-    sub: "Most agencies ask what content you want. We start by asking what isn’t working — pick the headache below and we’ll prescribe the fix.",
+    line1: "You bring the headache.",
+    line2: "We build the story.",
+    sub: "This isn’t a list of deliverables. It’s a rate card built around your problem — pick the headache, we’ll prescribe the fix.",
+    cycle: ["headache.", "chaos.", "confusion.", "mess.", "questions."],
   },
   about: ABOUT,
   teamPhotos: TEAM_PHOTOS,

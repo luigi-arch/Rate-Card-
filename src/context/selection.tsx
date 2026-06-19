@@ -37,6 +37,10 @@ interface SelectionState {
   timeline: string;
   setTimeline: (v: string) => void;
 
+  // Personalisation — captured at the diagnosis gate, reused in the brief
+  client: { name: string; company: string; email: string };
+  setClient: (patch: Partial<{ name: string; company: string; email: string }>) => void;
+
   // Derived journey state
   progress: { step1: boolean; step2: boolean; step3: boolean; pct: number };
   briefCount: number;
@@ -54,6 +58,12 @@ export function SelectionProvider({ children }: { children: React.ReactNode }) {
   const [selectedAddOns, setSelectedAddOns] = useState<string[]>([]);
   const [budget, setBudget] = useState("");
   const [timeline, setTimeline] = useState("");
+  const [client, setClientState] = useState({ name: "", company: "", email: "" });
+  const setClient = useCallback(
+    (patch: Partial<{ name: string; company: string; email: string }>) =>
+      setClientState((prev) => ({ ...prev, ...patch })),
+    []
+  );
 
   const toggle = useCallback((id: string) => {
     setSelected((prev) =>
@@ -143,6 +153,8 @@ export function SelectionProvider({ children }: { children: React.ReactNode }) {
     setBudget,
     timeline,
     setTimeline,
+    client,
+    setClient,
     progress,
     briefCount,
   };

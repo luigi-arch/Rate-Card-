@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 
-/** Split "…team awake?" → ["…team", "awake?"] */
+/** Split "…the headache." → ["…the", "headache."] */
 function splitLast(text: string): [string, string] {
   const parts = text.trim().split(" ");
   const last = parts.pop() ?? "";
@@ -12,29 +12,42 @@ function splitLast(text: string): [string, string] {
 const H1 =
   "display mx-auto max-w-4xl text-5xl leading-[0.92] text-fg sm:text-6xl md:text-7xl";
 
-const CYCLE = ["awake?", "up at night?", "stuck?", "unseen?"];
-
-function KineticWord({ first }: { first: string }) {
+function KineticWord({ words }: { words: string[] }) {
   const [i, setI] = useState(0);
+  const animated = words.length > 1;
   useEffect(() => {
+    if (!animated) return;
     if (window.matchMedia?.("(prefers-reduced-motion: reduce)").matches) return;
-    const id = setInterval(() => setI((n) => (n + 1) % CYCLE.length), 1900);
+    const id = setInterval(() => setI((n) => (n + 1) % words.length), 1900);
     return () => clearInterval(id);
-  }, []);
-  // start on the headline's own last word, then cycle
-  const word = i === 0 ? first : CYCLE[i % CYCLE.length];
+  }, [animated, words.length]);
   return (
-    <span key={i} className="text-gold" style={{ animation: "word-swap 1.9s ease-in-out" }}>
-      {word}
+    <span
+      key={i}
+      className="text-gold"
+      style={animated ? { animation: "word-swap 1.9s ease-in-out" } : undefined}
+    >
+      {words[i % words.length]}
     </span>
   );
 }
 
-export default function HeroHeadline({ text }: { text: string }) {
+export default function HeroHeadline({
+  text,
+  cycle,
+}: {
+  text: string;
+  cycle?: string[];
+}) {
   const [lead, last] = splitLast(text);
+  // Cycle through the provided words; ensure the headline's own last word leads
+  // and de-dupe so it never repeats awkwardly.
+  const words = (cycle && cycle.length ? cycle : [last]).filter(Boolean);
+  const ordered = words[0] === last ? words : [last, ...words.filter((w) => w !== last)];
+
   return (
     <h1 className={H1}>
-      {lead} <KineticWord first={last} />
+      {lead} <KineticWord words={ordered} />
     </h1>
   );
 }

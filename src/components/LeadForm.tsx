@@ -20,6 +20,8 @@ export default function LeadForm() {
     setBudget,
     timeline,
     setTimeline,
+    client,
+    setClient,
   } = useSelection();
   const [isPending, startTransition] = useTransition();
   const [done, setDone] = useState(false);
@@ -185,13 +187,22 @@ export default function LeadForm() {
           <div className="p-8 sm:p-10">
               <form onSubmit={handleSubmit} className="space-y-4">
                 <div className="grid gap-4 sm:grid-cols-2">
-                  <Field label="Name" name="name" required autoComplete="name" />
+                  <Field
+                    label="Name"
+                    name="name"
+                    required
+                    autoComplete="name"
+                    value={client.name}
+                    onChange={(v) => setClient({ name: v })}
+                  />
                   <Field
                     label="Work email"
                     name="email"
                     type="email"
                     required
                     autoComplete="email"
+                    value={client.email}
+                    onChange={(v) => setClient({ email: v })}
                   />
                 </div>
                 <div className="grid gap-4 sm:grid-cols-2">
@@ -199,6 +210,8 @@ export default function LeadForm() {
                     label="Company / organisation"
                     name="company"
                     autoComplete="organization"
+                    value={client.company}
+                    onChange={(v) => setClient({ company: v })}
                   />
                   <Field label="Your role" name="role" autoComplete="organization-title" />
                 </div>
@@ -334,13 +347,18 @@ function Field({
   type = "text",
   required = false,
   autoComplete,
+  value,
+  onChange,
 }: {
   label: string;
   name: string;
   type?: string;
   required?: boolean;
   autoComplete?: string;
+  value?: string;
+  onChange?: (v: string) => void;
 }) {
+  const controlled = value !== undefined;
   return (
     <div>
       <label htmlFor={name} className="mb-1.5 block text-sm font-medium text-fg">
@@ -353,6 +371,9 @@ function Field({
         type={type}
         required={required}
         autoComplete={autoComplete}
+        {...(controlled
+          ? { value, onChange: (e) => onChange?.(e.target.value) }
+          : {})}
         className="w-full rounded-xl border border-line bg-white px-4 py-3 text-sm text-fg outline-none transition-colors focus:border-gold"
       />
     </div>

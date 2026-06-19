@@ -17,6 +17,7 @@ export default function BriefTray() {
     selectedAddOns,
     progress,
     briefCount,
+    client,
   } = useSelection();
   const { formats } = useContent();
   const [open, setOpen] = useState(true);
@@ -72,6 +73,11 @@ export default function BriefTray() {
 
         {open && (
           <div className="border-t border-white/10 px-4 pb-4 pt-3">
+            {(client.name || client.company) && (
+              <p className="mb-3 truncate text-xs text-white/55">
+                {[client.name, client.company].filter(Boolean).join(" · ")}
+              </p>
+            )}
             {/* steps */}
             <ol className="space-y-2">
               {steps.map((s) => (

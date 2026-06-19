@@ -20,7 +20,8 @@ function joinList(items: string[]) {
 
 export default function Hero() {
   const { hero, formats } = useContent();
-  const { selected, recommendedFormatIds, clear, progress } = useSelection();
+  const { selected, recommendedFormatIds, clear, progress, client, setClient } =
+    useSelection();
   const [revealed, setRevealed] = useState(false);
 
   function startOver() {
@@ -125,32 +126,64 @@ export default function Hero() {
               ↑ Tap the headaches that sound like you
             </p>
           ) : !revealed ? (
-            <div className="flex flex-col items-center gap-4">
-              <p className="text-sm text-muted">
+            <div className="card p-6 text-left sm:p-7">
+              <p className="text-center text-sm text-muted">
                 <span className="font-bold text-fg">
                   {selected.length} headache{selected.length > 1 ? "s" : ""}
                 </span>{" "}
-                selected — add as many as apply, then get your diagnosis.
+                selected — add as many as apply. Tell us who we’re helping and we’ll
+                tailor your diagnosis.
               </p>
-              <button
-                onClick={() => setRevealed(true)}
-                disabled={!diagnosed}
-                className="press rounded-full bg-gold px-8 py-4 text-sm font-bold uppercase tracking-wide text-black transition-transform hover:scale-[1.03] disabled:opacity-50"
-              >
-                Diagnose me →
-              </button>
+              <div className="mt-5 grid gap-3 sm:grid-cols-3">
+                <input
+                  value={client.name}
+                  onChange={(e) => setClient({ name: e.target.value })}
+                  placeholder="Your name"
+                  autoComplete="name"
+                  className="w-full rounded-xl border border-line bg-white px-4 py-2.5 text-sm text-fg outline-none focus:border-gold"
+                />
+                <input
+                  value={client.company}
+                  onChange={(e) => setClient({ company: e.target.value })}
+                  placeholder="Company"
+                  autoComplete="organization"
+                  className="w-full rounded-xl border border-line bg-white px-4 py-2.5 text-sm text-fg outline-none focus:border-gold"
+                />
+                <input
+                  value={client.email}
+                  onChange={(e) => setClient({ email: e.target.value })}
+                  placeholder="Work email"
+                  type="email"
+                  autoComplete="email"
+                  className="w-full rounded-xl border border-line bg-white px-4 py-2.5 text-sm text-fg outline-none focus:border-gold"
+                />
+              </div>
+              <div className="mt-5 text-center">
+                <button
+                  onClick={() => setRevealed(true)}
+                  disabled={!diagnosed}
+                  className="press rounded-full bg-gold px-8 py-4 text-sm font-bold uppercase tracking-wide text-black transition-transform hover:scale-[1.03] disabled:opacity-50"
+                >
+                  Diagnose me →
+                </button>
+                <p className="mt-2 text-xs text-muted-2">Optional — skip and diagnose straight away.</p>
+              </div>
             </div>
           ) : (
             <div className="card overflow-hidden text-left">
               <div className="bg-ink px-6 py-5 text-white sm:px-8">
-                <p className="eyebrow eyebrow-gold">Diagnosis complete</p>
+                <p className="eyebrow eyebrow-gold">
+                  {client.company
+                    ? `${client.company}’s diagnosis`
+                    : "Diagnosis complete"}
+                </p>
                 <p className="mt-2 font-display text-3xl leading-none sm:text-4xl">
                   {keywords.length > 1 ? "You need a mix of " : "You need "}
                   <span className="text-gold">{joinList(keywords)}</span>.
                 </p>
                 <p className="mt-3 text-sm text-white/60">
-                  Based on the {selected.length} headache
-                  {selected.length > 1 ? "s" : ""} you picked.
+                  {client.name ? `${client.name.split(" ")[0]}, based` : "Based"} on the{" "}
+                  {selected.length} headache{selected.length > 1 ? "s" : ""} you picked.
                 </p>
               </div>
               <div className="p-6 sm:p-8">

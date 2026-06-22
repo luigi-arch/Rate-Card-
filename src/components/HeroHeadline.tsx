@@ -35,9 +35,11 @@ function KineticWord({ words }: { words: string[] }) {
 export default function HeroHeadline({
   text,
   cycle,
+  line2,
 }: {
   text: string;
   cycle?: string[];
+  line2?: string;
 }) {
   const [lead, last] = splitLast(text);
   // Cycle through the provided words; ensure the headline's own last word leads
@@ -47,7 +49,10 @@ export default function HeroHeadline({
 
   return (
     <h1 className={H1}>
-      {lead} <KineticWord words={ordered} />
+      <span className="block">
+        {lead} <KineticWord words={ordered} />
+      </span>
+      {line2 ? <span className="block">{line2}</span> : null}
     </h1>
   );
 }

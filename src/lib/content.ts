@@ -908,10 +908,10 @@ export interface SiteContent {
 
 export const DEFAULT_CONTENT: SiteContent = {
   hero: {
-    line1: "You bring the headache.",
+    line1: "You bring the vision.",
     line2: "We build the story.",
-    sub: "This isn’t a list of deliverables. It’s a rate card built around your problem — pick the headache, we’ll prescribe the fix.",
-    cycle: ["headache.", "chaos.", "confusion.", "mess.", "questions."],
+    sub: "Pick what you’re chasing below — we’ll build the content to get you there.",
+    cycle: ["vision.", "ambition.", "idea.", "mission.", "spark."],
   },
   about: ABOUT,
   teamPhotos: TEAM_PHOTOS,

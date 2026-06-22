@@ -63,7 +63,7 @@ export default function Hero() {
 
       <div className="relative mx-auto max-w-5xl px-5 pb-16 pt-32 text-center sm:px-8 sm:pt-36">
         <Reveal>
-          <HeroHeadline text={hero.line1} cycle={hero.cycle} />
+          <HeroHeadline text={hero.line1} cycle={hero.cycle} line2={hero.line2} />
         </Reveal>
 
         {/* journey stepper — previews the flow + tracks progress */}

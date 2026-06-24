@@ -11,7 +11,8 @@ import Reveal from "./Reveal";
 const price = (n: number | null) => (n ? `€${n.toLocaleString()}` : "Custom");
 
 function ServiceCard({ service: s }: { service: ServiceItem }) {
-  const { toggleAddOn, selectedAddOns } = useSelection();
+  const { toggleAddOn, selectedAddOns, recommendedServiceIds } = useSelection();
+  const recommended = recommendedServiceIds.includes(s.id);
   const hasOptions = Boolean(s.options?.length);
   const [optIndex, setOptIndex] = useState(0);
   const opt = hasOptions ? s.options![optIndex] : undefined;
@@ -42,7 +43,7 @@ function ServiceCard({ service: s }: { service: ServiceItem }) {
   return (
     <div
       className={`group hover-lift flex h-full flex-col overflow-hidden rounded-2xl border transition-all ${
-        on ? "border-gold ring-1 ring-gold" : "border-line"
+        on || recommended ? "border-gold ring-1 ring-gold" : "border-line"
       }`}
     >
       {/* illustration */}
@@ -55,11 +56,18 @@ function ServiceCard({ service: s }: { service: ServiceItem }) {
           <span className="rounded-md bg-paper-2 px-2 py-0.5 text-[0.6rem] font-bold uppercase tracking-wide text-muted-2">
             {s.category}
           </span>
-          {on && (
+          {on ? (
             <span className="rounded-full bg-gold px-2 py-0.5 text-[0.6rem] font-bold uppercase tracking-wide text-black">
               ✓ In brief
             </span>
-          )}
+          ) : recommended ? (
+            <span
+              className="rounded-full border border-gold px-2 py-0.5 text-[0.6rem] font-bold uppercase tracking-wide text-gold"
+              title="Recommended for you"
+            >
+              ★ Recommended
+            </span>
+          ) : null}
         </div>
         <h3 className="mt-3 font-display text-2xl leading-none text-fg">{s.name}</h3>
         <p className="mt-2 flex-1 text-sm leading-relaxed text-muted">{s.blurb}</p>

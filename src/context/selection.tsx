@@ -18,6 +18,7 @@ interface SelectionState {
   isSelected: (id: string) => boolean;
   selectedHeadacheLabels: string[];
   recommendedFormatIds: FormatId[];
+  recommendedServiceIds: string[];
 
   // Step 2 — format (follows recommendation until manually pinned)
   activeFormatId: FormatId;
@@ -51,7 +52,7 @@ const SelectionContext = createContext<SelectionState | null>(null);
 const DEFAULT_FORMAT: FormatId = "explained";
 
 export function SelectionProvider({ children }: { children: React.ReactNode }) {
-  const { formats: FORMATS, headaches: HEADACHES } = useContent();
+  const { formats: FORMATS, services: SERVICES, headaches: HEADACHES } = useContent();
   const [selected, setSelected] = useState<string[]>([]);
   const [manualFormatId, setManualFormatId] = useState<FormatId | null>(null);
   const [selectedPackage, setSelectedPackage] = useState<string | null>(null);
@@ -85,19 +86,29 @@ export function SelectionProvider({ children }: { children: React.ReactNode }) {
     [selected, HEADACHES]
   );
 
-  // Recommended formats, ordered by how many selected headaches map to them.
-  const recommendedFormatIds = useMemo(() => {
-    const counts = new Map<FormatId, number>();
+  // All recommended target ids (formats + services), ordered by how many selected
+  // headaches map to each. A headache can recommend several targets via `recommends`;
+  // the legacy single `formatId` is honoured as a fallback for un-migrated content.
+  const recommendedTargetIds = useMemo(() => {
+    const counts = new Map<string, number>();
     for (const id of selected) {
       const h = HEADACHES.find((x) => x.id === id);
       if (!h) continue;
-      counts.set(h.formatId, (counts.get(h.formatId) ?? 0) + 1);
+      const targets = h.recommends ?? (h.formatId ? [h.formatId] : []);
+      for (const t of targets) counts.set(t, (counts.get(t) ?? 0) + 1);
     }
-    return [...counts.entries()]
-      .sort((a, b) => b[1] - a[1])
-      .map(([fid]) => fid)
-      .filter((fid) => FORMATS.some((f) => f.id === fid));
-  }, [selected, FORMATS, HEADACHES]);
+    return [...counts.entries()].sort((a, b) => b[1] - a[1]).map(([id]) => id);
+  }, [selected, HEADACHES]);
+
+  // Split into recommended video formats and non-video services for the UI.
+  const recommendedFormatIds = useMemo(
+    () => recommendedTargetIds.filter((id) => FORMATS.some((f) => f.id === id)),
+    [recommendedTargetIds, FORMATS]
+  );
+  const recommendedServiceIds = useMemo(
+    () => recommendedTargetIds.filter((id) => SERVICES.some((s) => s.id === id)),
+    [recommendedTargetIds, SERVICES]
+  );
 
   // Active format = manual pin, else top recommendation, else default.
   const activeFormatId: FormatId =
@@ -141,6 +152,7 @@ export function SelectionProvider({ children }: { children: React.ReactNode }) {
     isSelected,
     selectedHeadacheLabels,
     recommendedFormatIds,
+    recommendedServiceIds,
     activeFormatId,
     setActiveFormat,
     formatEngaged,

@@ -36,7 +36,15 @@ export interface ContentFormat {
 export interface Headache {
   id: string;
   label: string; // the quote a client recognises
-  formatId: FormatId; // the format that answers it
+  /**
+   * The format(s) and/or service(s) that answer this headache, by id. Each entry
+   * may reference a video `ContentFormat` id or a non-video `ServiceItem` id, so a
+   * single headache can prescribe both (e.g. a Carousel + the Explained video).
+   */
+  recommends: string[];
+  /** @deprecated legacy single-format mapping; superseded by `recommends`. Kept so
+   * un-migrated stored content still resolves. */
+  formatId?: FormatId;
 }
 
 /* ------------------------------------------------------------------ */
@@ -402,19 +410,25 @@ export const FORMATS: ContentFormat[] = [
 /* The interactive qualifier — headaches mapped to formats            */
 /* ------------------------------------------------------------------ */
 
+// Curated to exactly 12 so the brain animation's 12 fixed nodes stay unchanged.
+// Each headache can recommend a mix of video formats and non-video services, so the
+// diagnosis steers people to carousels / statics / stories / giveaways too — not just
+// video. Every video format (explained, street-views, guides, mini-docs, interviews,
+// spotlight-reel) and every service (carousel, static, stories, giveaway) is covered;
+// the last two are generic catch-alls on a sensible default mix.
 export const HEADACHES: Headache[] = [
-  { id: "understand", label: "People don’t understand what we do", formatId: "explained" },
-  { id: "complex", label: "Our message is too complex to simplify", formatId: "explained" },
-  { id: "corporate", label: "We feel corporate and out of touch", formatId: "street-views" },
-  { id: "authentic", label: "We need authentic engagement, not actors", formatId: "street-views" },
-  { id: "howto", label: "People don’t know how to use what we offer", formatId: "guides" },
-  { id: "overwhelmed", label: "Our audience feels overwhelmed", formatId: "guides" },
-  { id: "impact", label: "People don’t feel our impact", formatId: "mini-docs" },
-  { id: "csr", label: "Our good work goes unseen", formatId: "mini-docs" },
-  { id: "leadership", label: "Our leadership feels distant", formatId: "interviews" },
-  { id: "credibility", label: "We need credibility & thought leadership", formatId: "interviews" },
-  { id: "attention", label: "We need to grab attention fast", formatId: "spotlight-reel" },
-  { id: "forgettable", label: "Our content feels flat and forgettable", formatId: "spotlight-reel" },
+  { id: "explain-simple", label: "Our service is too complicated to explain in one post", recommends: ["carousel", "explained"] },
+  { id: "same-questions", label: "People ask us the same questions over and over", recommends: ["carousel", "guides"] },
+  { id: "no-shoot", label: "We want exposure but don’t need a full video shoot", recommends: ["static"] },
+  { id: "quick-credible", label: "We need something quick that still builds credibility", recommends: ["static", "spotlight-reel"] },
+  { id: "behind-scenes", label: "We have no behind-the-scenes presence", recommends: ["stories", "street-views"] },
+  { id: "credibility", label: "We need credibility & thought leadership", recommends: ["interviews"] },
+  { id: "grow-fast", label: "We have no way to grow our following fast", recommends: ["giveaway"] },
+  { id: "no-interaction", label: "Our audience never interacts with us", recommends: ["giveaway", "stories"] },
+  { id: "csr", label: "Our good work goes unseen", recommends: ["mini-docs"] },
+  { id: "attention", label: "We need to grab attention fast", recommends: ["spotlight-reel"] },
+  { id: "competitors-louder", label: "Our competitors are louder than us online", recommends: ["spotlight-reel", "static"] },
+  { id: "whats-working", label: "We don’t know what’s actually working", recommends: ["explained", "static"] },
 ];
 
 /* ------------------------------------------------------------------ */

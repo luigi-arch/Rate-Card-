@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { type ContentFormat } from "@/lib/content";
+import { type ContentFormat, type ServiceItem } from "@/lib/content";
 import { useSelection } from "@/context/selection";
 import { useContent } from "@/context/content";
 import BrainAnimation from "./BrainAnimation";
@@ -19,9 +19,16 @@ function joinList(items: string[]) {
 }
 
 export default function Hero() {
-  const { hero, formats } = useContent();
-  const { selected, recommendedFormatIds, clear, progress, client, setClient } =
-    useSelection();
+  const { hero, formats, services } = useContent();
+  const {
+    selected,
+    recommendedFormatIds,
+    recommendedServiceIds,
+    clear,
+    progress,
+    client,
+    setClient,
+  } = useSelection();
   const [revealed, setRevealed] = useState(false);
 
   function startOver() {
@@ -32,7 +39,10 @@ export default function Hero() {
   const recommended = recommendedFormatIds
     .map((id) => formats.find((f) => f.id === id))
     .filter((f): f is ContentFormat => Boolean(f));
-  const diagnosed = recommended.length > 0;
+  const recommendedServices = recommendedServiceIds
+    .map((id) => services.find((s) => s.id === id))
+    .filter((s): s is ServiceItem => Boolean(s));
+  const diagnosed = recommended.length + recommendedServices.length > 0;
   const keywords = [...new Set(recommended.map((f) => f.keyword))];
 
   // Journey stepper — previews the flow and lights up with progress.
@@ -178,8 +188,14 @@ export default function Hero() {
                     : "Diagnosis complete"}
                 </p>
                 <p className="mt-2 font-display text-3xl leading-none sm:text-4xl">
-                  {keywords.length > 1 ? "You need a mix of " : "You need "}
-                  <span className="text-gold">{joinList(keywords)}</span>.
+                  {keywords.length === 0 ? (
+                    <>Here’s your <span className="text-gold">prescription</span>.</>
+                  ) : (
+                    <>
+                      {keywords.length > 1 ? "You need a mix of " : "You need "}
+                      <span className="text-gold">{joinList(keywords)}</span>.
+                    </>
+                  )}
                 </p>
                 <p className="mt-3 text-sm text-white/60">
                   {client.name ? `${client.name.split(" ")[0]}, based` : "Based"} on the{" "}
@@ -198,10 +214,19 @@ export default function Hero() {
                       <span className="text-sm text-muted-2">— {f.keyword}</span>
                     </li>
                   ))}
+                  {recommendedServices.map((s) => (
+                    <li key={s.id} className="flex items-center gap-2.5 text-fg">
+                      <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-gold text-xs font-bold text-black">
+                        ✓
+                      </span>
+                      <span className="font-medium">{s.name}</span>
+                      <span className="text-sm text-muted-2">— {s.category}</span>
+                    </li>
+                  ))}
                 </ul>
                 <div className="mt-6 flex flex-wrap items-center gap-3">
                   <button
-                    onClick={() => scrollTo("formats")}
+                    onClick={() => scrollTo(recommended.length ? "formats" : "services")}
                     className="press rounded-full bg-gold px-7 py-3.5 text-sm font-bold uppercase tracking-wide text-black transition-transform hover:scale-[1.03]"
                   >
                     Get my prescription →

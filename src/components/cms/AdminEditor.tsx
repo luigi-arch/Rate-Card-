@@ -62,6 +62,20 @@ export default function AdminEditor({ initial }: { initial: SiteContent }) {
     name: f.name || f.id || "(unnamed)",
   }));
 
+  // Headaches can recommend video formats and/or non-video services.
+  const targetOptions = [
+    ...content.formats.map((f) => ({
+      id: f.id,
+      name: f.name || f.id || "(unnamed)",
+      kind: "Video format",
+    })),
+    ...content.services.map((s) => ({
+      id: s.id,
+      name: s.name || s.id || "(unnamed)",
+      kind: "Service",
+    })),
+  ];
+
   return (
     <div className="mx-auto max-w-4xl px-5 py-8 sm:px-8">
       {/* top bar */}
@@ -579,50 +593,66 @@ export default function AdminEditor({ initial }: { initial: SiteContent }) {
         </Panel>
 
         {/* ---- Headaches ---- */}
-        <Panel title="Headaches → format mapping">
+        <Panel title="Headaches → format / service mapping">
           <Repeater<Headache>
             items={content.headaches}
             onChange={(v) => set("headaches", v)}
             makeBlank={() => ({
               id: `headache-${Date.now()}`,
               label: "",
-              formatId: formatOptions[0]?.id ?? "",
+              recommends: [],
             })}
             itemTitle={(h) => h.label || "Headache"}
             addLabel="Add headache"
           >
-            {(item, update) => (
-              <>
-                <TextField
-                  label="Label (the quote)"
-                  value={item.label}
-                  onChange={(v) => update({ label: v })}
-                />
-                <div className="grid gap-3 sm:grid-cols-2">
+            {(item, update) => {
+              // Tolerate legacy rows that only have the single `formatId`.
+              const selectedTargets = item.recommends ?? (item.formatId ? [item.formatId] : []);
+              const toggleTarget = (id: string) =>
+                update({
+                  recommends: selectedTargets.includes(id)
+                    ? selectedTargets.filter((t) => t !== id)
+                    : [...selectedTargets, id],
+                });
+              return (
+                <>
+                  <TextField
+                    label="Label (the quote)"
+                    value={item.label}
+                    onChange={(v) => update({ label: v })}
+                  />
                   <TextField
                     label="ID"
                     value={item.id}
                     onChange={(v) => update({ id: v })}
                   />
-                  <label className="block">
+                  <div>
                     <span className="mb-1.5 block text-sm font-medium">
-                      Recommends format
+                      Recommends (pick any formats and/or services)
                     </span>
-                    <select
-                      value={item.formatId}
-                      onChange={(e) => update({ formatId: e.target.value })}
-                      className="w-full rounded-xl border border-line bg-white px-4 py-2.5 text-sm outline-none focus:border-gold"
-                    >
-                      {formatOptions.map((f) => (
-                        <option key={f.id} value={f.id}>
-                          {f.name}
-                        </option>
+                    <div className="grid gap-2 sm:grid-cols-2">
+                      {targetOptions.map((t) => (
+                        <label
+                          key={t.id}
+                          className="flex items-center gap-2 rounded-xl border border-line bg-white px-3 py-2 text-sm"
+                        >
+                          <input
+                            type="checkbox"
+                            checked={selectedTargets.includes(t.id)}
+                            onChange={() => toggleTarget(t.id)}
+                            className="h-4 w-4 accent-gold"
+                          />
+                          <span className="flex-1">{t.name}</span>
+                          <span className="text-[0.65rem] uppercase tracking-wide text-muted-2">
+                            {t.kind}
+                          </span>
+                        </label>
                       ))}
-                    </select>
-                  </label>
-                </div>
-              </>
-            )}
+                    </div>
+                  </div>
+                </>
+              );
+            }}
           </Repeater>
         </Panel>
 

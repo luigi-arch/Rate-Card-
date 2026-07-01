@@ -31,6 +31,54 @@ import {
   ImageField,
 } from "./fields";
 
+/** Shared "See example" editor: an uploaded MP4, an embed URL, and a click-through link. */
+type ExamplePatch = {
+  exampleVideoUrl?: string;
+  exampleEmbedUrl?: string;
+  exampleLink?: string;
+};
+function ExampleFields({
+  slot,
+  videoUrl,
+  embedUrl,
+  link,
+  onChange,
+  onError,
+}: {
+  slot: string;
+  videoUrl?: string;
+  embedUrl?: string;
+  link?: string;
+  onChange: (patch: ExamplePatch) => void;
+  onError: (text: string) => void;
+}) {
+  return (
+    <div className="rounded-xl border border-line bg-surface/40 p-3">
+      <p className="mb-2 text-sm font-medium">“See example” mockup (optional)</p>
+      <div className="grid gap-3">
+        <ImageField
+          label="Example video (upload MP4)"
+          accept="video/*"
+          slot={`${slot}-video`}
+          value={videoUrl}
+          onChange={(url) => onChange({ exampleVideoUrl: url })}
+          onError={onError}
+        />
+        <TextField
+          label="…or embed URL (YouTube / Vimeo / Instagram)"
+          value={embedUrl ?? ""}
+          onChange={(v) => onChange({ exampleEmbedUrl: v })}
+        />
+        <TextField
+          label="Link when clicked (opens in a new tab)"
+          value={link ?? ""}
+          onChange={(v) => onChange({ exampleLink: v })}
+        />
+      </div>
+    </div>
+  );
+}
+
 export default function AdminEditor({ initial }: { initial: SiteContent }) {
   const [content, setContent] = useState<SiteContent>(initial);
   const [saving, setSaving] = useState(false);
@@ -476,6 +524,14 @@ export default function AdminEditor({ initial }: { initial: SiteContent }) {
                   onChange={(url) => update({ logo: url })}
                   onError={fail}
                 />
+                <ExampleFields
+                  slot={`format-${i}-example`}
+                  videoUrl={item.exampleVideoUrl}
+                  embedUrl={item.exampleEmbedUrl}
+                  link={item.exampleLink}
+                  onChange={(patch) => update(patch)}
+                  onError={fail}
+                />
                 <StringListEditor
                   label="Solves (client headaches)"
                   items={item.solves}
@@ -587,6 +643,14 @@ export default function AdminEditor({ initial }: { initial: SiteContent }) {
                     )}
                   </Repeater>
                 </div>
+                <ExampleFields
+                  slot={`service-${item.id}-example`}
+                  videoUrl={item.exampleVideoUrl}
+                  embedUrl={item.exampleEmbedUrl}
+                  link={item.exampleLink}
+                  onChange={(patch) => update(patch)}
+                  onError={fail}
+                />
               </>
             )}
           </Repeater>

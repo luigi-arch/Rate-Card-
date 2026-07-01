@@ -6,6 +6,7 @@ import { useSelection } from "@/context/selection";
 import type { ServiceItem, AddOnItem } from "@/lib/content";
 import { SectionHeading } from "./Section";
 import ServiceIllustration from "./ServiceIllustration";
+import ExampleModal from "./ExampleModal";
 import Reveal from "./Reveal";
 
 const price = (n: number | null) => (n ? `€${n.toLocaleString()}` : "Custom");
@@ -14,6 +15,8 @@ function ServiceCard({ service: s }: { service: ServiceItem }) {
   const { toggleAddOn, selectedAddOns, recommendedServiceIds } = useSelection();
   const recommended = recommendedServiceIds.includes(s.id);
   const hasOptions = Boolean(s.options?.length);
+  const [showExample, setShowExample] = useState(false);
+  const hasExample = Boolean(s.exampleVideoUrl || s.exampleEmbedUrl);
   const [optIndex, setOptIndex] = useState(0);
   const opt = hasOptions ? s.options![optIndex] : undefined;
 
@@ -101,7 +104,27 @@ function ServiceCard({ service: s }: { service: ServiceItem }) {
             {on ? "Remove" : "+ Add"}
           </button>
         </div>
+
+        {hasExample && (
+          <button
+            type="button"
+            onClick={() => setShowExample(true)}
+            className="press mt-3 text-xs font-bold uppercase tracking-wide text-muted-2 transition-colors hover:text-fg"
+          >
+            ▶ See example
+          </button>
+        )}
       </div>
+
+      {showExample && (
+        <ExampleModal
+          title={s.name}
+          videoUrl={s.exampleVideoUrl}
+          embedUrl={s.exampleEmbedUrl}
+          link={s.exampleLink}
+          onClose={() => setShowExample(false)}
+        />
+      )}
     </div>
   );
 }

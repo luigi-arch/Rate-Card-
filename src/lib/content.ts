@@ -29,6 +29,9 @@ export interface ContentFormat {
   reach: string;
   idealFor: string;
   logo?: string; // public URL of an uploaded logo; falls back to a monogram
+  exampleVideoUrl?: string; // uploaded MP4 played inside the "See example" iPhone mockup
+  exampleEmbedUrl?: string; // external embed (YouTube/Vimeo/Instagram) shown in the mockup
+  exampleLink?: string; // where clicking the mockup navigates (falls back to the embed URL)
   includes: IncludeGroup[];
   solves: string[]; // client headache quotes this format answers
 }
@@ -410,12 +413,12 @@ export const FORMATS: ContentFormat[] = [
 /* The interactive qualifier — headaches mapped to formats            */
 /* ------------------------------------------------------------------ */
 
-// Curated to exactly 12 so the brain animation's 12 fixed nodes stay unchanged.
-// Each headache can recommend a mix of video formats and non-video services, so the
-// diagnosis steers people to carousels / statics / stories / giveaways too — not just
-// video. Every video format (explained, street-views, guides, mini-docs, interviews,
-// spotlight-reel) and every service (carousel, static, stories, giveaway) is covered;
-// the last two are generic catch-alls on a sensible default mix.
+// The brain animation lays out however many headaches exist, so the count is free to
+// change from the CMS. Each headache can recommend a mix of video formats and non-video
+// services, so the diagnosis steers people to carousels / statics / stories / giveaways
+// too — not just video. This default set covers every video format (explained,
+// street-views, guides, mini-docs, interviews, spotlight-reel) and every service
+// (carousel, static, stories, giveaway); the last two are generic catch-alls.
 export const HEADACHES: Headache[] = [
   { id: "explain-simple", label: "Our service is too complicated to explain in one post", recommends: ["carousel", "explained"] },
   { id: "same-questions", label: "People ask us the same questions over and over", recommends: ["carousel", "guides"] },
@@ -498,6 +501,9 @@ export interface ServiceItem {
   priceFrom: number | null;
   icon?: string; // illustration key: carousel | static | stories | giveaway | banners
   options?: ServiceOption[]; // when present, the card shows a quantity dropdown
+  exampleVideoUrl?: string; // uploaded MP4 played inside the "See example" iPhone mockup
+  exampleEmbedUrl?: string; // external embed (YouTube/Vimeo/Instagram) shown in the mockup
+  exampleLink?: string; // where clicking the mockup navigates (falls back to the embed URL)
 }
 
 export const SERVICES: ServiceItem[] = [

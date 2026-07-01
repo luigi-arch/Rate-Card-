@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { useSelection } from "@/context/selection";
 import { useContent } from "@/context/content";
 
@@ -14,28 +14,42 @@ import { useContent } from "@/context/content";
 const DURATIONS = ["5.5s", "6.2s", "5.8s", "6.6s", "6s", "5.3s", "6.4s", "5.6s", "6.1s", "5.9s"];
 const DELAYS = ["0s", "0.6s", "1.1s", "0.3s", "1.4s", "0.9s", "0.2s", "1.2s", "0.5s", "0.8s"];
 
-// Region nodes on the 240x200 brain viewBox — first half left hemisphere,
-// second half right, so the left/right pill columns map to their side.
-const NODES: { x: number; y: number }[] = [
-  { x: 74, y: 58 },
-  { x: 58, y: 90 },
-  { x: 88, y: 82 },
-  { x: 68, y: 116 },
-  { x: 98, y: 112 },
-  { x: 86, y: 142 },
-  { x: 166, y: 58 },
-  { x: 182, y: 90 },
-  { x: 152, y: 82 },
-  { x: 172, y: 116 },
-  { x: 142, y: 112 },
-  { x: 154, y: 142 },
-];
+type Point = { x: number; y: number };
 
-// Faint synapse links between nearby nodes (indices into NODES).
-const LINKS: [number, number][] = [
-  [0, 2], [2, 4], [1, 3], [3, 5], [2, 1], [4, 5],
-  [6, 8], [8, 10], [7, 9], [9, 11], [8, 7], [10, 11],
-];
+/**
+ * Region nodes on the 240x200 brain viewBox, generated for however many headaches
+ * exist (the CMS can add/remove them). The first half sit on the left hemisphere and
+ * the rest on the right, so the left/right pill columns map to their side. Positions
+ * are deterministic (index-based, no randomness) so server and client render alike.
+ */
+function buildNodes(count: number): Point[] {
+  if (count <= 0) return [];
+  const half = Math.ceil(count / 2);
+  const yTop = 56;
+  const yBot = 144;
+  const place = (n: number, i: number, cx: number): Point => {
+    const t = n === 1 ? 0.5 : i / (n - 1);
+    const y = yTop + t * (yBot - yTop);
+    // Gentle deterministic horizontal offset around the hemisphere centre.
+    const x = cx + Math.sin(i * 1.7 + cx) * 16;
+    return { x, y };
+  };
+  const nodes: Point[] = [];
+  for (let i = 0; i < count; i++) {
+    if (i < half) nodes.push(place(half, i, 78));
+    else nodes.push(place(count - half, i - half, 162));
+  }
+  return nodes;
+}
+
+/** Faint synapse links — a chain down each hemisphere (indices into the node list). */
+function buildLinks(count: number): [number, number][] {
+  const half = Math.ceil(count / 2);
+  const links: [number, number][] = [];
+  for (let i = 1; i < half; i++) links.push([i - 1, i]);
+  for (let i = half + 1; i < count; i++) links.push([i - 1, i]);
+  return links;
+}
 
 function Node({
   label,
@@ -102,6 +116,10 @@ export default function BrainAnimation({
   const half = Math.ceil(HEADACHES.length / 2);
   const left = HEADACHES.slice(0, half);
   const right = HEADACHES.slice(half);
+
+  // Node positions + synapse links scale to the current headache count.
+  const NODES = useMemo(() => buildNodes(HEADACHES.length), [HEADACHES.length]);
+  const LINKS = useMemo(() => buildLinks(HEADACHES.length), [HEADACHES.length]);
 
   const outline = dark ? "#ffffff" : "var(--color-fg)";
   const lit = (i: number) => {

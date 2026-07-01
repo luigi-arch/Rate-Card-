@@ -5,6 +5,7 @@ import { type ContentFormat } from "@/lib/content";
 import { useSelection } from "@/context/selection";
 import { useContent } from "@/context/content";
 import { SectionHeading } from "./Section";
+import ExampleModal from "./ExampleModal";
 import Reveal from "./Reveal";
 
 export default function Formats() {
@@ -126,6 +127,8 @@ function FeaturePanel({
 }) {
   const { distribution } = useContent();
   const logo = f.logo;
+  const [showExample, setShowExample] = useState(false);
+  const hasExample = Boolean(f.exampleVideoUrl || f.exampleEmbedUrl);
 
   return (
     <div className="card overflow-hidden">
@@ -243,13 +246,34 @@ function FeaturePanel({
           </p>
         </details>
 
-        <a
-          href="#contact"
-          className="press mt-7 block rounded-full bg-gold py-3.5 text-center text-sm font-bold uppercase tracking-wide text-black transition-transform hover:scale-[1.01]"
-        >
-          Add to my brief
-        </a>
+        <div className="mt-7 flex flex-col gap-3 sm:flex-row">
+          {hasExample && (
+            <button
+              type="button"
+              onClick={() => setShowExample(true)}
+              className="press flex-1 rounded-full border border-line-strong py-3.5 text-center text-sm font-bold uppercase tracking-wide text-fg transition-colors hover:border-fg"
+            >
+              ▶ See example
+            </button>
+          )}
+          <a
+            href="#contact"
+            className="press flex-1 rounded-full bg-gold py-3.5 text-center text-sm font-bold uppercase tracking-wide text-black transition-transform hover:scale-[1.01]"
+          >
+            Add to my brief
+          </a>
+        </div>
       </div>
+
+      {showExample && (
+        <ExampleModal
+          title={f.name}
+          videoUrl={f.exampleVideoUrl}
+          embedUrl={f.exampleEmbedUrl}
+          link={f.exampleLink}
+          onClose={() => setShowExample(false)}
+        />
+      )}
     </div>
   );
 }

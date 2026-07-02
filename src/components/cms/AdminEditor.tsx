@@ -65,7 +65,7 @@ function ExampleFields({
           onError={onError}
         />
         <TextField
-          label="…or embed URL (YouTube / Vimeo / Instagram)"
+          label="…or paste a video link (YouTube / Vimeo / Instagram post or reel)"
           value={embedUrl ?? ""}
           onChange={(v) => onChange({ exampleEmbedUrl: v })}
         />

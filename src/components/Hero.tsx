@@ -172,6 +172,7 @@ export default function Hero() {
                 <button
                   onClick={() => setRevealed(true)}
                   disabled={!diagnosed}
+                  data-track="Diagnose me"
                   className="press rounded-full bg-gold px-8 py-4 text-sm font-bold uppercase tracking-wide text-black transition-transform hover:scale-[1.03] disabled:opacity-50"
                 >
                   Diagnose me →
@@ -227,6 +228,7 @@ export default function Hero() {
                 <div className="mt-6 flex flex-wrap items-center gap-3">
                   <button
                     onClick={() => scrollTo(recommended.length ? "formats" : "services")}
+                    data-track="Get my prescription"
                     className="press rounded-full bg-gold px-7 py-3.5 text-sm font-bold uppercase tracking-wide text-black transition-transform hover:scale-[1.03]"
                   >
                     Get my prescription →

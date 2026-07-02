@@ -14,6 +14,7 @@ import BehindScenes from "@/components/BehindScenes";
 import LeadForm from "@/components/LeadForm";
 import Footer from "@/components/Footer";
 import BriefTray from "@/components/BriefTray";
+import AnalyticsTracker from "@/components/AnalyticsTracker";
 
 export const dynamic = "force-dynamic";
 
@@ -22,6 +23,7 @@ export default async function Home() {
   return (
     <ContentProvider value={content}>
       <SelectionProvider>
+        <AnalyticsTracker />
         <Nav />
         <main>
           {/* diagnose → prescribe → build → trust → contact */}
